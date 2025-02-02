@@ -1,0 +1,12 @@
+<script setup lang="ts"></script>
+<template>
+  <header>
+    <nav class="flex items-center p-4 text-font">
+      <ul class="flex justify-between w-full font-primary font-bold text-2xl">
+        <li><NuxtLink to="/">Home</NuxtLink></li>
+        <li><NuxtLink to="/about">About</NuxtLink></li>
+        <li><NuxtLink to="/contact">Contact</NuxtLink></li>
+      </ul>
+    </nav>
+  </header>
+</template>
