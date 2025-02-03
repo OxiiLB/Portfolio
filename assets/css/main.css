@@ -26,6 +26,8 @@
     /* Font Color */
     --color-font: #f5f5f5;
 
+    --color-electric-blue: #7ffafa;
+
     /* Shadows */
     --drop-shadow-secondary: 0 10px 10px var(--color-secondary-500);
 }
