@@ -12,6 +12,9 @@ export default defineNuxtConfig({
       mode: "out-in",
     },
     head: {
+      htmlAttrs: {
+        lang: "en",
+      },
       title: "Portfolio",
       titleTemplate: "%s - Romain Giraud's Portfolio",
       meta: [
