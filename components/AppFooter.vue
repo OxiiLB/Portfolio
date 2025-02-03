@@ -1,8 +1,9 @@
-<script setup lanag="ts">
+<script setup lang="ts">
 </script>
+
 <template>
-  <footer class="bg-black bg-opacity-50 py-4">
-    <p class="text-center text-white text-sm">
+  <footer class="fixed bottom-0 left-0 w-full bg-transparent">
+    <p class="text-center text-xl">
       &copy; 2025 Portolio - Romain GIRAUD. Tous droits réservés.
     </p>
   </footer>

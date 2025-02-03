@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="bg-primary-500">
+  <div>
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
