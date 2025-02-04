@@ -69,7 +69,7 @@ const toggleComponent = (component: string) => {
             class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
             @click="toggleComponent('cv')"
           >
-          CV.exe
+          CV.EXE
           </button>
           </li>
           <li>
@@ -77,18 +77,18 @@ const toggleComponent = (component: string) => {
               class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
               @click="toggleComponent('contact')"
             >
-              Contact.exe
+              CONTACT.EXE
             </button>
           </li>
           <li
             class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
           >
-            About.exe
+            ABOUT_ME.EXE
           </li>
           <li
             class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
           >
-            Projects.exe
+            PROJECTS.EXE
           </li>
         </ul>
       </div>
