@@ -34,6 +34,11 @@ const isComponentVisible = (component: string) => {
       v-if="isComponentVisible('contact')"
       @close="componentStore.hideComponent('contact')"
     />
+    <PdfViewer
+      class="z-20"
+      v-if="isComponentVisible('cv')"
+      @close="componentStore.hideComponent('cv')"
+    />
     <div
       class="flex-grow h-screen flex flex-col items-center justify-center gap-6 text-center px-4"
     >

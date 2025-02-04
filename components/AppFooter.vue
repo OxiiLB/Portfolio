@@ -64,9 +64,13 @@ const toggleComponent = (component: string) => {
         <p class="text-xl font-bold mb-2">Programmes</p>
         <ul>
           <li
-            class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
           >
-            CV.exe
+          <button
+            class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
+            @click="toggleComponent('cv')"
+          >
+          CV.exe
+          </button>
           </li>
           <li>
             <button

@@ -77,7 +77,7 @@ onMounted(() => {
             <input
               type="text"
               v-model="name"
-              class="border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 p-1 font-pixel text-sm focus:outline-dotted w-full"
+              class="border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 p-1 font-pixel text-black text-sm focus:outline-dotted w-full"
               required
             />
           </div>
@@ -87,7 +87,7 @@ onMounted(() => {
             <input
               type="email"
               v-model="email"
-              class="border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 p-1 font-pixel text-sm focus:outline-dotted w-full"
+              class="border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 p-1 font-pixel text-black text-sm focus:outline-dotted w-full"
               required
             />
           </div>
@@ -96,7 +96,7 @@ onMounted(() => {
             <label class="block mb-1 font-pixel text-sm">Message:</label>
             <textarea
               v-model="message"
-              class="border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 p-1 font-pixel text-sm focus:outline-dotted w-full h-32 resize-none"
+              class="border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 p-1 font-pixel text-black text-sm focus:outline-dotted w-full h-32 resize-none"
               required
             ></textarea>
           </div>
