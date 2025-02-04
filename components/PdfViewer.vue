@@ -61,6 +61,15 @@ const VuePdfEmbed = defineAsyncComponent(() => import("vue-pdf-embed"));
           <VuePdfEmbed :source="pdfUrl" class="border shadow-md w-full" />
         </ClientOnly>
       </div>
+      <div>
+        <a
+          href="/Romain_Giraud_CV.pdf"
+          download="Romain_Giraud_CV.pdf"
+          class="block text-center text-white bg-win-blue p-2 mt-2"
+        >
+          Download
+        </a>
+      </div>
     </div>
   </div>
 </template>

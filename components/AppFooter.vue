@@ -29,7 +29,7 @@ const toggleComponent = (component: string) => {
           alt="Microsoft Logo"
           class="w-4 h-4 sm:w-5 sm:h-5"
         />
-        <span class="text-black font-bold text-sm sm:text-base">Démarrer</span>
+        <span class="text-black font-bold text-sm sm:text-base">Start</span>
       </button>
       <div class="flex gap-1 sm:gap-3 text-neon-pink items-center">
         <span class="text-xl hidden sm:inline-block">💾</span>
@@ -88,7 +88,7 @@ const toggleComponent = (component: string) => {
           <li
             class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
           >
-            Project.exe
+            Projects.exe
           </li>
         </ul>
       </div>
