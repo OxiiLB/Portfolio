@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Définition de l’animation pop-up */
+@keyframes popup {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Vos variables personnalisées */
 @theme {
     /* Primary Colors */
     --color-primary-100: #d2d2d2;
@@ -30,15 +43,22 @@
 
     /* Shadows */
     --drop-shadow-secondary: 0 10px 10px var(--color-secondary-500);
+
+    /* Animation */
+    --animate-popup: popup 0.1s ease-out;
 }
 
 @layer utilities {
     .drop-shadow-secondary {
       filter: drop-shadow(var(--drop-shadow-secondary));
     }
-  }
+    /* Classe utilitaire pour l'animation pop-up */
+    .animate-popup {
+      animation: var(--animate-popup);
+    }
+}
 
-/* default colors */
+/* Application des couleurs par défaut */
 html {
     @apply bg-primary-500 text-font;
 }
