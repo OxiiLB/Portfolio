@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Définition de l’animation pop-up */
+/* Pop-up animation definition */
 @keyframes popup {
   0% {
     transform: scale(0.8);
@@ -12,7 +12,7 @@
   }
 }
 
-/* Vos variables personnalisées */
+/* Custom variables */
 @theme {
     /* Primary Colors */
     --color-primary-100: #d2d2d2;
@@ -48,17 +48,99 @@
     --animate-popup: popup 0.1s ease-out;
 }
 
+/* Utility classes */
 @layer utilities {
     .drop-shadow-secondary {
       filter: drop-shadow(var(--drop-shadow-secondary));
     }
-    /* Classe utilitaire pour l'animation pop-up */
+    /* Utility class for the pop-up animation */
     .animate-popup {
       animation: var(--animate-popup);
     }
 }
 
-/* Application des couleurs par défaut */
+/* Default color application */
 html {
     @apply bg-primary-500 text-font;
+}
+
+/* Styling for the Windows 95-style window */
+.windows-95-window {
+  width: 500px;
+  border: 3px solid;
+  border-color: #ff66cc #333399 #333399 #ff66cc;
+  background: linear-gradient(45deg, #ff6b6b, #ffccff, #45b7d1);
+}
+
+/* Title bar styling */
+.windows-title-bar {
+  border-bottom: 2px solid #000;
+  font-family: "MS Sans Serif", sans-serif;
+}
+
+/* Content section inside the window */
+.windows-content {
+  background: linear-gradient(135deg, #ff69b4, #00ffff, #ffccff);
+  overflow: auto;
+}
+
+/* Pressed button style */
+.windows-button-pressed {
+  border-color: #ff00ff #00ffff #00ffff #ff00ff;
+}
+
+/* Neon text effect */
+.neon-text {
+  text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
+}
+
+/* Pixel font styling */
+.font-pixel {
+  font-family: "VT323", monospace;
+}
+
+/* Windows blue background */
+.bg-win-blue {
+  background: #333399;
+}
+
+/* Vaporwave background gradient */
+.bg-vaporwave-bg {
+  background: linear-gradient(135deg, #ff69b4, #00ffff, #ffccff);
+}
+
+/* Animated gradient effect for the Windows 95 bar */
+.windows-95-bar {
+  background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+  animation: gradientShift 10s infinite;
+}
+
+/* Neon text shadow effect */
+.text-shadow-neon {
+  text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
+}
+
+/* Neon pink text color and effect */
+.text-neon-pink {
+  color: #ff00ff;
+  text-shadow: 0 0 8px #ff00ff;
+}
+
+/* Neon cyan text color and effect */
+.text-neon-cyan {
+  color: #AAffff;
+  text-shadow: 0 0 8px #00ffff;
+}
+
+/* Gradient shift animation */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

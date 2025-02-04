@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useComponentStore } from "~/stores/componentStore";
+import { useActiveComponentStore } from "~/stores/activeComponent";
 
 const showStartMenu = ref(false);
 
@@ -9,10 +10,29 @@ const toggleStartMenu = () => {
 
 const componentStore = useComponentStore();
 
+const activeComponentStore = useActiveComponentStore();
+
 const toggleComponent = (component: string) => {
   componentStore.toggleComponent(component);
+  activeComponentStore.setActive(component);
   toggleStartMenu();
 };
+
+const currentTime = ref<string>("");
+
+const updateCurrentTime = () => {
+  const now = new Date();
+  currentTime.value = now.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+onMounted(() => {
+  updateCurrentTime();
+  const interval = setInterval(updateCurrentTime, 60000);
+  onUnmounted(() => clearInterval(interval));
+});
 </script>
 
 <template>
@@ -51,9 +71,7 @@ const toggleComponent = (component: string) => {
         >
           📶
         </div>
-        <div class="text-neon-cyan text-sm sm:text-base">
-          {{ new Date().toLocaleTimeString() }}
-        </div>
+        <div data-allow-mismatch="text">{{ currentTime }}</div>
       </div>
     </div>
     <div
@@ -63,14 +81,13 @@ const toggleComponent = (component: string) => {
       <div class="p-2">
         <p class="text-xl font-bold mb-2">Programmes</p>
         <ul>
-          <li
-          >
-          <button
-            class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
-            @click="toggleComponent('cv')"
-          >
-          CV.EXE
-          </button>
+          <li>
+            <button
+              class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
+              @click="toggleComponent('cv')"
+            >
+              CV.EXE
+            </button>
           </li>
           <li>
             <button
@@ -80,10 +97,13 @@ const toggleComponent = (component: string) => {
               CONTACT.EXE
             </button>
           </li>
-          <li
-            class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
-          >
-            ABOUT_ME.EXE
+          <li>
+            <button
+              class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
+              @click="toggleComponent('about')"
+            >
+              ABOUT_ME.EXE
+            </button>
           </li>
           <li
             class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
@@ -95,40 +115,3 @@ const toggleComponent = (component: string) => {
     </div>
   </footer>
 </template>
-
-<style>
-.font-pixel {
-  font-family: "VT323", monospace;
-}
-
-.windows-95-bar {
-  background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
-  animation: gradientShift 10s infinite;
-}
-
-.text-shadow-neon {
-  text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
-}
-
-.text-neon-pink {
-  color: #ff00ff;
-  text-shadow: 0 0 8px #ff00ff;
-}
-
-.text-neon-cyan {
-  color: #00ffff;
-  text-shadow: 0 0 8px #00ffff;
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-</style>

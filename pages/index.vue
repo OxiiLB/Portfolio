@@ -18,11 +18,9 @@ useHead(
 
 const componentStore = useComponentStore();
 
-
 const isComponentVisible = (component: string) => {
   return componentStore.activeComponents[component] ?? false;
 };
-
 </script>
 <template>
   <div
@@ -38,6 +36,11 @@ const isComponentVisible = (component: string) => {
       class="z-20"
       v-if="isComponentVisible('cv')"
       @close="componentStore.hideComponent('cv')"
+    />
+    <Win95AboutMe
+      class="z-20"
+      v-if="isComponentVisible('about')"
+      @close="componentStore.hideComponent('about')"
     />
     <div
       class="flex-grow h-screen flex flex-col items-center justify-center gap-6 text-center px-4"

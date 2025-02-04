@@ -2,6 +2,14 @@
 import { ref, onMounted } from "vue";
 import interact from "interactjs";
 import { defineAsyncComponent } from "vue";
+import { useActiveComponentStore } from "~/stores/activeComponent";
+
+const activeStore = useActiveComponentStore();
+
+const myId = 'component-' + Math.random().toString(36).substr(2, 9);
+
+const defaultZIndex = 20;
+
 
 const emit = defineEmits(["close"]);
 const close = () => emit("close");
@@ -9,6 +17,14 @@ const close = () => emit("close");
 const pdfUrl = "/Romain_Giraud_CV.pdf";
 
 const windowRef = ref<HTMLElement | null>(null);
+
+const zIndex = computed(() => {
+  return activeStore.activeId === myId ? 9999 : defaultZIndex;
+});
+
+const bringToFront = () => {
+  activeStore.setActive(myId);
+};
 
 onMounted(() => {
   if (windowRef.value) {
@@ -37,6 +53,8 @@ const VuePdfEmbed = defineAsyncComponent(() => import("vue-pdf-embed"));
   <div>
     <div
       ref="windowRef"
+      @mousedown="bringToFront"
+      :style="{ zIndex: zIndex }"
       class="windows-95-window animate-popup shadow-lg z-20 fixed top-0 left-0 w-full max-w-[95vw] max-h-[90vh] p-2  sm:max-w-[800px]"
     >
       <div
@@ -74,41 +92,3 @@ const VuePdfEmbed = defineAsyncComponent(() => import("vue-pdf-embed"));
   </div>
 </template>
 
-<style>
-.windows-95-window {
-  width: 800px;
-  border: 3px solid;
-  border-color: #ff66cc #333399 #333399 #ff66cc;
-  background: linear-gradient(45deg, #ff6b6b, #ffccff, #45b7d1);
-}
-
-.windows-title-bar {
-  border-bottom: 2px solid #000;
-  font-family: "MS Sans Serif", sans-serif;
-}
-
-.windows-content {
-  background: linear-gradient(135deg, #ff69b4, #00ffff, #ffccff);
-  overflow: auto;
-}
-
-.windows-button-pressed {
-  border-color: #ff00ff #00ffff #00ffff #ff00ff;
-}
-
-.neon-text {
-  text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
-}
-
-.font-pixel {
-  font-family: "VT323", monospace;
-}
-
-.bg-win-blue {
-  background: #333399;
-}
-
-.bg-vaporwave-bg {
-  background: linear-gradient(135deg, #ff69b4, #00ffff, #ffccff);
-}
-</style>

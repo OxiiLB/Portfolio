@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import interact from "interactjs";
+import { useActiveComponentStore } from "~/stores/activeComponent";
+
+const activeStore = useActiveComponentStore();
+
+const myId = "component-" + Math.random().toString(36).substr(2, 9);
+
+const defaultZIndex = 20;
 
 const emit = defineEmits(["close"]);
 
@@ -28,6 +35,14 @@ const handleSubmit = async () => {
 
 const windowRef = ref<HTMLElement | null>(null);
 
+const zIndex = computed(() => {
+  return activeStore.activeId === myId ? 9999 : defaultZIndex;
+});
+
+const bringToFront = () => {
+  activeStore.setActive(myId);
+};
+
 onMounted(() => {
   if (windowRef.value) {
     interact(windowRef.value).draggable({
@@ -51,6 +66,8 @@ onMounted(() => {
   <div>
     <div
       ref="windowRef"
+      @mousedown="bringToFront"
+      :style="{ zIndex: zIndex }"
       class="windows-95-window animate-popup shadow-lg z-20 fixed top-1/2 left-1/2 w-full max-w-[95vw] max-h-[90vh] p-2 transform -translate-x-1/2 -translate-y-1/2 sm:max-w-[500px] sm:max-h-[600px]"
     >
       <div
@@ -115,37 +132,3 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
-<style>
-.windows-95-window {
-  width: 500px;
-  border: 3px solid;
-  border-color: #ff66cc #333399 #333399 #ff66cc;
-  background: linear-gradient(45deg, #ff6b6b, #ffccff, #45b7d1);
-}
-
-.windows-title-bar {
-  border-bottom: 2px solid #000;
-  font-family: "MS Sans Serif", sans-serif;
-}
-
-.windows-button-pressed {
-  border-color: #ff00ff #00ffff #00ffff #ff00ff;
-}
-
-.neon-text {
-  text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
-}
-
-.font-pixel {
-  font-family: "VT323", monospace;
-}
-
-.bg-win-blue {
-  background: #333399;
-}
-
-.bg-vaporwave-bg {
-  background: linear-gradient(135deg, #ff69b4, #00ffff, #ffccff);
-}
-</style>
