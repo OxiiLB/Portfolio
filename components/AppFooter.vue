@@ -41,7 +41,7 @@ onMounted(() => {
       class="windows-95-bar inset-0 bg-win-blue flex justify-between items-center border-2 border-t-white border-l-white border-b-gray-600 border-r-gray-600 px-2"
     >
       <button
-        class="flex items-center gap-1 sm:gap-2 px-2 py-1 sm:px-3 sm:py-1 border-2 border-t-gray-100 border-l-gray-100 border-b-gray-600 border-r-gray-600 active:border-reverse"
+        class="flex items-center gap-1 sm:gap-2 px-2 py-1 sm:px-3 sm:py-1 border-2 border-t-gray-100 border-l-gray-100 border-b-gray-600 border-r-gray-600 active:border-reverse hover:bg-secondary-300 hover:text-black transition-colors duration-200"
         @click="toggleStartMenu"
       >
         <img
@@ -49,8 +49,9 @@ onMounted(() => {
           alt="Microsoft Logo"
           class="w-4 h-4 sm:w-5 sm:h-5"
         />
-        <span class="text-black font-bold text-sm sm:text-base">Start</span>
+        <span class="font-bold text-sm sm:text-base">Start</span>
       </button>
+
       <div class="flex gap-1 sm:gap-3 text-neon-pink items-center">
         <span class="text-xl hidden sm:inline-block">💾</span>
         <p

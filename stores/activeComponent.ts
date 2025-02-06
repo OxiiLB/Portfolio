@@ -7,7 +7,6 @@ export const useActiveComponentStore = defineStore('activeComponent', {
   actions: {
     setActive(id: string) {
       this.activeId = id;
-      console.log('activeId', this.activeId);
     }
   }
 });

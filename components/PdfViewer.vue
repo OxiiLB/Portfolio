@@ -6,8 +6,6 @@ import { useActiveComponentStore } from "~/stores/activeComponent";
 
 const activeStore = useActiveComponentStore();
 
-const myId = 'component-' + Math.random().toString(36).substr(2, 9);
-
 const defaultZIndex = 20;
 
 
@@ -19,11 +17,11 @@ const pdfUrl = "/Romain_Giraud_CV.pdf";
 const windowRef = ref<HTMLElement | null>(null);
 
 const zIndex = computed(() => {
-  return activeStore.activeId === myId ? 9999 : defaultZIndex;
+  return activeStore.activeId === "cv" ? 9999 : defaultZIndex;
 });
 
 const bringToFront = () => {
-  activeStore.setActive(myId);
+  activeStore.setActive("cv");
 };
 
 onMounted(() => {
@@ -55,7 +53,7 @@ const VuePdfEmbed = defineAsyncComponent(() => import("vue-pdf-embed"));
       ref="windowRef"
       @mousedown="bringToFront"
       :style="{ zIndex: zIndex }"
-      class="windows-95-window animate-popup shadow-lg z-20 fixed top-0 left-0 w-full max-w-[95vw] max-h-[90vh] p-2  sm:max-w-[800px]"
+      class="windows-95-window animate-popup shadow-lg fixed top-0 left-0 w-full max-w-[95vw] max-h-[90vh] p-2  sm:max-w-[800px]"
     >
       <div
         class="windows-title-bar bg-win-blue text-white px-2 py-1 flex justify-between items-center cursor-move select-none"

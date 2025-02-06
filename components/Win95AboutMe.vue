@@ -4,8 +4,6 @@ import { useActiveComponentStore } from "~/stores/activeComponent";
 
 const activeStore = useActiveComponentStore();
 
-const myId = 'component-' + Math.random().toString(36).substr(2, 9);
-
 const defaultZIndex = 20;
 
 const emit = defineEmits(["close"]);
@@ -15,11 +13,11 @@ const close = () => emit("close");
 const windowRef = ref<HTMLElement | null>(null);
 
 const zIndex = computed(() => {
-  return activeStore.activeId === myId ? 9999 : defaultZIndex;
+  return activeStore.activeId === "about" ? 9999 : defaultZIndex;
 });
 
 const bringToFront = () => {
-  activeStore.setActive(myId);
+  activeStore.setActive("about");
 };
 
 onMounted(() => {
@@ -68,10 +66,10 @@ onMounted(() => {
       <div class="windows-content bg-vaporwave-bg p-4 overflow-y-auto">
         <div class="text-black font-pixel text-sm leading-relaxed">
           <p>
-            Hi! My name is Romain Giraud, a web developer passionate about
-            creating interactive experiences. I like atypical designs and enjoy
-            combining creativity with functionality to build engaging websites
-            and applications.
+            Hi! My name is Romain Giraud. I am a Epitech student in 3rd year, but also a game and web developer
+            passionate about creating interactive experiences. I appreciate
+            unconventional designs and enjoy combining creativity with
+            functionality to build engaging websites and applications.
           </p>
           <h3 class="mt-4 mb-2 text-lg font-pixel">Skills:</h3>
           <ul class="list-disc list-inside">
@@ -81,11 +79,21 @@ onMounted(() => {
             <li>Game engine creation</li>
           </ul>
           <h3 class="mt-4 mb-2 text-lg font-pixel">Experience:</h3>
-          <p>
-            I have worked on various projects ranging from showcase websites to
-            complex web applications. I strive to integrate nostalgic design
-            elements while ensuring modern performance.
-          </p>
+          <!-- list of professional exp -->
+          <ul class="list-disc list-inside">
+            <li>
+              <strong>Full-stack Developer:</strong> Worked in BestConsultant
+              and Eclipsa company as a full-stack developer. Developed web
+              applications using Vue.js, Nuxt, and Node.js. Experienced in
+              front-end and back-end development.
+            </li>
+            <li>
+              <strong>AI Developer:</strong> Conducted research on AI and
+              machine learning algorithms. Developed AI models for various
+              applications, including image recognition and natural language
+              processing.
+            </li>
+          </ul>
           <h3 class="mt-4 mb-2 text-lg font-pixel">Passions:</h3>
           <p>
             Besides coding, I have a deep love for video games, cooking, and

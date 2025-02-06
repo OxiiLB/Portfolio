@@ -4,7 +4,6 @@ import { useActiveComponentStore } from "~/stores/activeComponent";
 
 const activeStore = useActiveComponentStore();
 
-const myId = "component-" + Math.random().toString(36).substr(2, 9);
 
 const defaultZIndex = 20;
 
@@ -36,11 +35,11 @@ const handleSubmit = async () => {
 const windowRef = ref<HTMLElement | null>(null);
 
 const zIndex = computed(() => {
-  return activeStore.activeId === myId ? 9999 : defaultZIndex;
+  return activeStore.activeId === "contact" ? 9999 : defaultZIndex;
 });
 
 const bringToFront = () => {
-  activeStore.setActive(myId);
+  activeStore.setActive("contact");
 };
 
 onMounted(() => {
@@ -87,8 +86,8 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="windows-content bg-vaporwave-bg p-4">
-        <form @submit.prevent="handleSubmit" class="space-y-4">
+      <div class="windows-content bg-vaporwave-bg flex flex-col gap-4 p-4">
+        <form @submit.prevent="handleSubmit" class="flex flex-col gap-4">
           <div class="form-group">
             <label class="block mb-1 font-pixel text-sm">Nom:</label>
             <input
@@ -128,6 +127,30 @@ onMounted(() => {
             </button>
           </div>
         </form>
+        <hr
+          class="border-t-2 border-b-0 border-l-0 border-r-0 border-dotted border-gray-400"
+        />
+        <h3 class="font-pixel text-black text-xl text-center">
+          Or contact me on:
+        </h3>
+        <div class="flex justify-center gap-2">
+          <a
+            href="https://www.linkedin.com/in/romain-paul-giraud/"
+            target="_blank"
+            class="flex items-center gap-1 px-2 py-1 text-lg border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 font-pixel text-black"
+          >
+            <Icon name="uil:linkedin" style="color: black" />
+            <span>LinkedIn</span>
+          </a>
+          <a
+            href="https://github.com/OxiiLB"
+            target="_blank"
+            class="flex items-center gap-1 px-2 py-1 text-lg border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 font-pixel text-black"
+          >
+            <Icon name="uil:github" style="color: black" />
+            <span>GitHub</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>

@@ -18,6 +18,7 @@ useHead(
 
 const componentStore = useComponentStore();
 
+
 const isComponentVisible = (component: string) => {
   return componentStore.activeComponents[component] ?? false;
 };

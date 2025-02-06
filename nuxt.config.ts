@@ -1,5 +1,11 @@
 import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
+  modules: ['@nuxt/icon'],
+  icon: {
+    serverBundle: {
+      collections: ['uil', 'mdi']
+    }
+  },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
