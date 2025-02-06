@@ -72,7 +72,6 @@ const { data: pinnedItems } = await useAsyncData<PinnedItemsData>(
     return data;
   }
 );
-
 onMounted(() => {
   if (windowRef.value) {
     interact(windowRef.value).draggable({
@@ -104,7 +103,7 @@ onMounted(() => {
     >
       <div class="flex items-center gap-2">
         <span class="text-lg">📌</span>
-        <h2 class="font-pixel text-sm neon-text">PROJECT.EXE</h2>
+        <h2 class="font-pixel text-sm neon-text">PROJECTS.EXE</h2>
       </div>
       <div class="flex gap-1">
         <button
@@ -115,25 +114,31 @@ onMounted(() => {
         </button>
       </div>
     </div>
-    <div>
-      <h1>Pinned GitHub Repositories</h1>
-      <ul>
-        <li
-          v-for="repo in pinnedItems?.user?.pinnedItems?.nodes || []"
-          :key="repo.name"
-        >
-          <a :href="repo.url" target="_blank">
-            <strong>{{ repo.name }}</strong>
-          </a>
-          <p>{{ repo.description }}</p>
-          <p>⭐ {{ repo.stargazerCount }} | Forks: {{ repo.forkCount }}</p>
-          <p v-if="repo.primaryLanguage">
-            <span :style="{ color: repo.primaryLanguage.color }">
-              {{ repo.primaryLanguage.name }}
-            </span>
-          </p>
-        </li>
-      </ul>
+    <div class="windows-content bg-vaporwave-bg p-4 overflow-y-auto">
+      <div class="text-black font-pixel leading-relaxed">
+        <ul class="grid grid-cols-2 gap-4">
+          <li
+            v-for="repo in pinnedItems?.user?.pinnedItems?.nodes || []"
+            :key="repo.name"
+            class="border p-4 rounded shadow-sm bg-secondary-500"
+          >
+            <a :href="repo.url" target="_blank" class="underline font-bold">
+              {{ repo.name }}
+            </a>
+            <p class="mt-2">
+              {{ repo.description || "No description available." }}
+            </p>
+            <p class="mt-2">
+              ⭐ {{ repo.stargazerCount }} | Forks: {{ repo.forkCount }}
+            </p>
+            <p v-if="repo.primaryLanguage" class="mt-2">
+              <span :style="{ color: repo.primaryLanguage.color }">
+                {{ repo.primaryLanguage.name }}
+              </span>
+            </p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

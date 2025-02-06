@@ -1,6 +1,21 @@
 <script setup lang="ts">
-import Win95Input from "~/components/Win95Contact.vue";
+import { defineAsyncComponent } from "vue";
 import { useComponentStore } from "~/stores/componentStore";
+import { useHead } from "#app";
+
+// Définition des composants en lazy loading
+const Win95Input = defineAsyncComponent(
+  () => import("~/components/Win95Contact.vue")
+);
+const PdfViewer = defineAsyncComponent(
+  () => import("~/components/PdfViewer.vue")
+);
+const Win95AboutMe = defineAsyncComponent(
+  () => import("~/components/Win95AboutMe.vue")
+);
+const Win95Projects = defineAsyncComponent(
+  () => import("~/components/Win95Projects.vue")
+);
 
 useHead(
   {
@@ -18,11 +33,11 @@ useHead(
 
 const componentStore = useComponentStore();
 
-
 const isComponentVisible = (component: string) => {
   return componentStore.activeComponents[component] ?? false;
 };
 </script>
+
 <template>
   <div
     class="bg-cover bg-center h-screen"
@@ -48,16 +63,17 @@ const isComponentVisible = (component: string) => {
       v-if="isComponentVisible('projects')"
       @close="componentStore.hideComponent('projects')"
     />
+    <!-- Contenu principal de la page -->
     <div
       class="flex-grow h-screen flex flex-col items-center justify-center gap-6 text-center px-4"
     >
       <h1
-        class="text-5xl sm:text-6xl font-extrabold text-font drop-shadow-secondary z-10"
+        class="text-5xl sm:text-6xl font-extrabold text-font drop-shadow-secondary"
       >
         Welcome to my portfolio
       </h1>
       <h2
-        class="text-xl sm:text-2xl font-extrabold text-font drop-shadow-secondary z-10"
+        class="text-xl sm:text-2xl font-extrabold text-font drop-shadow-secondary"
       >
         Romain Giraud - Game & Web Developer
       </h2>
