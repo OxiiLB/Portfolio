@@ -43,6 +43,11 @@ const isComponentVisible = (component: string) => {
       v-if="isComponentVisible('about')"
       @close="componentStore.hideComponent('about')"
     />
+    <Win95Projects
+      class="z-20"
+      v-if="isComponentVisible('projects')"
+      @close="componentStore.hideComponent('projects')"
+    />
     <div
       class="flex-grow h-screen flex flex-col items-center justify-center gap-6 text-center px-4"
     >

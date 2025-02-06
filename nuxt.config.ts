@@ -1,10 +1,30 @@
 import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
-  modules: ['@nuxt/icon'],
+  modules: ["@nuxt/icon", "nuxt-graphql-request"],
+  runtimeConfig: {
+    githubToken: process.env.GITHUB_TOKEN,
+    public: {
+    },
+  },
+  graphql: {
+    clients: {
+      default: {
+        endpoint: "https://api.github.com/graphql",
+        options: {
+          headers: {
+            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+          },
+        },
+      },
+    },
+    includeNodeModules: true,
+  },
+
   icon: {
     serverBundle: {
-      collections: ['uil', 'mdi']
-    }
+      collections: ["uil", "mdi"],
+    },
   },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
@@ -34,8 +54,11 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=VT323&display=swap'}
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=VT323&display=swap",
+        },
       ],
     },
-  }
+  },
 });

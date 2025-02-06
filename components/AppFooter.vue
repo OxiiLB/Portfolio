@@ -77,7 +77,7 @@ onMounted(() => {
     </div>
     <div
       v-if="showStartMenu"
-      class="bg-secondary-500 w-48 sm:w-36 h-48 fixed bottom-14 sm:bottom-12 left-2 border-2 border-t-white border-l-white border-b-gray-600 border-r-gray-600 shadow-lg"
+      class="bg-secondary-500 z-50 w-48 sm:w-36 h-48 fixed bottom-14 sm:bottom-12 left-2 border-2 border-t-white border-l-white border-b-gray-600 border-r-gray-600 shadow-lg"
     >
       <div class="p-2">
         <p class="text-xl font-bold mb-2">Programmes</p>
@@ -106,10 +106,13 @@ onMounted(() => {
               ABOUT_ME.EXE
             </button>
           </li>
-          <li
-            class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
-          >
-            PROJECTS.EXE
+          <li>
+            <button
+              class="hover:bg-win-blue hover:text-white px-2 py-1 cursor-pointer text-sm sm:text-base"
+              @click="toggleComponent('projects')"
+            >
+              PROJECTS.EXE
+            </button>
           </li>
         </ul>
       </div>

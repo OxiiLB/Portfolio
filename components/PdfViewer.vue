@@ -17,7 +17,7 @@ const pdfUrl = "/Romain_Giraud_CV.pdf";
 const windowRef = ref<HTMLElement | null>(null);
 
 const zIndex = computed(() => {
-  return activeStore.activeId === "cv" ? 9999 : defaultZIndex;
+  return activeStore.activeId === "cv" ? 40 : defaultZIndex;
 });
 
 const bringToFront = () => {

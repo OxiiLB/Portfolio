@@ -35,7 +35,7 @@ const handleSubmit = async () => {
 const windowRef = ref<HTMLElement | null>(null);
 
 const zIndex = computed(() => {
-  return activeStore.activeId === "contact" ? 9999 : defaultZIndex;
+  return activeStore.activeId === "contact" ? 40 : defaultZIndex;
 });
 
 const bringToFront = () => {

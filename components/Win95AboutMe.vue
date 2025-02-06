@@ -13,7 +13,7 @@ const close = () => emit("close");
 const windowRef = ref<HTMLElement | null>(null);
 
 const zIndex = computed(() => {
-  return activeStore.activeId === "about" ? 9999 : defaultZIndex;
+  return activeStore.activeId === "about" ? 40 : defaultZIndex;
 });
 
 const bringToFront = () => {
