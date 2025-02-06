@@ -120,7 +120,7 @@ onMounted(() => {
           <li
             v-for="repo in pinnedItems?.user?.pinnedItems?.nodes || []"
             :key="repo.name"
-            class="border p-4 rounded shadow-sm bg-secondary-500"
+            class="border p-4 rounded shadow-sm bg-secondary-300"
           >
             <a :href="repo.url" target="_blank" class="underline font-bold">
               {{ repo.name }}
