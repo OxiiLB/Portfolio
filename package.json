@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@iconify-json/uil": "^1.2.3",
     "@nuxt/icon": "^1.10.3",
     "@tailwindcss/vite": "^4.0.3",
     "interactjs": "^1.10.27",
