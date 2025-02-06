@@ -63,7 +63,6 @@ const isComponentVisible = (component: string) => {
       v-if="isComponentVisible('projects')"
       @close="componentStore.hideComponent('projects')"
     />
-    <!-- Contenu principal de la page -->
     <div
       class="flex-grow h-screen flex flex-col items-center justify-center gap-6 text-center px-4"
     >
