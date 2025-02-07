@@ -125,7 +125,7 @@ onMounted(() => {
             <a :href="repo.url" target="_blank" class="underline font-bold">
               {{ repo.name }}
             </a>
-            <p class="mt-2">
+            <p class="mt-2 line-clamp-2">
               {{ repo.description || "No description available." }}
             </p>
             <p class="mt-2">
