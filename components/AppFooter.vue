@@ -80,7 +80,7 @@ onMounted(() => {
       class="bg-secondary-500 z-50 w-48 sm:w-36 h-48 fixed bottom-14 sm:bottom-12 left-2 border-2 border-t-white border-l-white border-b-gray-600 border-r-gray-600 shadow-lg"
     >
       <div class="p-2">
-        <p class="text-xl font-bold mb-2">Programmes</p>
+        <p class="text-xl font-bold mb-2">Programs</p>
         <ul>
           <li>
             <button

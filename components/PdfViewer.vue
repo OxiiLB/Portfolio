@@ -53,7 +53,7 @@ const VuePdfEmbed = defineAsyncComponent(() => import("vue-pdf-embed"));
       ref="windowRef"
       @mousedown="bringToFront"
       :style="{ zIndex: zIndex }"
-      class="windows-95-window animate-popup shadow-lg fixed top-0 left-0 w-full max-w-[95vw] max-h-[90vh] p-2  sm:max-w-[800px]"
+      class="windows-95-window animate-popup shadow-lg fixed top-1/2 left-1/2 w-full max-w-[95vw] max-h-[90vh] p-2 transform -translate-x-1/2 -translate-y-1/2 sm:max-w-[800px]"
     >
       <div
         class="windows-title-bar bg-win-blue text-white px-2 py-1 flex justify-between items-center cursor-move select-none"
