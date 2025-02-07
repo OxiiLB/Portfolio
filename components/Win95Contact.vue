@@ -4,7 +4,6 @@ import { useActiveComponentStore } from "~/stores/activeComponent";
 
 const activeStore = useActiveComponentStore();
 
-
 const defaultZIndex = 20;
 
 const emit = defineEmits(["close"]);
@@ -15,22 +14,6 @@ const message = ref("");
 const isSending = ref(false);
 
 const close = () => emit("close");
-
-const handleSubmit = async () => {
-  isSending.value = true;
-  try {
-    await $fetch("/api/contact", {
-      method: "POST",
-      body: { name, email, message },
-    });
-    alert("Message envoyé!");
-    close();
-  } catch (error) {
-    alert("Erreur d'envoi");
-  } finally {
-    isSending.value = false;
-  }
-};
 
 const windowRef = ref<HTMLElement | null>(null);
 
@@ -87,46 +70,17 @@ onMounted(() => {
       </div>
 
       <div class="windows-content bg-vaporwave-bg flex flex-col gap-4 p-4">
-        <form @submit.prevent="handleSubmit" class="flex flex-col gap-4">
-          <div class="form-group">
-            <label class="block mb-1 font-pixel text-sm">Nom:</label>
-            <input
-              type="text"
-              v-model="name"
-              class="border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 p-1 font-pixel text-black text-sm focus:outline-dotted w-full"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label class="block mb-1 font-pixel text-sm">Email:</label>
-            <input
-              type="email"
-              v-model="email"
-              class="border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 p-1 font-pixel text-black text-sm focus:outline-dotted w-full"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label class="block mb-1 font-pixel text-sm">Message:</label>
-            <textarea
-              v-model="message"
-              class="border-2 border-t-blue-600 border-l-blue-600 border-b-blue-300 border-r-blue-300 bg-pink-50 p-1 font-pixel text-black text-sm focus:outline-dotted w-full h-32 resize-none"
-              required
-            ></textarea>
-          </div>
-
-          <div class="flex justify-end gap-2">
-            <button
-              type="submit"
-              class="flex items-center justify-center border-2 border-t-pink-300 border-l-pink-300 border-b-pink-600 border-r-pink-600 bg-pink-400 hover:bg-pink-500 bg-win-blue text-white px-4 py-1 relative active:top-px"
-              :class="{ 'windows-button-pressed': isSending }"
-            >
-              <span class="neon-text">Envoyer</span>
-            </button>
-          </div>
-        </form>
+        <h3 class="font-pixel text-black text-xl text-center">
+          Send me a mail:
+        </h3>
+        <div class="text-center mt-2">
+          <a
+            href="mailto:romain.giraud@epitech.eu"
+            class="text-blue-600 hover:text-blue-800 underline font-bold transition-colors duration-200"
+          >
+            romain.giraud@epitech.eu
+          </a>
+        </div>
         <hr
           class="border-t-2 border-b-0 border-l-0 border-r-0 border-dotted border-gray-400"
         />

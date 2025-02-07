@@ -132,7 +132,12 @@ onMounted(() => {
               ⭐ {{ repo.stargazerCount }} | Forks: {{ repo.forkCount }}
             </p>
             <p v-if="repo.primaryLanguage" class="mt-2">
-              <span :style="{ color: repo.primaryLanguage.color }">
+              <span
+                :style="{
+                  color: repo.primaryLanguage.color,
+                  textShadow: '1px 1px 2px rgba(0, 0, 0, 0.7)',
+                }"
+              >
                 {{ repo.primaryLanguage.name }}
               </span>
             </p>

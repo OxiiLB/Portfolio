@@ -33,7 +33,7 @@ const toggleComponent = (component: string) => {
 
 const desktopIcons = [
   {
-    name: "Contact",
+    name: "CONTACT",
     component: "contact",
     icon: "material-symbols:mail-outline",
     position: { x: 20, y: 20 },
@@ -45,13 +45,13 @@ const desktopIcons = [
     position: { x: 20, y: 100 },
   },
   {
-    name: "About Me",
+    name: "ABOUT_ME",
     component: "about",
     icon: "ix:about",
     position: { x: 20, y: 180 },
   },
   {
-    name: "Projects",
+    name: "PROJECTS",
     component: "projects",
     icon: "tabler:pinned",
     position: { x: 20, y: 260 },
@@ -76,9 +76,9 @@ const desktopIcons = [
         class="w-16 h-16 pixel-border bg-gray-300 transition-transform duration-500 ease-out scale-200 group-hover:scale-250 group-hover:bg-win-blue"
       />
       <span
-        class="text-center text-white text-shadow-neon text-sm font-pixel px-1 bg-black/50"
+        class="text-center text-white text-shadow-neon text-lg font-pixel px-1 bg-black/50"
       >
-        {{ icon.name }}.exe
+        {{ icon.name }}.EXE
       </span>
     </div>
 
