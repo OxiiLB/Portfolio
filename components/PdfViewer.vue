@@ -59,7 +59,7 @@ const VuePdfEmbed = defineAsyncComponent(() => import("vue-pdf-embed"));
         class="windows-title-bar bg-win-blue text-white px-2 py-1 flex justify-between items-center cursor-move select-none"
       >
         <div class="flex items-center gap-2">
-          <span class="text-lg">📄</span>
+          <Icon name="material-symbols-light:attach-file-rounded" class="w-6 h-6" />
           <h2 class="font-pixel text-sm neon-text">CV.EXE</h2>
         </div>
         <div class="flex gap-1">

@@ -3,20 +3,6 @@ import { defineAsyncComponent } from "vue";
 import { useComponentStore } from "~/stores/componentStore";
 import { useHead } from "#app";
 
-// Définition des composants en lazy loading
-const Win95Input = defineAsyncComponent(
-  () => import("~/components/Win95Contact.vue")
-);
-const PdfViewer = defineAsyncComponent(
-  () => import("~/components/PdfViewer.vue")
-);
-const Win95AboutMe = defineAsyncComponent(
-  () => import("~/components/Win95AboutMe.vue")
-);
-const Win95Projects = defineAsyncComponent(
-  () => import("~/components/Win95Projects.vue")
-);
-
 useHead(
   {
     title: "Home",
@@ -43,7 +29,7 @@ const isComponentVisible = (component: string) => {
     class="bg-cover bg-center h-screen"
     style="background-image: url('/background.gif')"
   >
-    <Win95Input
+    <Win95Contact
       class="z-20"
       v-if="isComponentVisible('contact')"
       @close="componentStore.hideComponent('contact')"
