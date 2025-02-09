@@ -66,8 +66,8 @@ const desktopIcons = [
   >
     <div
       v-for="(icon, index) in desktopIcons"
-      :key="index"
-      class="absolute flex flex-col items-center gap-1 w-20 cursor-pointer group select-none"
+      :key="index"j
+      class="absolute hidden md:flex flex-col items-center gap-1 w-20 cursor-pointer group select-none"
       :style="{ left: `${icon.position.x}px`, top: `${icon.position.y}px` }"
       @dblclick="toggleComponent(icon.component)"
     >
