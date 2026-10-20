@@ -78,7 +78,7 @@ onMounted(() => {
             href="mailto:romain.giraud@epitech.eu"
             class="text-blue-600 hover:text-blue-800 underline font-bold transition-colors duration-200"
           >
-            romain.giraud@epitech.eu
+            romaingiraud86130@gmail.com
           </a>
         </div>
         <hr

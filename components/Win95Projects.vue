@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import interact from "interactjs";
 import { useActiveComponentStore } from "~/stores/activeComponent";
-import { gql } from "nuxt-graphql-request/utils";
 
 interface Repository {
   name: string;
@@ -23,8 +22,6 @@ interface PinnedItemsData {
   };
 }
 
-const { $graphql } = useNuxtApp();
-
 const activeStore = useActiveComponentStore();
 
 const defaultZIndex = 20;
@@ -43,34 +40,9 @@ const bringToFront = () => {
   activeStore.setActive("projects");
 };
 
-const query = gql`
-  query {
-    user(login: "OxiiLB") {
-      pinnedItems(first: 6, types: REPOSITORY) {
-        nodes {
-          ... on Repository {
-            name
-            description
-            url
-            stargazerCount
-            forkCount
-            primaryLanguage {
-              name
-              color
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-const { data: pinnedItems } = await useAsyncData<PinnedItemsData>(
-  "pinnedItems",
-  async () => {
-    const data: PinnedItemsData = await $graphql.default.request(query);
-    return data;
-  }
+const { data: pinnedItems } = await useFetch<PinnedItemsData>(
+  "/api/pinned-repos",
+  { key: "pinnedItems" }
 );
 onMounted(() => {
   if (windowRef.value) {

@@ -1,24 +1,11 @@
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
-  modules: ["@nuxt/icon", "nuxt-graphql-request"],
+  modules: ["@nuxt/icon"],
   runtimeConfig: {
     githubToken: process.env.GITHUB_TOKEN,
     public: {
     },
-  },
-  graphql: {
-    clients: {
-      default: {
-        endpoint: "https://api.github.com/graphql",
-        options: {
-          headers: {
-            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-          },
-        },
-      },
-    },
-    includeNodeModules: true,
   },
 
   icon: {
