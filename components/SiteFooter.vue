@@ -1,7 +1,12 @@
 <script setup lang="ts">
 const profile = useProfile();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const year = new Date().getFullYear();
+
+// File names must match public/ exactly (servers are case-sensitive).
+const cvHref = computed(() =>
+  locale.value === "fr" ? "/CV_Romain_GIRAUD_Prospection.pdf" : "/CV_Romain_GIRAUD_Outreach_EN.pdf",
+);
 </script>
 
 <template>
@@ -16,7 +21,7 @@ const year = new Date().getFullYear();
       <div class="ctas">
         <a class="btn primary" href="#links">{{ t("footer.contact") }}</a>
         <a class="btn ghost" href="#ask">{{ t("footer.askFirst") }}</a>
-        <a class="btn ghost" href="/Romain_Giraud_CV.pdf" target="_blank">{{ t("footer.cv") }}</a>
+        <a class="btn ghost" :href="cvHref" target="_blank" rel="noopener">{{ t("footer.cv") }}</a>
       </div>
       <div class="row">
         <span>© {{ year }} {{ profile.name }} · {{ profile.role }} · {{ profile.location }}</span>
