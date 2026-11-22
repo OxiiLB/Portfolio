@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "title": "Romain Giraud · Freelance AI engineer",
+    "description": "Romain Giraud, freelance AI engineer. RAG assistants, LLM agents and AI features for your business. Ask my assistant anything about my work."
+  },
+  "nav": {
+    "home": "Romain Giraud, home",
+    "sections": "Sections",
+    "links": "Links",
+    "ask": "Ask",
+    "projects": "Projects",
+    "services": "Services",
+    "hire": "Hire me",
+    "language": "Language"
+  },
+  "hero": {
+    "ask": "Ask my assistant",
+    "askHint": "answers from my profile",
+    "hire": "Hire me",
+    "tokens": "{n} tokens",
+    "attention": "attention from “{token}”",
+    "hover": "hover a token",
+    "view": "Headline view",
+    "viewTokens": "tokens",
+    "viewPlain": "plain"
+  },
+  "links": {
+    "title": "Find me",
+    "sub": "Book a mission on the platform you already use, or write to me directly.",
+    "axis": "p(next contact)",
+    "softmax": "softmax · {n} options",
+    "email": "Email",
+    "copy": "copy",
+    "copied": "copied",
+    "selected": "selected"
+  },
+  "ask": {
+    "title": "Ask my assistant",
+    "sub": "It answers from my profile, projects and services, and shows the passages it used.",
+    "greeting": "Hi! I'm Romain's assistant. Ask me about his projects, skills or availability.",
+    "indexed": "{n} passages indexed",
+    "powered": "powered by Claude",
+    "thinking": "Thinking",
+    "label": "Your question",
+    "placeholder": "e.g. Have you built a chatbot for a shop?",
+    "send": "Ask",
+    "try": "Try asking",
+    "color": "Color tokens as they stream",
+    "lastAnswer": "last answer",
+    "tokens": "{n} tokens",
+    "sources": "sources",
+    "unavailable": "The assistant is unavailable right now.",
+    "emailFallback": "You can also email Romain at {email}."
+  },
+  "projects": {
+    "title": "AI projects",
+    "filter": "Filter projects",
+    "all": "all",
+    "rag": "RAG",
+    "agent": "agents",
+    "vision": "vision",
+    "ml": "ML",
+    "github": "view on GitHub ↗"
+  },
+  "services": {
+    "title": "What I can build for you",
+    "sub": "Fixed scope, a working demo early, and code you own at the end."
+  },
+  "footer": {
+    "got": "Got",
+    "a": "a",
+    "project": "project",
+    "talk": "Let's talk.",
+    "contact": "Contact me",
+    "askFirst": "Ask the assistant first",
+    "cv": "Download CV",
+    "profiles": "Profiles"
+  }
+}

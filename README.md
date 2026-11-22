@@ -1,75 +1,31 @@
-# Nuxt Minimal Starter
+# Romain Giraud · Portfolio
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Nuxt 3 site (dark only, English at / and French at /fr): token-style hero with attention-weight hover, an embedding-map background, link hub, AI projects, services, and a RAG assistant that answers questions about Romain.
 
 ## Setup
 
-Make sure to install dependencies:
-
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+cp .env.example .env   # then paste your Anthropic API key
+npm run dev            # http://localhost:3000
 ```
 
-## Development Server
+Without `ANTHROPIC_API_KEY` the site works, and the assistant replies that it isn't switched on yet.
 
-Start the development server on `http://localhost:3000`:
+## Editing content
 
-```bash
-# npm
-npm run dev
+- **`data/profile.ts`**: headline, links, projects, services, suggested questions. Shown on the page **and** indexed by the assistant.
+- **`server/knowledge/*.md`**: extra facts for the assistant only (bio, how missions work, FAQ). Each `## Heading` becomes one searchable passage. Add a file and it is picked up automatically.
 
-# pnpm
-pnpm dev
+Search for `TODO(Romain)` to find everything that still holds placeholder content.
 
-# yarn
-yarn dev
+## How the assistant works
 
-# bun
-bun run dev
-```
+`server/api/ask.post.ts` → `server/utils/knowledge.ts`
 
-## Production
+1. Profile data and markdown are split into short passages.
+2. The visitor's question is matched against them with BM25 keyword search (top 4 passages).
+3. Claude (`claude-opus-5-5`, low effort) answers using only those passages and streams the reply back as NDJSON; the passages used are shown as sources.
+4. Requests are rate limited per IP (8/minute, 40/hour) in memory.
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Deploy on any Node host (Vercel, Netlify, a VPS) with `npm run build` and the `ANTHROPIC_API_KEY` environment variable set.

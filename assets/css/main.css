@@ -1,146 +1,116 @@
-@import "tailwindcss";
+/* Tokenizer design system, dark only.
+   Ground: near-black "latent space" ink with a faint violet bias.
+   Accent: the magma colormap (purple → pink → orange → cream), the palette
+   of attention heatmaps and loss plots. Tokens keep six luminous hues. */
+:root {
+  --bg: #09080F;
+  --surface: #12101C;
+  --surface-2: #191626;
+  --ink: #EEEAF6;
+  --soft: #9C96B2;
+  --faint: #5F5978;
+  --line: rgba(238, 234, 246, 0.08);
 
-/* Pop-up animation definition */
-@keyframes popup {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  --m1: #51127C;
+  --m2: #B73779;
+  --m3: #FC8961;
+  --m4: #FCFDBF;
+  --grad: linear-gradient(100deg, var(--m2), var(--m3));
+  --grad-long: linear-gradient(100deg, var(--m1), var(--m2) 40%, var(--m3) 80%, var(--m4));
+
+  --tok-ink: #120F1A;
+  --ok: #4ADE9B;
+  --t1: #BBA6FF;
+  --t2: #86E3C6;
+  --t3: #FFA585;
+  --t4: #93C8FF;
+  --t5: #FFE07D;
+  --t6: #FF93C9;
+
+  --f-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --gutter: 20px;
+  color-scheme: dark;
 }
 
-/* Custom variables */
-@theme {
-    /* Primary Colors */
-    --color-primary-100: #d2d2d2;
-    --color-primary-200: #a4a4a5;
-    --color-primary-300: #777778;
-    --color-primary-400: #49494b;
-    --color-primary-500: #1c1c1e;
-    --color-primary-600: #161618;
-    --color-primary-700: #111112;
-    --color-primary-800: #0b0b0c;
-    --color-primary-900: #060606;
+*, *::before, *::after { box-sizing: border-box; }
+/* No background on html: body's background then paints the canvas root, so the
+   fixed LatentField (z-index -1) can sit above it and below the content. */
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--f-display);
+  font-size: 16px;
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(60rem 40rem at 88% -8%, color-mix(in srgb, var(--m2) 22%, transparent), transparent 70%),
+    radial-gradient(50rem 50rem at -10% 38%, color-mix(in srgb, var(--m1) 38%, transparent), transparent 70%),
+    radial-gradient(40rem 30rem at 70% 100%, color-mix(in srgb, var(--m3) 10%, transparent), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+img { max-width: 100%; }
+:focus-visible { outline: 2px solid var(--m3); outline-offset: 3px; border-radius: 4px; }
+::selection { background: var(--m2); color: #fff; }
 
-    /* Secondary Colors */
-    --color-secondary-100: #f0dcff;
-    --color-secondary-200: #e1baff;
-    --color-secondary-300: #d297ff;
-    --color-secondary-400: #c375ff;
-    --color-secondary-500: #b452ff;
-    --color-secondary-600: #9042cc;
-    --color-secondary-700: #6c3199;
-    --color-secondary-800: #482166;
-    --color-secondary-900: #241033;
+.in {
+  position: relative;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+.mono { font-family: var(--f-mono); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-    /* Font Color */
-    --color-font: #f5f5f5;
+.c1 { background: var(--t1); } .c2 { background: var(--t2); } .c3 { background: var(--t3); }
+.c4 { background: var(--t4); } .c5 { background: var(--t5); } .c6 { background: var(--t6); }
 
-    --color-electric-blue: #7ffafa;
+section.block { padding-block: 64px; }
 
-    /* Shadows */
-    --drop-shadow-secondary: 0 10px 10px var(--color-secondary-500);
-
-    /* Animation */
-    --animate-popup: popup 0.1s ease-out;
+/* Cut-corner panels: an outer layer paints the edge (flat or gradient),
+   the inner layer sits 1px inside with the same chamfer. */
+.cut-edge {
+  --c: 16px;
+  position: relative;
+  padding: 1px;
+  background: var(--edge, var(--line));
+  clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+  transition: background 0.3s;
+}
+.cut-inner {
+  height: 100%;
+  background: var(--fill, var(--surface));
+  clip-path: polygon(calc(var(--c) - 0.4px) 0, 100% 0, 100% calc(100% - var(--c) + 0.4px), calc(100% - var(--c) + 0.4px) 100%, 0 100%, 0 calc(var(--c) - 0.4px));
 }
 
-/* Utility classes */
-@layer utilities {
-    .drop-shadow-secondary {
-      filter: drop-shadow(var(--drop-shadow-secondary));
-    }
-    /* Utility class for the pop-up animation */
-    .animate-popup {
-      animation: var(--animate-popup);
-    }
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-/* Default color application */
-html {
-    @apply bg-primary-500 text-font;
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+  padding: 13px 20px; font-weight: 600; font-size: 16px; border: 0;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  transition: transform 0.15s, filter 0.15s, background-color 0.15s;
 }
+.btn.primary { background: var(--grad); color: #160A14; }
+.btn.primary:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.btn.ghost { background: rgba(238, 234, 246, 0.06); color: var(--ink); }
+.btn.ghost:hover { background: rgba(238, 234, 246, 0.11); }
+.btn .k { font-family: var(--f-mono); font-size: 11px; font-weight: 500; opacity: 0.7; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 
-/* Styling for the Windows 95-style window */
-.windows-95-window {
-  width: 500px;
-  border: 3px solid;
-  border-color: #ff66cc #333399 #333399 #ff66cc;
-  background: linear-gradient(45deg, #ff6b6b, #ffccff, #45b7d1);
-}
-
-/* Title bar styling */
-.windows-title-bar {
-  border-bottom: 2px solid #000;
-  font-family: "MS Sans Serif", sans-serif;
-}
-
-/* Content section inside the window */
-.windows-content {
-  background: linear-gradient(135deg, #ff69b4, #00ffff, #ffccff);
-  overflow: auto;
-}
-
-/* Pressed button style */
-.windows-button-pressed {
-  border-color: #ff00ff #00ffff #00ffff #ff00ff;
-}
-
-/* Neon text effect */
-.neon-text {
-  text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
-}
-
-/* Pixel font styling */
-.font-pixel {
-  font-family: "VT323", monospace;
-}
-
-/* Windows blue background */
-.bg-win-blue {
-  background: #333399;
-}
-
-/* Vaporwave background gradient */
-.bg-vaporwave-bg {
-  background: linear-gradient(135deg, #ff69b4, #00ffff, #ffccff);
-}
-
-/* Animated gradient effect for the Windows 95 bar */
-.windows-95-bar {
-  background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
-  animation: gradientShift 10s infinite;
-}
-
-/* Neon text shadow effect */
-.text-shadow-neon {
-  text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
-}
-
-/* Neon pink text color and effect */
-.text-neon-pink {
-  color: #ff00ff;
-  text-shadow: 0 0 8px #ff00ff;
-}
-
-/* Neon cyan text color and effect */
-.text-neon-cyan {
-  color: #AAffff;
-  text-shadow: 0 0 8px #00ffff;
-}
-
-/* Gradient shift animation */
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
 }

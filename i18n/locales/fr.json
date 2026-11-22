@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "title": "Romain Giraud · Ingénieur IA freelance",
+    "description": "Romain Giraud, ingénieur IA freelance. Assistants RAG, agents LLM et fonctionnalités IA pour votre entreprise. Posez vos questions à mon assistant."
+  },
+  "nav": {
+    "home": "Romain Giraud, accueil",
+    "sections": "Sections",
+    "links": "Liens",
+    "ask": "Assistant",
+    "projects": "Projets",
+    "services": "Services",
+    "hire": "Me recruter",
+    "language": "Langue"
+  },
+  "hero": {
+    "ask": "Interroger mon assistant",
+    "askHint": "répond à partir de mon profil",
+    "hire": "Me recruter",
+    "tokens": "{n} tokens",
+    "attention": "attention depuis « {token} »",
+    "hover": "survolez un token",
+    "view": "Affichage du titre",
+    "viewTokens": "tokens",
+    "viewPlain": "texte"
+  },
+  "links": {
+    "title": "Me trouver",
+    "sub": "Réservez une mission sur la plateforme que vous utilisez déjà, ou écrivez-moi directement.",
+    "axis": "p(prochain contact)",
+    "softmax": "softmax · {n} options",
+    "email": "E-mail",
+    "copy": "copier",
+    "copied": "copié",
+    "selected": "sélectionné"
+  },
+  "ask": {
+    "title": "Interrogez mon assistant",
+    "sub": "Il répond à partir de mon profil, de mes projets et de mes services, et montre les passages utilisés.",
+    "greeting": "Bonjour ! Je suis l'assistant de Romain. Posez-moi vos questions sur ses projets, ses compétences ou ses disponibilités.",
+    "indexed": "{n} passages indexés",
+    "powered": "propulsé par Claude",
+    "thinking": "Réflexion",
+    "label": "Votre question",
+    "placeholder": "ex. : Avez-vous déjà créé un chatbot pour une boutique ?",
+    "send": "Envoyer",
+    "try": "Exemples de questions",
+    "color": "Colorer les tokens pendant la réponse",
+    "lastAnswer": "dernière réponse",
+    "tokens": "{n} tokens",
+    "sources": "sources",
+    "unavailable": "L'assistant n'est pas disponible pour le moment.",
+    "emailFallback": "Vous pouvez aussi écrire à Romain : {email}."
+  },
+  "projects": {
+    "title": "Projets IA",
+    "filter": "Filtrer les projets",
+    "all": "tous",
+    "rag": "RAG",
+    "agent": "agents",
+    "vision": "vision",
+    "ml": "ML",
+    "github": "voir sur GitHub ↗"
+  },
+  "services": {
+    "title": "Ce que je peux créer pour vous",
+    "sub": "Un périmètre défini, une démo fonctionnelle rapidement, et un code qui vous appartient à la fin."
+  },
+  "footer": {
+    "got": "Un",
+    "a": "projet",
+    "project": "en tête",
+    "talk": "Parlons-en.",
+    "contact": "Me contacter",
+    "askFirst": "Demander d'abord à l'assistant",
+    "cv": "Télécharger le CV",
+    "profiles": "Profils"
+  }
+}
