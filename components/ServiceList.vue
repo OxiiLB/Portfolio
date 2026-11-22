@@ -7,7 +7,6 @@ const { t } = useI18n();
   <section id="services" class="block">
     <div class="in">
       <SectionHead
-        layer="L4"
         name="services"
         :title="t('services.title')"
         :sub="t('services.sub')"

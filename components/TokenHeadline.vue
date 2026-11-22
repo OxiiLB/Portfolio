@@ -116,7 +116,7 @@ onBeforeUnmount(() => ro?.disconnect());
       </h1>
     </div>
     <div class="meta">
-      <span>{{ t("hero.tokens", { n: tokens.length }) }} · {{ t("hero.attention", { token: tokens[source]?.text.trim() }) }} · {{ t("hero.hover") }}</span>
+      <span>{{ t("hero.tokens", { n: tokens.length }) }}</span>
       <span class="switch" role="group" :aria-label="t('hero.view')">
         <button type="button" :aria-pressed="view === 'tokens'" @click="view = 'tokens'">{{ t("hero.viewTokens") }}</button>
         <button type="button" :aria-pressed="view === 'plain'" @click="view = 'plain'">{{ t("hero.viewPlain") }}</button>

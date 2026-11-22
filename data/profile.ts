@@ -30,8 +30,6 @@ export interface ProfileLink {
   url: string;
   badge: string;
   color: TokenColor;
-  /** Share in the "where to reach me" softmax. All weights + emailWeight should sum to 1. */
-  weight: number;
 }
 
 export interface Project {
@@ -93,15 +91,15 @@ const headlines: L<{ tokens: Token[]; focus: number }> = {
 
 const links: (Omit<ProfileLink, "description"> & { description: L<string> })[] = [
   // TODO(Romain): paste your real Malt, Codeur.com and Fiverr profile URLs.
-  { key: "malt", label: "Malt", url: "https://www.malt.fr/", badge: "Ma", color: 3, weight: 0.31,
+  { key: "malt", label: "Malt", url: "https://www.malt.fr/", badge: "Ma", color: 3,
     description: { en: "Book a mission · reviews", fr: "Réserver une mission · avis" } },
-  { key: "codeur", label: "Codeur.com", url: "https://www.codeur.com/", badge: "Co", color: 4, weight: 0.22,
+  { key: "codeur", label: "Codeur.com", url: "https://www.codeur.com/", badge: "Co", color: 4,
     description: { en: "Send me a project brief", fr: "M'envoyer un brief de projet" } },
-  { key: "fiverr", label: "Fiverr", url: "https://www.fiverr.com/", badge: "Fi", color: 5, weight: 0.16,
+  { key: "fiverr", label: "Fiverr", url: "https://www.fiverr.com/", badge: "Fi", color: 5,
     description: { en: "Fixed-price AI gigs", fr: "Prestations IA à prix fixe" } },
-  { key: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/in/romain-paul-giraud/", badge: "Li", color: 2, weight: 0.14,
+  { key: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/in/romain-paul-giraud/", badge: "Li", color: 2,
     description: { en: "Experience and recommendations", fr: "Parcours et recommandations" } },
-  { key: "github", label: "GitHub", url: "https://github.com/OxiiLB", badge: "Gh", color: 1, weight: 0.09,
+  { key: "github", label: "GitHub", url: "https://github.com/OxiiLB", badge: "Gh", color: 1,
     description: { en: "Code and open source", fr: "Code et open source" } },
 ];
 
@@ -271,7 +269,6 @@ export function getProfile(locale: Locale) {
     name,
     ...t,
     email: "romaingiraud86130@gmail.com",
-    emailWeight: 0.08,
     photo: { src: "/romain-giraud.jpg", alt: t.photoAlt, width: 579, height: 600 },
     headline: h.tokens,
     /** Token the attention arcs start from before the visitor hovers anything. */

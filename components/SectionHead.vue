@@ -1,11 +1,10 @@
 <script setup lang="ts">
-// Sections read like layers of a forward pass: L1 find_me → L2 ask → …
-defineProps<{ layer: string; name: string; title: string; sub?: string }>();
+defineProps<{ name: string; title: string; sub?: string }>();
 </script>
 
 <template>
   <div class="sh">
-    <div class="lbl"><i></i>{{ layer }} · {{ name }}</div>
+    <div class="lbl"><i></i>{{ name }}</div>
     <div class="row">
       <h2>{{ title }}</h2>
       <p v-if="sub">{{ sub }}</p>

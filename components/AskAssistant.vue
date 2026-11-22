@@ -116,7 +116,6 @@ async function ask(q: string) {
   <section id="ask" class="block">
     <div class="in">
       <SectionHead
-        layer="L2"
         name="retrieve + generate"
         :title="t('ask.title')"
         :sub="t('ask.sub')"

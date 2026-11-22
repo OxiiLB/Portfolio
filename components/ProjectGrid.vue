@@ -20,7 +20,7 @@ const shown = computed<Project[]>(() =>
 <template>
   <section id="projects" class="block">
     <div class="in">
-      <SectionHead layer="L3" name="projects" :title="t('projects.title')">
+      <SectionHead name="projects" :title="t('projects.title')">
         <div class="filters" role="group" :aria-label="t('projects.filter')">
           <button
             v-for="f in usable"

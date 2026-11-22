@@ -14,8 +14,7 @@
     "language": "Language"
   },
   "hero": {
-    "ask": "Ask my assistant",
-    "askHint": "answers from my profile",
+    "ask": "Ask my assistant about my profile",
     "hire": "Hire me",
     "tokens": "{n} tokens",
     "attention": "attention from “{token}”",
@@ -27,8 +26,6 @@
   "links": {
     "title": "Find me",
     "sub": "Book a mission on the platform you already use, or write to me directly.",
-    "axis": "p(next contact)",
-    "softmax": "softmax · {n} options",
     "email": "Email",
     "copy": "copy",
     "copied": "copied",

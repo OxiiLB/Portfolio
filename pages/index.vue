@@ -25,7 +25,7 @@ useSeoMeta({
       <TokenHeadline :key="locale" class="headline" :tokens="profile.headline" :focus="profile.headlineFocus" />
       <p class="lede">{{ profile.lede }}</p>
       <div class="ctas">
-        <a class="btn primary" href="#ask">{{ t("hero.ask") }} <span class="k">{{ t("hero.askHint") }}</span></a>
+        <a class="btn primary" href="#ask">{{ t("hero.ask") }}</a>
         <a class="btn ghost" href="#links">{{ t("hero.hire") }}</a>
       </div>
     </div>

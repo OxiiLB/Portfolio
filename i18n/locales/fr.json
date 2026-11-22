@@ -15,7 +15,6 @@
   },
   "hero": {
     "ask": "Interroger mon assistant",
-    "askHint": "répond à partir de mon profil",
     "hire": "Me recruter",
     "tokens": "{n} tokens",
     "attention": "attention depuis « {token} »",
@@ -27,8 +26,6 @@
   "links": {
     "title": "Me trouver",
     "sub": "Réservez une mission sur la plateforme que vous utilisez déjà, ou écrivez-moi directement.",
-    "axis": "p(prochain contact)",
-    "softmax": "softmax · {n} options",
     "email": "E-mail",
     "copy": "copier",
     "copied": "copié",
