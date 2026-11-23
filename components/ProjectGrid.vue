@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import type { Project } from "~/data/profile";
+import type { Project, ProjectCategory } from "~/data/profile";
 
 const profile = useProfile();
 const { t } = useI18n();
 
-const filters = [{ key: "all" }, { key: "rag" }, { key: "agent" }, { key: "vision" }, { key: "ml" }] as const;
+const filters: ("all" | ProjectCategory)[] = ["all", "rag", "automation", "vision", "web", "games"];
 
-const active = ref<(typeof filters)[number]["key"]>("all");
+const active = ref<"all" | ProjectCategory>("all");
+// Only show filters that match at least one project.
 const usable = computed(() =>
-  filters.filter((f) => f.key === "all" || profile.value.projects.some((p) => p.categories.includes(f.key))),
+  filters.filter((f) => f === "all" || profile.value.projects.some((p) => p.categories.includes(f))),
 );
 const shown = computed<Project[]>(() =>
   active.value === "all"
     ? profile.value.projects
-    : profile.value.projects.filter((p) => p.categories.includes(active.value as Project["categories"][number])),
+    : profile.value.projects.filter((p) => p.categories.includes(active.value as ProjectCategory)),
 );
 </script>
 
@@ -24,11 +25,11 @@ const shown = computed<Project[]>(() =>
         <div class="filters" role="group" :aria-label="t('projects.filter')">
           <button
             v-for="f in usable"
-            :key="f.key"
+            :key="f"
             type="button"
-            :aria-pressed="active === f.key"
-            @click="active = f.key"
-          >{{ t(`projects.${f.key}`) }}</button>
+            :aria-pressed="active === f"
+            @click="active = f"
+          >{{ t(`projects.${f}`) }}</button>
         </div>
       </SectionHead>
       <div class="projs">
@@ -38,12 +39,13 @@ const shown = computed<Project[]>(() =>
           :tag="p.url ? 'a' : 'article'"
           class="pj"
           v-bind="p.url ? { href: p.url, target: '_blank', rel: 'noopener' } : {}"
-          :style="{ '--glow': `var(--t${p.tags[0]?.color ?? 1})` }"
+          :style="{ '--rest': `var(--t${p.tags[0]?.color ?? 1})`, '--pop': `var(--p${p.tags[0]?.color ?? 1})` }"
         >
           <div class="body">
             <div class="tags">
               <span v-for="tag in p.tags" :key="tag.label" :class="`c${tag.color}`">{{ tag.label }}</span>
             </div>
+            <div class="ctx">{{ p.context }}</div>
             <h3>{{ p.title }}</h3>
             <p>{{ p.summary }}</p>
             <div v-if="p.result" class="res">
@@ -59,19 +61,24 @@ const shown = computed<Project[]>(() =>
 </template>
 
 <style scoped>
-.filters { display: flex; gap: 2px; flex-wrap: wrap; background: rgba(238, 234, 246, 0.05); padding: 3px; }
-.filters button { border: 0; background: none; padding: 6px 12px; font-family: var(--f-mono); font-size: 12.5px; color: var(--soft); }
+.filters { display: flex; gap: 2px; flex-wrap: wrap; background: color-mix(in srgb, var(--ink) 5%, transparent); padding: 3px; border-radius: 999px; }
+.filters button { border: 0; border-radius: 999px; background: none; padding: 6px 12px; font-family: var(--f-mono); font-size: 12.5px; color: var(--soft); }
 .filters button:hover { color: var(--ink); }
 .filters button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 .projs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+/* With an odd number of cards, the first one spans the full width so no card sits alone. */
+.projs > :first-child:nth-last-child(odd) { grid-column: 1 / -1; }
 .pj { text-decoration: none; display: block; }
-.pj:hover { --edge: linear-gradient(135deg, var(--m3), var(--m2) 40%, rgba(238, 234, 246, 0.08) 75%); }
+.pj:hover { --edge: linear-gradient(135deg, color-mix(in srgb, var(--m2) 70%, transparent), color-mix(in srgb, var(--ink) 10%, transparent) 70%); }
+.pj { --glow: var(--rest); }
+.pj:hover { --glow: var(--pop); }
 .body {
   height: 100%; padding: 24px 24px 22px; display: grid; gap: 14px; align-content: start;
   background: radial-gradient(28rem 14rem at 0% 0%, color-mix(in srgb, var(--glow) 13%, transparent), transparent 70%);
 }
 .tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tags span { font-family: var(--f-mono); font-size: 11px; font-weight: 500; padding: 2px 7px; color: var(--tok-ink); }
+.tags span { font-family: var(--f-mono); font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 6px; color: var(--tok-ink); }
+.ctx { font-family: var(--f-mono); font-size: 12px; color: var(--faint); margin-bottom: -6px; }
 h3 { margin: 0; font-size: clamp(22px, 2.4vw, 27px); line-height: 1.12; letter-spacing: -0.025em; font-weight: 700; text-wrap: balance; }
 p { margin: 0; color: var(--soft); font-size: 15.5px; max-width: 46ch; }
 .res { display: flex; align-items: baseline; gap: 12px; margin-top: 6px; }

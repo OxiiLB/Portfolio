@@ -32,23 +32,39 @@ export interface ProfileLink {
   color: TokenColor;
 }
 
+export type ProjectCategory = "rag" | "automation" | "vision" | "web" | "games";
+
 export interface Project {
   slug: string;
   title: string;
   summary: string;
   /** Longer write-up used by the assistant (not shown on the card). */
   details: string;
+  /** Where or when it was built, e.g. "Freelance · 2026". */
+  context: string;
   tags: { label: string; color: TokenColor }[];
-  categories: ("rag" | "agent" | "vision" | "ml")[];
+  categories: ProjectCategory[];
   result?: { value: string; label: string };
   url?: string;
+}
+
+export type SideKind = "project" | "association" | "media" | "student";
+
+export interface SideProject {
+  slug: string;
+  kind: SideKind;
+  title: string;
+  /** When or where, e.g. "High school" or "EPITECH". */
+  context: string;
+  summary: string;
+  link?: { url: string; label: string };
+  color: TokenColor;
 }
 
 export interface Service {
   title: string;
   summary: string;
   deliverables: string[];
-  duration: string;
   color: TokenColor;
 }
 
@@ -90,12 +106,11 @@ const headlines: L<{ tokens: Token[]; focus: number }> = {
 };
 
 const links: (Omit<ProfileLink, "description"> & { description: L<string> })[] = [
-  // TODO(Romain): paste your real Malt, Codeur.com and Fiverr profile URLs.
-  { key: "malt", label: "Malt", url: "https://www.malt.fr/", badge: "Ma", color: 3,
+  { key: "malt", label: "Malt", url: "https://www.malt.com/profile/romaingiraud3", badge: "Ma", color: 3,
     description: { en: "Book a mission · reviews", fr: "Réserver une mission · avis" } },
-  { key: "codeur", label: "Codeur.com", url: "https://www.codeur.com/", badge: "Co", color: 4,
+  { key: "codeur", label: "Codeur.com", url: "https://www.codeur.com/-romaingiraud", badge: "Co", color: 4,
     description: { en: "Send me a project brief", fr: "M'envoyer un brief de projet" } },
-  { key: "fiverr", label: "Fiverr", url: "https://www.fiverr.com/", badge: "Fi", color: 5,
+  { key: "fiverr", label: "Fiverr", url: "https://www.fiverr.com/s/9dGvX2A", badge: "Fi", color: 5,
     description: { en: "Fixed-price AI gigs", fr: "Prestations IA à prix fixe" } },
   { key: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/in/romain-paul-giraud/", badge: "Li", color: 2,
     description: { en: "Experience and recommendations", fr: "Parcours et recommandations" } },
@@ -103,121 +118,391 @@ const links: (Omit<ProfileLink, "description"> & { description: L<string> })[] =
     description: { en: "Code and open source", fr: "Code et open source" } },
 ];
 
-// TODO(Romain): these are EXAMPLE projects. Replace them with your real ones
-// before going live, otherwise the assistant will talk about them as real.
-const projects: (Omit<Project, "title" | "summary" | "details" | "result"> & {
+// Projects and services are written from Romain's CV (Outreach EN, Nov. 2026).
+// Client names stay private; only results stated in the CV are shown.
+// Projects = school work and AI development. Personal projects and
+// associations live in sideProjects below.
+// TODO(Romain): add links (GitHub, demo) where you have them.
+const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "result"> & {
   title: L<string>;
   summary: L<string>;
   details: L<string>;
+  context: L<string>;
   result?: { value: string; label: L<string> };
 })[] = [
   {
-    slug: "contract-qa",
-    title: { en: "Contract Q&A over 4,000 PDFs", fr: "Questions-réponses sur 4 000 contrats PDF" },
+    slug: "rag-assistant",
+    context: { en: "Open source · 2026", fr: "Open source · 2026" },
+    title: { en: "Multi-document RAG assistant with citations", fr: "Assistant RAG multi-documents avec citations" },
     summary: {
-      en: "Lawyers ask in plain French and get answers with the exact clause cited.",
-      fr: "Les avocats posent leurs questions en français courant et obtiennent une réponse qui cite la clause exacte.",
+      en: "Ask questions about your PDFs: the answer streams in and cites the exact document and page, with clickable sources.",
+      fr: "Posez vos questions sur vos PDF : la réponse s'affiche en direct et cite le document et la page exacts, avec des sources cliquables.",
     },
     details: {
-      en: "Retrieval-augmented assistant over a law firm's contract archive. Documents are chunked by clause, embedded and stored in pgvector, with a reranker before generation. Every answer cites the clause it comes from. Evaluated on 200 real questions.",
-      fr: "Assistant RAG sur les archives de contrats d'un cabinet d'avocats. Les documents sont découpés par clause, vectorisés et stockés dans pgvector, avec un reranker avant la génération. Chaque réponse cite la clause d'origine. Évalué sur 200 vraies questions.",
+      en: "An open-source multi-document RAG assistant. PDFs are ingested in the background with page-by-page extraction and overlapping chunks. Search is hybrid: multilingual embeddings computed locally (multilingual-e5-small) fused with a BM25 index through Reciprocal Rank Fusion. Claude Sonnet 5 answers only from the retrieved passages, streams token by token and cites its sources; each citation opens the exact passage and page. Built with Angular, Tailwind CSS, Node.js and Fastify, with Qdrant as an optional vector store.",
+      fr: "Un assistant RAG multi-documents open source. Les PDF sont indexés en arrière-plan, page par page, avec un découpage qui se chevauche. La recherche est hybride : des embeddings multilingues calculés en local (multilingual-e5-small) fusionnés avec un index BM25 par Reciprocal Rank Fusion. Claude Sonnet 5 répond uniquement à partir des passages trouvés, en streaming, et cite ses sources ; chaque citation ouvre le passage et la page exacts. Construit avec Angular, Tailwind CSS, Node.js et Fastify, avec Qdrant en base vectorielle optionnelle.",
     },
-    tags: [{ label: "RAG", color: 1 }, { label: "pgvector", color: 4 }, { label: "reranker", color: 2 }],
-    categories: ["rag"],
-    result: { value: "92%", label: { en: "answer accuracy", fr: "de réponses exactes" } },
+    tags: [{ label: "RAG", color: 1 }, { label: "hybrid search", color: 2 }, { label: "Claude", color: 6 }, { label: "Angular", color: 4 }],
+    categories: ["rag", "web"],
+    url: "https://github.com/OxiiLB/rag-assistant",
   },
   {
-    slug: "invoice-agent",
-    title: { en: "Invoice extraction agent", fr: "Agent d'extraction de factures" },
+    slug: "ai-visuals",
+    context: { en: "Freelance · 2026", fr: "Freelance · 2026" },
+    title: { en: "AI image generation pipeline", fr: "Chaîne de génération d'images par IA" },
     summary: {
-      en: "Reads supplier invoices and fills the accounting software, with human review on low confidence.",
-      fr: "Lit les factures fournisseurs et remplit le logiciel comptable, avec une validation humaine en cas de doute.",
+      en: "Produces a finished visual in about 40 seconds, where manual retouching took several hours.",
+      fr: "Produit un visuel fini en environ 40 secondes, là où la retouche manuelle prenait plusieurs heures.",
     },
     details: {
-      en: "An LLM agent with vision that reads PDF and photographed invoices, extracts structured fields and pushes them to the accounting tool through its API. Low-confidence extractions go to a human review queue.",
-      fr: "Un agent LLM avec vision qui lit les factures en PDF ou en photo, extrait les champs structurés et les envoie au logiciel comptable via son API. Les extractions incertaines partent dans une file de validation humaine.",
+      en: "AI image generation and editing for clients, built with Stable Diffusion, ControlNet and LoRA. One visual is produced in about 40 seconds, versus several hours of manual retouching.",
+      fr: "Génération et retouche d'images par IA pour des clients, avec Stable Diffusion, ControlNet et LoRA. Un visuel est produit en environ 40 secondes, contre plusieurs heures de retouche manuelle.",
     },
-    tags: [{ label: "agent", color: 3 }, { label: "vision LLM", color: 5 }],
-    categories: ["agent", "vision"],
-    result: { value: "11 h", label: { en: "saved per week", fr: "gagnées par semaine" } },
+    tags: [{ label: "Stable Diffusion", color: 6 }, { label: "ControlNet", color: 3 }, { label: "LoRA", color: 4 }],
+    categories: ["vision"],
+    result: { value: "40 s", label: { en: "per visual, instead of hours", fr: "par visuel, au lieu d'heures" } },
   },
   {
-    slug: "eshop-support",
-    title: { en: "Support assistant for an e-shop", fr: "Assistant SAV pour une boutique en ligne" },
+    slug: "rag-extraction",
+    context: { en: "Freelance · 2026", fr: "Freelance · 2026" },
+    title: { en: "Document assistants & extraction agents", fr: "Assistants documentaires et agents d'extraction" },
     summary: {
-      en: "Answers order and return questions, hands off to a human when needed.",
-      fr: "Répond aux questions sur les commandes et les retours, et passe la main à un humain si besoin.",
+      en: "RAG assistants that answer from a company's own documents, and agents that pull structured data out of them.",
+      fr: "Des assistants RAG qui répondent à partir des documents d'une entreprise, et des agents qui en extraient des données structurées.",
     },
     details: {
-      en: "Chat widget built in Nuxt. The model uses tools to look up orders and the returns policy, and escalates to a human agent when it cannot help.",
-      fr: "Widget de chat développé avec Nuxt. Le modèle utilise des outils pour consulter les commandes et la politique de retour, et transmet à un conseiller humain quand il ne peut pas aider.",
+      en: "Freelance work for small businesses and agencies: RAG document assistants answering from the client's own documents, data extraction and structuring agents, and AI features integrated into existing products.",
+      fr: "Missions freelance pour des petites entreprises et des agences : assistants documentaires RAG qui répondent à partir des documents du client, agents d'extraction et de structuration de données, et fonctionnalités IA intégrées à des produits existants.",
     },
-    tags: [{ label: "chatbot", color: 6 }, { label: "tool calling", color: 2 }, { label: "Nuxt", color: 4 }],
-    categories: ["agent", "rag"],
-    result: { value: "38%", label: { en: "tickets deflected", fr: "de tickets évités" } },
+    tags: [{ label: "RAG", color: 1 }, { label: "extraction agents", color: 2 }, { label: "AI integration", color: 5 }],
+    categories: ["rag", "automation"],
+    url: "https://github.com/OxiiLB/Paperly",
+  },
+  {
+    slug: "rhinov",
+    context: { en: "Rhinov · AI R&D · 2025", fr: "Rhinov · R&D IA · 2025" },
+    title: { en: "AI editing for photorealistic 3D renders", fr: "Édition par IA de rendus 3D photoréalistes" },
+    summary: {
+      en: "Research tools to improve photorealistic rendering in Unreal Engine, and an interface to edit 3D renders with AI.",
+      fr: "Des outils de R&D pour améliorer le rendu photoréaliste sous Unreal Engine, et une interface d'édition de rendus 3D par IA.",
+    },
+    details: {
+      en: "As an AI R&D developer at Rhinov (March to August 2025), Romain researched and developed tools that improve photorealistic rendering in Unreal Engine, and built an interface for editing 3D renders with AI.",
+      fr: "En tant que développeur R&D IA chez Rhinov (mars à août 2025), Romain a recherché et développé des outils améliorant le rendu photoréaliste sous Unreal Engine, et créé une interface d'édition de rendus 3D par IA.",
+    },
+    tags: [{ label: "Unreal Engine", color: 4 }, { label: "image AI", color: 6 }, { label: "R&D", color: 2 }],
+    categories: ["vision"],
+  },
+  {
+    slug: "area",
+    context: { en: "EPITECH project", fr: "Projet EPITECH" },
+    title: { en: "Area, an automation platform", fr: "Area, une plateforme d'automatisation" },
+    summary: {
+      en: "Web and mobile platform in the style of IFTTT or Zapier: connect your services and trigger actions on events.",
+      fr: "Plateforme web et mobile dans le style d'IFTTT ou Zapier : connectez vos services et déclenchez des actions sur des événements.",
+    },
+    details: {
+      en: "Area is a web and mobile automation platform with SSO connection to third-party services and event-triggered actions, in the style of IFTTT or Zapier.",
+      fr: "Area est une plateforme d'automatisation web et mobile, avec connexion SSO à des services tiers et actions déclenchées par des événements, dans le style d'IFTTT ou Zapier.",
+    },
+    tags: [{ label: "automation", color: 2 }, { label: "SSO", color: 1 }, { label: "web + mobile", color: 5 }],
+    categories: ["automation", "web"],
+    url: "https://github.com/JsuisSayker/Area51",
+  },
+  {
+    slug: "game-engines",
+    context: { en: "EPITECH projects", fr: "Projets EPITECH" },
+    title: { en: "Pikselite Engine & R-Type", fr: "Pikselite Engine et R-Type" },
+    summary: {
+      en: "Two 2D game engines in C++: one with per-pixel physics, one with an ECS architecture and networked multiplayer.",
+      fr: "Deux moteurs de jeu 2D en C++ : l'un avec une physique au pixel près, l'autre avec une architecture ECS et un multijoueur en réseau.",
+    },
+    details: {
+      en: "Pikselite Engine and R-Type are 2D game engines: one with per-pixel physics, the other with a C++ ECS architecture and networked multiplayer.",
+      fr: "Pikselite Engine et R-Type sont des moteurs de jeu 2D : l'un avec une physique au pixel près, l'autre avec une architecture ECS en C++ et un multijoueur en réseau.",
+    },
+    tags: [{ label: "C++", color: 3 }, { label: "ECS", color: 1 }, { label: "networking", color: 4 }],
+    categories: ["games"],
+    url: "https://github.com/JsuisSayker/Pikselite",
   },
   {
     slug: "portfolio-rag",
+    context: { en: "This website", fr: "Ce site" },
     title: { en: "This portfolio's assistant", fr: "L'assistant de ce portfolio" },
     summary: {
-      en: "A small RAG over my own profile. Ask it anything about my work.",
-      fr: "Un petit RAG sur mon propre profil. Posez-lui vos questions sur mon travail.",
+      en: "A small RAG over my own profile, built with Nuxt and Claude. Ask it anything about my work.",
+      fr: "Un petit RAG sur mon propre profil, construit avec Nuxt et Claude. Posez-lui vos questions sur mon travail.",
     },
     details: {
-      en: "The assistant on this website. It splits Romain's profile, projects and services into passages, retrieves the most relevant ones with BM25 keyword search, and asks Claude to answer using only those passages. Sources are shown under each answer.",
-      fr: "L'assistant de ce site. Il découpe le profil, les projets et les services de Romain en passages, retrouve les plus pertinents par recherche de mots-clés BM25, et demande à Claude de répondre uniquement à partir de ces passages. Les sources sont affichées sous chaque réponse.",
+      en: "The assistant on this website. It splits Romain's profile, projects and services into passages, retrieves the most relevant ones with BM25 keyword search, and asks Claude to answer using only those passages. Sources are shown under each answer, and a monthly budget caps its cost.",
+      fr: "L'assistant de ce site. Il découpe le profil, les projets et les services de Romain en passages, retrouve les plus pertinents par recherche de mots-clés BM25, et demande à Claude de répondre uniquement à partir de ces passages. Les sources sont affichées sous chaque réponse, et un budget mensuel plafonne son coût.",
     },
     tags: [{ label: "RAG", color: 2 }, { label: "Claude", color: 6 }, { label: "Nuxt", color: 1 }],
-    categories: ["rag"],
+    categories: ["rag", "web"],
     url: "https://github.com/OxiiLB",
   },
 ];
 
-// TODO(Romain): adjust offers and durations to what you actually sell.
-const services: (Omit<Service, "title" | "summary" | "deliverables" | "duration"> & {
+// Side projects: things outside school and work, and associations.
+// TODO(Romain): describe VideoSync, add the dates, your role in each
+// association, and the Spotify link for (Hi)story.
+const sideProjects: (Omit<SideProject, "title" | "context" | "summary" | "link"> & {
   title: L<string>;
+  context: L<string>;
   summary: L<string>;
-  deliverables: L<string[]>;
-  duration: L<string>;
+  link?: { url: string; label: L<string> };
 })[] = [
   {
-    title: { en: "RAG assistant", fr: "Assistant RAG" },
+    slug: "videosync",
+    kind: "project",
+    title: { en: "VideoSync", fr: "VideoSync" },
+    context: { en: "On my own time", fr: "Sur mon temps libre" },
     summary: {
-      en: "A chatbot that answers from your documents and cites them.",
-      fr: "Un chatbot qui répond à partir de vos documents et les cite.",
+      en: "A personal project I build on my own time, outside school and client work.",
+      fr: "Un projet personnel que je développe sur mon temps libre, en dehors de l'école et des missions.",
     },
-    deliverables: {
-      en: ["Document ingestion and search", "Chat widget or internal tool", "Accuracy test set"],
-      fr: ["Ingestion et recherche de documents", "Widget de chat ou outil interne", "Jeu de tests de précision"],
+    color: 4,
+  },
+  {
+    slug: "history-podcast",
+    kind: "media",
+    title: { en: "(Hi)story", fr: "(Hi)story" },
+    context: { en: "Podcast & live radio", fr: "Podcast et radio en direct" },
+    summary: {
+      en: "My podcast on Spotify, also broadcast as a live radio show.",
+      fr: "Mon podcast sur Spotify, aussi diffusé en direct comme émission de radio.",
     },
-    duration: { en: "usually 2–4 weeks", fr: "en général 2 à 4 semaines" },
+    color: 6,
+  },
+  {
+    slug: "bde",
+    kind: "student",
+    title: { en: "Student union (BDE)", fr: "Bureau des étudiants (BDE)" },
+    context: { en: "EPITECH", fr: "EPITECH" },
+    summary: {
+      en: "Member of my school's student union, which organizes events and student life.",
+      fr: "Membre du bureau des étudiants de mon école, qui organise les événements et la vie étudiante.",
+    },
     color: 1,
   },
   {
-    title: { en: "AI agent & automation", fr: "Agent IA et automatisation" },
+    slug: "bloque",
+    kind: "association",
+    title: { en: "Bloqué", fr: "Bloqué" },
+    context: { en: "High school association", fr: "Association du lycée" },
     summary: {
-      en: "An LLM that does a repetitive task end to end.",
-      fr: "Un LLM qui réalise une tâche répétitive de bout en bout.",
+      en: "An association where we designed and built escape games.",
+      fr: "Une association où nous concevions et construisions des escape games.",
     },
-    deliverables: {
-      en: ["Email, invoice or form processing", "Connected to your tools", "Human review where it matters"],
-      fr: ["Traitement d'e-mails, de factures ou de formulaires", "Connecté à vos outils", "Validation humaine là où c'est important"],
-    },
-    duration: { en: "usually 3–6 weeks", fr: "en général 3 à 6 semaines" },
     color: 3,
   },
   {
-    title: { en: "AI in your app", fr: "L'IA dans votre application" },
+    slug: "jobs-report",
+    kind: "association",
+    title: { en: "Jobs Report", fr: "Jobs Report" },
+    context: { en: "High school association", fr: "Association du lycée" },
     summary: {
-      en: "AI features added to a web app you already run.",
-      fr: "Des fonctionnalités IA ajoutées à une application web existante.",
+      en: "A student journalism association: finding stories, writing and publishing them.",
+      fr: "Une association de journalisme étudiant : trouver des sujets, les écrire et les publier.",
+    },
+    color: 5,
+  },
+];
+
+const services: (Omit<Service, "title" | "summary" | "deliverables"> & {
+  title: L<string>;
+  summary: L<string>;
+  deliverables: L<string[]>;
+})[] = [
+  {
+    title: { en: "AI assistants & chatbots", fr: "Assistants IA et chatbots" },
+    summary: {
+      en: "Customer support, internal FAQ or knowledge base, powered by your own documents (RAG).",
+      fr: "Support client, FAQ interne ou base de connaissances, alimentés par vos propres documents (RAG).",
     },
     deliverables: {
-      en: ["Search, summaries, classification", "Vue / Nuxt front end", "Cost and latency kept in check"],
-      fr: ["Recherche, résumés, classification", "Front-end Vue / Nuxt", "Coûts et latence maîtrisés"],
+      en: ["Answers from your own documents", "For your customers or your team", "Sources shown with each answer"],
+      fr: ["Des réponses issues de vos documents", "Pour vos clients ou votre équipe", "Les sources affichées avec chaque réponse"],
     },
-    duration: { en: "usually 1–3 weeks", fr: "en général 1 à 3 semaines" },
+    color: 1,
+  },
+  {
+    title: { en: "Automation", fr: "Automatisation" },
+    summary: {
+      en: "Take repetitive work off your team.",
+      fr: "Libérez votre équipe des tâches répétitives.",
+    },
+    deliverables: {
+      en: ["Data extraction and structuring", "Automatic follow-ups", "Workflows connecting your tools and services"],
+      fr: ["Extraction et structuration de données", "Relances automatiques", "Workflows reliant vos outils et services"],
+    },
+    color: 2,
+  },
+  {
+    title: { en: "AI integration", fr: "Intégration IA" },
+    summary: {
+      en: "AI features added to the website, app or software you already have.",
+      fr: "Des fonctionnalités IA ajoutées au site, à l'application ou au logiciel que vous avez déjà.",
+    },
+    deliverables: {
+      en: ["Existing websites and web apps", "Software products", "Built around how your team works"],
+      fr: ["Sites et applications web existants", "Logiciels et produits", "Pensé autour de la façon dont votre équipe travaille"],
+    },
     color: 4,
+  },
+  {
+    title: { en: "Web development", fr: "Développement web" },
+    summary: {
+      en: "Custom websites and web apps, or improvements to the code you already run.",
+      fr: "Des sites et applications web sur mesure, ou l'amélioration du code que vous avez déjà.",
+    },
+    deliverables: {
+      en: ["Vue.js, Nuxt or Angular", "Migration of existing code", "Performance optimization"],
+      fr: ["Vue.js, Nuxt ou Angular", "Migration de code existant", "Optimisation des performances"],
+    },
+    color: 5,
+  },
+];
+
+// ---------------------------------------------------------------------------
+// About, values and process: the "who I am and how I work" part of the page.
+// About and skills are written from Romain's CV (Outreach EN, Nov. 2026).
+// TODO(Romain): values and process are still drafts; rewrite them in your own words.
+
+const about: L<{ paragraphs: string[]; facts: { label: string; value: string }[] }> = {
+  en: {
+    paragraphs: [
+      "I'm Romain, a freelance developer who helps small businesses, agencies and solo entrepreneurs save time with AI: assistants that answer from your own documents, automations for repetitive tasks, AI features added to the tools you already use, and custom websites.",
+      "I'm completing a Master's-level degree in IT at EPITECH Bordeaux (class of 2027), and I spent a year at Keimyung University in South Korea, in an English-taught program focused on game development. I learned by building: 2D game engines in C++ with per-pixel physics and networked multiplayer, and Area, a web and mobile automation platform in the spirit of IFTTT and Zapier.",
+      "In companies, I was a full-stack developer at BestConsultant, where I migrated the product to Vue.js and optimized the backend. I then joined Rhinov as an AI R&D developer, building tools to improve photorealistic rendering in Unreal Engine and an interface to edit 3D renders with AI.",
+      "Since September 2026 I've been freelancing, with France's national student-entrepreneur status granted by the PÉPITE PSL committee. I design RAG document assistants, data extraction agents and AI image pipelines: one of them produces a finished visual in 40 seconds instead of several hours of manual retouching. I work fully remotely and adapt to European, American and Asian time zones.",
+      "Outside of code, I love video games and how they are designed, cooking and trying new cuisines, and animals.",
+    ],
+    facts: [
+      { label: "Based in", value: "France · fully remote" },
+      { label: "Time zones", value: "Europe, Americas, Asia" },
+      { label: "Languages", value: "French (native), English (professional), Korean (basic), Spanish (A2)" },
+      { label: "Education", value: "EPITECH Bordeaux, Master's level (2027) · Keimyung University, South Korea" },
+      { label: "Experience", value: "Rhinov (AI R&D) · BestConsultant (full-stack)" },
+      { label: "Status", value: "Student-entrepreneur (PÉPITE PSL)" },
+    ],
+  },
+  fr: {
+    paragraphs: [
+      "Je suis Romain, développeur freelance. J'aide les petites entreprises, les agences et les entrepreneurs indépendants à gagner du temps grâce à l'IA : des assistants qui répondent à partir de vos propres documents, l'automatisation des tâches répétitives, des fonctionnalités IA ajoutées à vos outils existants, et des sites web sur mesure.",
+      "Je termine un diplôme de niveau Master en informatique à EPITECH Bordeaux (promotion 2027), et j'ai passé un an à l'université Keimyung en Corée du Sud, dans un programme enseigné en anglais et spécialisé en développement de jeux vidéo. J'ai appris en construisant : des moteurs de jeu 2D en C++ avec physique au pixel près et multijoueur en réseau, et Area, une plateforme d'automatisation web et mobile dans l'esprit d'IFTTT et Zapier.",
+      "En entreprise, j'ai été développeur full-stack chez BestConsultant, où j'ai migré le produit vers Vue.js et optimisé le backend. J'ai ensuite rejoint Rhinov comme développeur R&D IA, pour créer des outils améliorant le rendu photoréaliste sous Unreal Engine et une interface d'édition de rendus 3D par IA.",
+      "Depuis septembre 2026, je suis freelance, avec le statut national d'étudiant-entrepreneur accordé par le comité PÉPITE PSL. Je conçois des assistants documentaires RAG, des agents d'extraction de données et des chaînes de génération d'images par IA : l'une d'elles produit un visuel fini en 40 secondes, au lieu de plusieurs heures de retouche manuelle. Je travaille entièrement à distance et je m'adapte aux fuseaux horaires européens, américains et asiatiques.",
+      "En dehors du code, j'adore les jeux vidéo et leur game design, la cuisine et la découverte de nouvelles cuisines, et les animaux.",
+    ],
+    facts: [
+      { label: "Basé en", value: "France · 100 % à distance" },
+      { label: "Fuseaux", value: "Europe, Amériques, Asie" },
+      { label: "Langues", value: "français (natif), anglais (professionnel), coréen (notions), espagnol (A2)" },
+      { label: "Formation", value: "EPITECH Bordeaux, niveau Master (2027) · Université Keimyung, Corée du Sud" },
+      { label: "Expérience", value: "Rhinov (R&D IA) · BestConsultant (full-stack)" },
+      { label: "Statut", value: "Étudiant-entrepreneur (PÉPITE PSL)" },
+    ],
+  },
+};
+
+const skills: { label: string; color: TokenColor }[] = [
+  { label: "RAG", color: 1 },
+  { label: "Data extraction agents", color: 2 },
+  { label: "Stable Diffusion", color: 6 },
+  { label: "ControlNet", color: 3 },
+  { label: "LoRA", color: 4 },
+  { label: "Python", color: 5 },
+  { label: "JavaScript", color: 5 },
+  { label: "Vue.js", color: 2 },
+  { label: "Nuxt", color: 2 },
+  { label: "Angular", color: 6 },
+  { label: "Tailwind CSS", color: 4 },
+  { label: "Express / Fastify", color: 1 },
+  { label: "C / C++", color: 3 },
+  { label: "Docker", color: 4 },
+  { label: "Unreal Engine", color: 1 },
+];
+
+export interface Value {
+  keyword: string;
+  title: string;
+  text: string;
+  color: TokenColor;
+}
+
+const values: { keyword: L<string>; title: L<string>; text: L<string>; color: TokenColor }[] = [
+  {
+    keyword: { en: "useful", fr: "utile" },
+    title: { en: "Useful before impressive", fr: "Utile avant d'être impressionnant" },
+    text: {
+      en: "I add AI where it saves real time or money. If a simple script or an existing tool does the job better, I'll tell you, even if it means a smaller project.",
+      fr: "J'ajoute de l'IA là où elle fait gagner du temps ou de l'argent. Si un simple script ou un outil existant fait mieux l'affaire, je vous le dis, même si le projet devient plus petit.",
+    },
+    color: 1,
+  },
+  {
+    keyword: { en: "demo", fr: "démo" },
+    title: { en: "Show, don't promise", fr: "Montrer plutôt que promettre" },
+    text: {
+      en: "You get a working version on your own data early, so you judge the results yourself before investing further. No long slide decks.",
+      fr: "Vous avez rapidement une version qui fonctionne sur vos propres données, pour juger les résultats vous-même avant d'aller plus loin. Pas de longues présentations.",
+    },
+    color: 2,
+  },
+  {
+    keyword: { en: "privacy", fr: "confidentialité" },
+    title: { en: "Your data stays yours", fr: "Vos données restent les vôtres" },
+    text: {
+      en: "I only access what the project needs, I'm clear about where your data goes and which services see it, and I pick providers that don't train on it.",
+      fr: "J'accède uniquement à ce dont le projet a besoin, je vous dis clairement où vont vos données et quels services les voient, et je choisis des fournisseurs qui ne s'entraînent pas dessus.",
+    },
+    color: 3,
+  },
+  {
+    keyword: { en: "ownership", fr: "propriété" },
+    title: { en: "You own what you pay for", fr: "Vous possédez ce que vous payez" },
+    text: {
+      en: "Code, prompts and documentation are handed over at the end, written so another developer can pick them up. You're never locked in with me.",
+      fr: "Code, prompts et documentation vous sont remis à la fin, écrits pour qu'un autre développeur puisse les reprendre. Vous n'êtes jamais dépendant de moi.",
+    },
+    color: 4,
+  },
+];
+
+export interface Step {
+  title: string;
+  text: string;
+}
+
+const process: { title: L<string>; text: L<string> }[] = [
+  {
+    title: { en: "Intro call", fr: "Premier appel" },
+    text: {
+      en: "We talk about your problem, your data and your constraints. I tell you honestly whether AI is the right tool for it.",
+      fr: "On parle de votre problème, de vos données et de vos contraintes. Je vous dis honnêtement si l'IA est le bon outil.",
+    },
+  },
+  {
+    title: { en: "Clear proposal", fr: "Proposition claire" },
+    text: {
+      en: "A written scope, timeline and fixed quote, so you know exactly what you get and when.",
+      fr: "Un périmètre, un planning et un devis fixe par écrit, pour savoir exactement ce que vous obtenez et quand.",
+    },
+  },
+  {
+    title: { en: "Early demo", fr: "Démo rapide" },
+    text: {
+      en: "A first working version on your real data, then short iterations based on your feedback.",
+      fr: "Une première version fonctionnelle sur vos vraies données, puis de courtes itérations selon vos retours.",
+    },
+  },
+  {
+    title: { en: "Delivery & handover", fr: "Livraison et passation" },
+    text: {
+      en: "Deployment, documentation and a walkthrough with your team. I stay available for questions afterwards.",
+      fr: "Mise en production, documentation et présentation à votre équipe. Je reste disponible pour vos questions ensuite.",
+    },
   },
 ];
 
@@ -231,32 +516,32 @@ const text: L<{
   suggestedQuestions: string[];
 }> = {
   en: {
-    role: "Freelance AI engineer",
+    role: "Freelance developer · AI integration & automation",
     location: "France",
-    languages: ["French", "English"],
+    languages: ["French (native)", "English (professional)", "Korean (basic)", "Spanish (A2)"],
     // TODO(Romain): update or set to null to hide the badge.
     availability: "Available for missions",
     photoAlt: "Portrait of Romain Giraud",
-    lede: "Freelance AI engineer. I build RAG assistants on your documents, LLM agents that take repetitive work off your team, and AI features inside the apps you already have.",
+    lede: "Freelance developer. I help small businesses, agencies and solo entrepreneurs save time with AI: assistants that answer from your own documents, automation of repetitive tasks, AI in the tools you already use, and custom websites.",
     suggestedQuestions: [
-      "What kind of AI projects do you take?",
+      "What could you automate for my business?",
+      "Have you built a document assistant before?",
+      "Can you add AI to my existing website?",
       "Are you available for a mission?",
-      "Have you built a RAG system before?",
-      "How does this assistant work?",
     ],
   },
   fr: {
-    role: "Ingénieur IA freelance",
+    role: "Développeur freelance · intégration IA et automatisation",
     location: "France",
-    languages: ["français", "anglais"],
+    languages: ["français (natif)", "anglais (professionnel)", "coréen (notions)", "espagnol (A2)"],
     availability: "Disponible pour des missions",
     photoAlt: "Portrait de Romain Giraud",
-    lede: "Ingénieur IA freelance. Je crée des assistants RAG sur vos documents, des agents LLM qui libèrent votre équipe des tâches répétitives, et des fonctionnalités IA dans les applications que vous utilisez déjà.",
+    lede: "Développeur freelance. J'aide les petites entreprises, les agences et les indépendants à gagner du temps grâce à l'IA : des assistants qui répondent à partir de vos documents, l'automatisation des tâches répétitives, l'IA dans vos outils existants, et des sites web sur mesure.",
     suggestedQuestions: [
-      "Quels types de projets IA acceptez-vous ?",
+      "Que pourriez-vous automatiser dans mon entreprise ?",
+      "Avez-vous déjà créé un assistant documentaire ?",
+      "Pouvez-vous ajouter de l'IA à mon site existant ?",
       "Êtes-vous disponible pour une mission ?",
-      "Avez-vous déjà créé un système RAG ?",
-      "Comment fonctionne cet assistant ?",
     ],
   },
 };
@@ -273,8 +558,6 @@ export function getProfile(locale: Locale) {
     headline: h.tokens,
     /** Token the attention arcs start from before the visitor hovers anything. */
     headlineFocus: h.focus,
-    /** Labelled clusters drawn in the background "embedding map". */
-    latentClusters: ["RAG", "agents", "LLMs", "vision", "Nuxt", "C++"],
     links: links.map((l): ProfileLink => ({ ...l, description: l.description[locale] })),
     projects: projects.map(
       (p): Project => ({
@@ -282,16 +565,31 @@ export function getProfile(locale: Locale) {
         title: p.title[locale],
         summary: p.summary[locale],
         details: p.details[locale],
+        context: p.context[locale],
         result: p.result && { value: p.result.value, label: p.result.label[locale] },
       }),
     ),
+    sideProjects: sideProjects.map(
+      (p): SideProject => ({
+        ...p,
+        title: p.title[locale],
+        context: p.context[locale],
+        summary: p.summary[locale],
+        link: p.link && { url: p.link.url, label: p.link.label[locale] },
+      }),
+    ),
+    about: about[locale],
+    skills,
+    values: values.map(
+      (v): Value => ({ keyword: v.keyword[locale], title: v.title[locale], text: v.text[locale], color: v.color }),
+    ),
+    process: process.map((s): Step => ({ title: s.title[locale], text: s.text[locale] })),
     services: services.map(
       (s): Service => ({
         ...s,
         title: s.title[locale],
         summary: s.summary[locale],
         deliverables: s.deliverables[locale],
-        duration: s.duration[locale],
       }),
     ),
   };

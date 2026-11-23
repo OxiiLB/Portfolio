@@ -126,18 +126,18 @@ onBeforeUnmount(() => ro?.disconnect());
 </template>
 
 <style scoped>
-.wrap { position: relative; margin-top: 56px; }
+.wrap { position: relative; margin-top: 44px; }
 .threads { position: absolute; inset: 0; overflow: visible; pointer-events: none; z-index: 0; transition: opacity 0.4s; }
 .thread {
   fill: none; stroke: var(--m3); stroke-linecap: round;
-  filter: drop-shadow(0 0 8px var(--m2));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--m2) 60%, transparent));
   stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 0.8s ease-out forwards;
 }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 .toks {
   position: relative; z-index: 1; margin: 0;
   display: grid; justify-items: start; row-gap: 0.18em;
-  font-size: clamp(38px, 6.2vw, 84px); font-weight: 800; line-height: 1.02; letter-spacing: -0.035em;
+  font-size: clamp(32px, 4.8vw, 64px); font-weight: 800; line-height: 1.02; letter-spacing: -0.035em;
 }
 /* One line per phrase. Pieces of the same word sit almost touching;
    a real space between words gets a clear gap. */
@@ -145,11 +145,11 @@ onBeforeUnmount(() => ro?.disconnect());
 .tk + .tk { margin-left: 0.05em; }
 .tk.word + .tk.word, .tk + .tk.word { margin-left: 0.3em; }
 .tk {
-  position: relative; padding: 0.02em 0.08em 0.14em; border-radius: 0.06em; color: var(--tok-ink); cursor: default;
+  position: relative; padding: 0.02em 0.08em 0.14em; border-radius: 0.14em; color: var(--tok-ink); cursor: default;
   transition: background-color 0.5s, color 0.5s, transform 0.2s, box-shadow 0.3s, opacity 0.35s;
   animation: pop 0.5s backwards cubic-bezier(0.2, 0.9, 0.3, 1.3);
 }
-.tk.src { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--m3), 0 12px 44px -8px var(--m2); }
+.tk.src { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--m2); }
 .tk small {
   position: absolute; left: 0.3em; bottom: -0.02em;
   font: 500 10.5px/1 var(--f-mono); letter-spacing: 0;
@@ -157,7 +157,7 @@ onBeforeUnmount(() => ro?.disconnect());
 }
 .w {
   position: absolute; z-index: 3; top: -9px; right: -6px; font: 600 11px/1 var(--f-mono); font-style: normal; letter-spacing: 0;
-  color: #160A14; background: var(--grad); padding: 3px 5px;
+  color: var(--on-accent); background: var(--grad); padding: 3px 5px; border-radius: 4px;
   animation: fade 0.3s both;
 }
 @keyframes fade { from { opacity: 0; transform: translateY(4px); } }
@@ -169,7 +169,7 @@ onBeforeUnmount(() => ro?.disconnect());
 .plain .tk small, .plain .w { opacity: 0; }
 .plain .threads { opacity: 0; }
 .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 22px; font-family: var(--f-mono); font-size: 12.5px; color: var(--soft); }
-.switch { display: inline-flex; background: rgba(238, 234, 246, 0.06); }
+.switch { display: inline-flex; background: color-mix(in srgb, var(--ink) 6%, transparent); border-radius: 8px; overflow: hidden; }
 .switch button { border: 0; background: none; padding: 5px 10px; font-family: var(--f-mono); font-size: 12px; color: var(--soft); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 @media (max-width: 560px) { .w { font-size: 9.5px; top: -7px; } .tk small { font-size: 9px; } }

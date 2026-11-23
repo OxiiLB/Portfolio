@@ -20,6 +20,17 @@ const thread = ref<HTMLElement | null>(null);
 
 const greetingTokens = computed(() => splitTokens(t("ask.greeting")));
 
+/** Leading whitespace of a token, rendered outside its highlight. */
+function lead(tok: string): string {
+  return tok.match(/^\s*/)?.[0] ?? "";
+}
+
+/** Matcha tint at rest, pastel on hover, cycling through the six token colors. */
+function tokStyle(i: number) {
+  const n = (i % 6) + 1;
+  return { "--tok": `var(--t${n})`, "--tok-pop": `var(--p${n})` };
+}
+
 /** Rough, display-only split that looks like sub-word tokens. */
 function splitTokens(text: string): string[] {
   const out: string[] = [];
@@ -120,7 +131,7 @@ async function ask(q: string) {
         :title="t('ask.title')"
         :sub="t('ask.sub')"
       />
-      <CutPanel :cut="22" edge="linear-gradient(135deg, var(--m2), var(--m3) 30%, rgba(238,234,246,.08) 60%, rgba(238,234,246,.08) 85%, var(--m1))" fill="color-mix(in srgb, var(--surface) 92%, transparent)">
+      <CutPanel :cut="22" edge="linear-gradient(135deg, color-mix(in srgb, var(--m2) 55%, transparent), color-mix(in srgb, var(--ink) 8%, transparent) 45%, color-mix(in srgb, var(--ink) 8%, transparent) 80%, color-mix(in srgb, var(--m3) 40%, transparent))" fill="color-mix(in srgb, var(--surface) 92%, transparent)">
       <div class="chat" :class="{ nocolor: !colorTokens }">
         <div class="thread">
           <div class="chead">
@@ -129,13 +140,13 @@ async function ask(q: string) {
           </div>
           <div ref="thread" class="msgs" aria-live="polite">
             <div class="m-bot">
-              <span v-for="(t, i) in greetingTokens" :key="i" class="t" :class="`c${(i % 6) + 1}`">{{ t }}</span>
+              <template v-for="(tok, i) in greetingTokens" :key="i">{{ lead(tok) }}<span class="t" :style="tokStyle(i)">{{ tok.trimStart() }}</span></template>
             </div>
             <template v-for="(turn, n) in turns" :key="n">
               <div v-if="turn.role === 'user'" class="m-user">{{ turn.text }}</div>
               <div v-else class="m-bot" :class="{ err: turn.error }">
                 <span v-if="!turn.tokens.length" class="typing" :aria-label="t('ask.thinking')">●●●</span>
-                <span v-for="(t, i) in turn.tokens" :key="i" class="t" :class="`c${(i % 6) + 1}`">{{ t }}</span>
+                <template v-for="(tok, i) in turn.tokens" :key="i">{{ lead(tok) }}<span class="t" :style="tokStyle(i)">{{ tok.trimStart() }}</span></template>
                 <div v-if="turn.sources.length && !busy" class="srcs">
                   <span v-for="s in turn.sources" :key="s">{{ s }}</span>
                 </div>
@@ -188,27 +199,38 @@ async function ask(q: string) {
 .live i.on { animation: blink 0.8s infinite alternate; }
 @keyframes blink { to { opacity: 0.25; } }
 .msgs { display: flex; flex-direction: column; gap: 16px; flex: 1; overflow-y: auto; min-height: 0; padding-right: 4px; }
-.m-user { align-self: flex-end; background: rgba(238, 234, 246, 0.07); clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px)); padding: 10px 14px; max-width: 80%; overflow-wrap: anywhere; }
+.m-user { align-self: flex-end; background: color-mix(in srgb, var(--ink) 7%, transparent); border-radius: 14px 14px 4px 14px; padding: 10px 14px; max-width: 80%; overflow-wrap: anywhere; }
 .m-bot { max-width: 62ch; font-size: 17px; line-height: 1.6; overflow-wrap: anywhere; }
-.m-bot .t { border-radius: 3px; padding: 0 1px; color: var(--tok-ink); transition: background-color 0.6s, color 0.6s; white-space: pre-wrap; }
+/* Token highlight: a band behind most of the letters (about 3/4 of the line), not a full
+   block, with a small gap between pieces so neighbours never touch. */
+.m-bot .t {
+  /* Slightly deeper than the token tint so the palest shades still show on white. */
+  --band: color-mix(in srgb, var(--tok) 72%, var(--m3));
+  color: var(--tok-ink); white-space: pre-wrap;
+  margin-left: 1px; border-radius: 2px;
+  background-image: linear-gradient(var(--band), var(--band));
+  background-repeat: no-repeat; background-size: 100% 74%; background-position: 0 72%;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.m-bot .t:hover { --band: var(--tok-pop); }
 .nocolor .m-bot .t, .m-bot.err .t { background: transparent !important; color: var(--ink); }
 .m-bot.err { color: var(--soft); }
 .typing { color: var(--soft); letter-spacing: 3px; animation: blink 0.8s infinite alternate; }
 .srcs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-.srcs span { font-family: var(--f-mono); font-size: 11.5px; background: rgba(238, 234, 246, 0.06); padding: 3px 8px; color: var(--soft); }
+.srcs span { font-family: var(--f-mono); font-size: 11.5px; background: color-mix(in srgb, var(--ink) 6%, transparent); padding: 3px 8px; color: var(--soft); }
 .srcs span::before { content: "↳ "; }
-.ask { display: flex; gap: 8px; background: rgba(238, 234, 246, 0.05); padding: 6px; box-shadow: inset 0 -2px 0 rgba(238, 234, 246, 0.1); transition: box-shadow 0.2s; }
+.ask { border-radius: 14px; display: flex; gap: 8px; background: color-mix(in srgb, var(--ink) 5%, transparent); padding: 6px; box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--ink) 10%, transparent); transition: box-shadow 0.2s; }
 .ask:focus-within { box-shadow: inset 0 -2px 0 var(--m3); }
 .ask input { flex: 1; min-width: 0; background: none; border: 0; color: var(--ink); font: inherit; font-size: 16px; padding: 8px 10px; }
 .ask input::placeholder { color: var(--soft); }
 .ask input:focus { outline: none; }
-.ask button { border: 0; background: var(--grad); color: #160A14; font-weight: 600; padding: 8px 14px; }
+.ask button { border: 0; border-radius: 10px; background: var(--grad); color: var(--on-accent); font-weight: 600; padding: 8px 14px; }
 button:disabled { opacity: 0.5; cursor: progress; }
 .side { border-left: 1px solid var(--line); padding: 26px 22px; display: grid; gap: 18px; align-content: start; }
 .side .label { color: var(--soft); }
 .sugg { display: grid; gap: 8px; }
-.sugg button { text-align: left; background: rgba(238, 234, 246, 0.05); border: 0; border-left: 2px solid transparent; padding: 10px 12px; font-size: 14.5px; color: var(--ink); }
-.sugg button:hover:not(:disabled) { border-left-color: var(--m3); background: rgba(238, 234, 246, 0.09); }
+.sugg button { text-align: left; background: color-mix(in srgb, var(--ink) 5%, transparent); border: 0; border-radius: 10px; padding: 10px 12px; font-size: 14.5px; color: var(--ink); }
+.sugg button:hover:not(:disabled) { background: color-mix(in srgb, var(--ink) 10%, transparent); }
 .tgl { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--soft); }
 .tgl input { accent-color: var(--m3); width: 16px; height: 16px; }
 .stat { font-family: var(--f-mono); font-size: 12px; color: var(--soft); display: grid; gap: 6px; }

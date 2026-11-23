@@ -16,9 +16,27 @@ export default defineNuxtConfig({
     detectBrowserLanguage: { useCookie: true, cookieKey: "i18n_lang", redirectOn: "root" },
   },
 
+  runtimeConfig: {
+    // Assistant spend limits. Override on the host with
+    // NUXT_ASSISTANT_MONTHLY_BUDGET_USD and NUXT_ASSISTANT_DAILY_QUESTIONS.
+    // $2.50 stays under €3 at any usual exchange rate.
+    assistantMonthlyBudgetUsd: 2.5,
+    assistantDailyQuestions: 200,
+  },
+
   nitro: {
     // Markdown files in server/knowledge/ are bundled and indexed by the assistant.
     serverAssets: [{ baseName: "knowledge", dir: "./knowledge" }],
+    // Where the assistant's spend counters are kept. A file on disk survives
+    // restarts on a normal server. On serverless hosts (Netlify, Vercel,
+    // Cloudflare) switch this to a shared store such as Upstash Redis or
+    // Cloudflare KV, see https://nitro.build/guide/storage.
+    storage: {
+      "assistant-usage": { driver: "fs", base: "./.data/assistant-usage" },
+    },
+    devStorage: {
+      "assistant-usage": { driver: "fs", base: "./.data/assistant-usage" },
+    },
   },
 
   app: {
@@ -32,7 +50,7 @@ export default defineNuxtConfig({
           content:
             "Romain Giraud, freelance AI engineer. RAG assistants, LLM agents and AI features for your business. Ask my assistant anything about my work.",
         },
-        { name: "theme-color", content: "#09080F" },
+        { name: "theme-color", content: "#FAF9F3" },
       ],
       link: [
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },

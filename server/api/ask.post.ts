@@ -3,7 +3,10 @@ import { getProfile, isLocale, type Locale } from "~/data/profile";
 
 const profile = getProfile("en");
 
-const SYSTEM = `You are the assistant on ${profile.name}'s portfolio website. ${profile.name} is a ${profile.role}. Visitors are mostly potential clients deciding whether to hire him.
+// Claude Haiku 5.5: fast and very cheap, plenty for short answers from a few passages.
+const MODEL = "claude-haiku-5-5";
+
+const SYSTEM = `You are the assistant on ${profile.name}'s portfolio website. ${profile.name} is a freelance developer specialised in AI integration and automation for small businesses, agencies and solo entrepreneurs. Visitors are mostly potential clients deciding whether to hire him.
 
 Answer questions about ${profile.name} using only the passages given in <passages>. If the passages don't contain the answer, say you don't know and suggest contacting him by email (${profile.email}) or through the links on the site. Never invent projects, clients, numbers, prices or dates.
 
@@ -14,6 +17,8 @@ const MESSAGES: Record<Locale, Record<string, string>> = {
     badQuestion: "Please ask a question of up to 500 characters.",
     tooMany: "That's a lot of questions! Please wait a minute and try again.",
     off: "The assistant isn't switched on yet.",
+    month: "The assistant has answered all the questions it can this month. You can still contact Romain directly.",
+    day: "The assistant has answered all the questions it can today. Come back tomorrow, or contact Romain directly.",
     refusal: "I can't help with that one. Try asking about Romain's work.",
     busy: "The assistant is busy. Please try again in a minute.",
     misconfigured: "The assistant isn't configured correctly.",
@@ -23,6 +28,8 @@ const MESSAGES: Record<Locale, Record<string, string>> = {
     badQuestion: "Merci de poser une question de 500 caractères maximum.",
     tooMany: "Beaucoup de questions d'un coup ! Patientez une minute avant de réessayer.",
     off: "L'assistant n'est pas encore activé.",
+    month: "L'assistant a répondu à toutes les questions possibles ce mois-ci. Vous pouvez toujours contacter Romain directement.",
+    day: "L'assistant a répondu à toutes les questions possibles aujourd'hui. Revenez demain, ou contactez Romain directement.",
     refusal: "Je ne peux pas répondre à cette question. Demandez plutôt quelque chose sur le travail de Romain.",
     busy: "L'assistant est très sollicité. Réessayez dans une minute.",
     misconfigured: "L'assistant n'est pas configuré correctement.",
@@ -31,9 +38,11 @@ const MESSAGES: Record<Locale, Record<string, string>> = {
 };
 
 const MAX_QUESTION = 500;
-const MAX_HISTORY = 6;
+// Only the last few messages, each trimmed, so a long chat can't inflate the cost of one call.
+const MAX_HISTORY = 4;
+const MAX_HISTORY_CHARS = 600;
 
-// Simple in-memory rate limit per IP. Good enough for a single-instance portfolio.
+// Simple in-memory rate limit per IP. The real money guard is the budget in server/utils/usage.ts.
 const hits = new Map<string, number[]>();
 function rateLimited(ip: string): boolean {
   const now = Date.now();
@@ -64,15 +73,23 @@ export default defineEventHandler(async (event) => {
   if (!process.env.ANTHROPIC_API_KEY) {
     throw createError({ statusCode: 503, message: msg.off });
   }
+
+  // Reserve the worst-case cost of this answer before calling the API.
+  const config = useRuntimeConfig(event);
+  const reservation = await reserve(
+    Number(config.assistantMonthlyBudgetUsd),
+    Number(config.assistantDailyQuestions),
+  );
+  if (!reservation.ok) {
+    throw createError({ statusCode: 429, message: reservation.reason === "month" ? msg.month : msg.day });
+  }
+
   client ??= new Anthropic();
 
-  const history: Anthropic.Beta.BetaMessageParam[] = (Array.isArray(body?.history) ? body.history : [])
-    .filter(
-      (m: any) =>
-        (m?.role === "user" || m?.role === "assistant") && typeof m.content === "string" && m.content.length < 2000,
-    )
+  const history: Anthropic.MessageParam[] = (Array.isArray(body?.history) ? body.history : [])
+    .filter((m: any) => (m?.role === "user" || m?.role === "assistant") && typeof m.content === "string")
     .slice(-MAX_HISTORY)
-    .map((m: any) => ({ role: m.role, content: m.content }));
+    .map((m: any) => ({ role: m.role, content: String(m.content).slice(0, MAX_HISTORY_CHARS) }));
   while (history.length && history[0]!.role !== "user") history.shift();
 
   // Retrieve with the previous question too, so follow-ups like "and the price?" still find context.
@@ -83,7 +100,7 @@ export default defineEventHandler(async (event) => {
     .join("\n");
   const siteLanguage = locale === "fr" ? "French" : "English";
 
-  const messages: Anthropic.Beta.BetaMessageParam[] = [
+  const messages: Anthropic.MessageParam[] = [
     ...history,
     {
       role: "user",
@@ -103,13 +120,14 @@ export default defineEventHandler(async (event) => {
   return new ReadableStream({
     async start(controller) {
       send(controller, { type: "meta", documents: total });
+      let actualUsd = 0;
       try {
-        const stream = client!.beta.messages.stream({
-          model: "claude-opus-5-5",
-          max_tokens: 1024, // answers are deliberately short
+        const stream = client!.messages.stream({
+          model: MODEL,
+          max_tokens: MAX_OUTPUT_TOKENS,
+          // Short factual answers: no extended reasoning needed, and it keeps every token for the reply.
+          thinking: { type: "disabled" },
           output_config: { effort: "low" },
-          betas: ["server-side-fallback-2026-07-01"],
-          fallbacks: "default",
           system: SYSTEM,
           messages,
         });
@@ -119,18 +137,27 @@ export default defineEventHandler(async (event) => {
           }
         }
         const final = await stream.finalMessage();
+        actualUsd = costOf(final.usage);
         if (final.stop_reason === "refusal") {
           send(controller, { type: "error", message: msg.refusal });
         } else {
           send(controller, { type: "sources", sources: [...new Set(passages.map((p) => p.source))] });
         }
       } catch (err) {
+        // A failed call may still have been billed for part of the answer; count the reservation to be safe.
+        actualUsd = WORST_CASE_USD;
         let message = msg.unavailable;
-        if (err instanceof Anthropic.RateLimitError) message = msg.busy;
-        else if (err instanceof Anthropic.AuthenticationError) message = msg.misconfigured;
+        if (err instanceof Anthropic.RateLimitError) {
+          message = msg.busy;
+          actualUsd = 0; // rejected before any tokens were used
+        } else if (err instanceof Anthropic.AuthenticationError) {
+          message = msg.misconfigured;
+          actualUsd = 0; // rejected before any tokens were used
+        }
         console.error("[ask]", err);
         send(controller, { type: "error", message });
       } finally {
+        await reservation.release(actualUsd);
         controller.close();
       }
     },

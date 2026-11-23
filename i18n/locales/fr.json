@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Romain Giraud · Ingénieur IA freelance",
-    "description": "Romain Giraud, ingénieur IA freelance. Assistants RAG, agents LLM et fonctionnalités IA pour votre entreprise. Posez vos questions à mon assistant."
+    "title": "Romain Giraud · Développeur freelance, IA et automatisation",
+    "description": "Romain Giraud, développeur freelance. Assistants IA sur vos documents, automatisation, intégration IA et développement web pour les petites entreprises et les agences. Posez vos questions à mon assistant."
   },
   "nav": {
     "home": "Romain Giraud, accueil",
@@ -11,7 +11,10 @@
     "projects": "Projets",
     "services": "Services",
     "hire": "Me recruter",
-    "language": "Langue"
+    "language": "Langue",
+    "about": "À propos",
+    "values": "Valeurs",
+    "side": "Projets perso"
   },
   "hero": {
     "ask": "Interroger mon assistant",
@@ -50,13 +53,14 @@
     "emailFallback": "Vous pouvez aussi écrire à Romain : {email}."
   },
   "projects": {
-    "title": "Projets IA",
+    "title": "Projets",
     "filter": "Filtrer les projets",
     "all": "tous",
     "rag": "RAG",
-    "agent": "agents",
-    "vision": "vision",
-    "ml": "ML",
+    "automation": "automatisation",
+    "vision": "IA image",
+    "web": "web",
+    "games": "moteurs de jeu",
     "github": "voir sur GitHub ↗"
   },
   "services": {
@@ -72,5 +76,29 @@
     "askFirst": "Demander d'abord à l'assistant",
     "cv": "Télécharger le CV",
     "profiles": "Profils"
+  },
+  "about": {
+    "title": "À propos de moi",
+    "sub": "La personne derrière le code, et pourquoi je fais ce métier.",
+    "facts": "En bref",
+    "skills": "Compétences"
+  },
+  "values": {
+    "title": "Ce qui compte pour moi",
+    "sub": "Quelques principes qui guident chaque projet et ma façon de travailler avec vous."
+  },
+  "process": {
+    "title": "Comment on travaille ensemble",
+    "sub": "Un chemin simple du premier appel à un produit qui fonctionne, sans mauvaise surprise."
+  },
+  "side": {
+    "title": "Projets perso et associations",
+    "sub": "Ce que je fais en dehors de l'école et des missions : projets personnels, un podcast, et les associations dont j'ai fait partie.",
+    "kinds": {
+      "project": "projet perso",
+      "association": "association",
+      "media": "podcast · radio",
+      "student": "vie étudiante"
+    }
   }
 }

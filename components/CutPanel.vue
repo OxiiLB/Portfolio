@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Chamfered panel with a 1px edge. Pass `edge` (any CSS background) and `fill`.
+// Rounded panel with a 1px edge. `cut` is the corner radius; pass `edge` (any CSS background) and `fill`.
 withDefaults(defineProps<{ tag?: string; cut?: number; edge?: string; fill?: string }>(), {
   tag: "div",
   cut: 16,

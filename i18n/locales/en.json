@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Romain Giraud · Freelance AI engineer",
-    "description": "Romain Giraud, freelance AI engineer. RAG assistants, LLM agents and AI features for your business. Ask my assistant anything about my work."
+    "title": "Romain Giraud · Freelance developer, AI & automation",
+    "description": "Romain Giraud, freelance developer. AI assistants on your documents, automation, AI integration and web development for small businesses and agencies. Ask my assistant anything about my work."
   },
   "nav": {
     "home": "Romain Giraud, home",
@@ -11,7 +11,10 @@
     "projects": "Projects",
     "services": "Services",
     "hire": "Hire me",
-    "language": "Language"
+    "language": "Language",
+    "about": "About",
+    "values": "Values",
+    "side": "Side projects"
   },
   "hero": {
     "ask": "Ask my assistant about my profile",
@@ -50,13 +53,14 @@
     "emailFallback": "You can also email Romain at {email}."
   },
   "projects": {
-    "title": "AI projects",
+    "title": "Projects",
     "filter": "Filter projects",
     "all": "all",
     "rag": "RAG",
-    "agent": "agents",
-    "vision": "vision",
-    "ml": "ML",
+    "automation": "automation",
+    "vision": "image AI",
+    "web": "web",
+    "games": "game engines",
     "github": "view on GitHub ↗"
   },
   "services": {
@@ -72,5 +76,29 @@
     "askFirst": "Ask the assistant first",
     "cv": "Download CV",
     "profiles": "Profiles"
+  },
+  "about": {
+    "title": "About me",
+    "sub": "The person behind the code, and why I do this work.",
+    "facts": "Quick facts",
+    "skills": "Skills"
+  },
+  "values": {
+    "title": "What I care about",
+    "sub": "A few principles that guide every project, and how I work with you."
+  },
+  "process": {
+    "title": "How we'll work together",
+    "sub": "A simple path from first call to a working product, with no surprises on the way."
+  },
+  "side": {
+    "title": "Side projects & associations",
+    "sub": "What I do outside school and client work: personal projects, a podcast, and the associations I've been part of.",
+    "kinds": {
+      "project": "side project",
+      "association": "association",
+      "media": "podcast · radio",
+      "student": "student life"
+    }
   }
 }

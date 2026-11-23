@@ -1,11 +1,11 @@
 <script setup lang="ts">
-// Portrait in a cut-corner frame with a magma edge.
+// Portrait in a rounded frame with a soft gradient edge.
 defineProps<{ src: string; alt: string; width: number; height: number }>();
 </script>
 
 <template>
   <figure class="photo">
-    <CutPanel :cut="28" edge="linear-gradient(150deg, var(--m3), var(--m2) 35%, rgba(238,234,246,.1) 70%, var(--m1))">
+    <CutPanel :cut="22" edge="linear-gradient(150deg, color-mix(in srgb, var(--m2) 60%, transparent), color-mix(in srgb, var(--ink) 10%, transparent) 50%, color-mix(in srgb, var(--m3) 40%, transparent))">
       <div class="frame">
         <img :src="src" :alt="alt" :width="width" :height="height" fetchpriority="high" />
       </div>

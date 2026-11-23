@@ -13,6 +13,7 @@ useSeoMeta({
 
 <template>
   <main id="top">
+    <section class="band-dark wave-bottom">
     <div class="in hero">
       <ProfilePhoto
         class="portrait"
@@ -29,16 +30,24 @@ useSeoMeta({
         <a class="btn ghost" href="#links">{{ t("hero.hire") }}</a>
       </div>
     </div>
+    </section>
+    <!-- Backgrounds: dark matcha hero, then classic and matcha-latte sections in
+         turn, joined by waves. Values has no bottom wave: the footer's top wave
+         covers that edge. -->
     <LinkHub />
+    <AboutSection class="band-latte wave-top wave-bottom" />
     <AskAssistant />
     <ProjectGrid />
+    <SideProjects class="band-latte wave-top wave-bottom" />
     <ServiceList />
+    <ProcessSection />
+    <ValuesSection class="band-latte wave-top" />
   </main>
 </template>
 
 <style scoped>
 .hero {
-  padding-block: 72px 48px;
+  padding-block: 56px 72px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
   grid-template-areas:
@@ -57,7 +66,7 @@ useSeoMeta({
 
 .avail {
   display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 12.5px; color: var(--soft);
-  background: rgba(238, 234, 246, 0.05); padding: 6px 12px 6px 10px;
+  background: color-mix(in srgb, var(--ink) 5%, transparent); padding: 6px 12px 6px 10px; border-radius: 999px;
 }
 .avail i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent), 0 0 12px var(--ok); }
 .lede { font-size: clamp(19px, 2.2vw, 24px); font-weight: 350; max-width: 40ch; margin: 30px 0 0; text-wrap: pretty; color: color-mix(in srgb, var(--ink) 86%, transparent); }

@@ -9,7 +9,6 @@ useHead(() => ({
 </script>
 
 <template>
-  <LatentField />
   <SiteNav />
   <NuxtPage />
   <SiteFooter />

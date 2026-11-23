@@ -37,13 +37,13 @@ function passagesFromProfile(locale: Locale): Passage[] {
       source: lb.contact,
       text: (fr
         ? [
-            `${p.name} est ${p.role.toLowerCase()}, basé en ${p.location}. Langues : ${p.languages.join(", ")}.`,
+            `${p.name} (${p.role}), basé en ${p.location}, travaille 100 % à distance. Langues : ${p.languages.join(", ")}.`,
             p.availability ? `Disponibilité actuelle : ${p.availability}.` : "",
             `E-mail : ${p.email}.`,
             `Profils : ${links}.`,
           ]
         : [
-            `${p.name} is a ${p.role} based in ${p.location}. Languages: ${p.languages.join(", ")}.`,
+            `${p.name} (${p.role}) is based in ${p.location} and works fully remotely. Languages: ${p.languages.join(", ")}.`,
             p.availability ? `Current availability: ${p.availability}.` : "",
             `Email: ${p.email}.`,
             `Profiles: ${links}.`,
@@ -65,12 +65,42 @@ function passagesFromProfile(locale: Locale): Passage[] {
       ].join("\n"),
     });
   }
+  // About, values and process are written in the first person on the page;
+  // the label tells the model they are Romain's own words.
+  out.push({
+    source: fr ? "à propos · Parcours" : "about me · Story",
+    text: `${fr ? "Romain, en ses propres mots" : "Romain, in his own words"}:\n${p.about.paragraphs.join("\n")}\n${p.about.facts
+      .map((f) => `${f.label}: ${f.value}`)
+      .join("; ")}. ${fr ? "Compétences" : "Skills"}: ${p.skills.map((s) => s.label).join(", ")}.`,
+  });
+  for (const v of p.values) {
+    out.push({
+      source: `${fr ? "valeur" : "value"} · ${v.title}`,
+      text: `${fr ? "Une des valeurs de Romain" : "One of Romain's values"}: ${v.title}. ${v.text}`,
+    });
+  }
+  out.push({
+    source: fr ? "méthode · Déroulement d'une mission" : "process · How a mission runs",
+    text: `${fr ? "Comment Romain travaille avec un client, étape par étape" : "How Romain works with a client, step by step"}:\n${p.process
+      .map((s, i) => `${i + 1}. ${s.title}: ${s.text}`)
+      .join("\n")}`,
+  });
+  for (const sp of p.sideProjects) {
+    out.push({
+      source: `${fr ? "projet perso" : "side project"} · ${sp.title}`,
+      text: [
+        `${fr ? "Projet personnel ou association de Romain (hors école et missions)" : "Romain's side project or association (outside school and client work)"}: ${sp.title} (${sp.context}).`,
+        sp.summary,
+        sp.link ? `${sp.link.label}: ${sp.link.url}` : "",
+      ].join("\n"),
+    });
+  }
   for (const s of p.services) {
     out.push({
       source: `${lb.service} · ${s.title}`,
       text: fr
-        ? `Service proposé : ${s.title}. ${s.summary} Comprend : ${s.deliverables.join(" ; ")}. Durée : ${s.duration}.`
-        : `Service offered: ${s.title}. ${s.summary} Includes: ${s.deliverables.join("; ")}. Duration: ${s.duration}.`,
+        ? `Service proposé : ${s.title}. ${s.summary} Comprend : ${s.deliverables.join(" ; ")}.`
+        : `Service offered: ${s.title}. ${s.summary} Includes: ${s.deliverables.join("; ")}.`,
     });
   }
   return out;

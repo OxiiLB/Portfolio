@@ -35,7 +35,7 @@ async function copyEmail() {
           :href="l.url"
           target="_blank"
           rel="noopener"
-          :style="{ '--hue': `var(--t${l.color})` }"
+          :style="{ '--rest': `var(--t${l.color})`, '--pop': `var(--p${l.color})` }"
         >
           <span class="sw">{{ l.badge }}</span>
           <span class="name"><b>{{ l.label }}</b><span>{{ l.description }}</span></span>
@@ -43,7 +43,7 @@ async function copyEmail() {
             <svg viewBox="0 0 16 16" width="16" height="16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" /></svg>
           </span>
         </a>
-        <div class="row mail" :style="{ '--hue': 'var(--t6)' }">
+        <div class="row mail" :style="{ '--rest': 'var(--t6)', '--pop': 'var(--p6)' }">
           <span class="sw">@</span>
           <span class="name">
             <b><a :href="`mailto:${profile.email}`">{{ t("links.email") }}</a></b>
@@ -66,26 +66,27 @@ async function copyEmail() {
 /* Two columns of contact rows on wide screens, one on phones. */
 .hub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 28px; }
 .row {
+  border-radius: 14px;
   display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 16px;
   padding: 14px; text-decoration: none; position: relative;
   transition: background-color 0.2s;
 }
-.row::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 2px; background: var(--hue); opacity: 0; transition: opacity 0.2s; }
+.row { --hue: var(--rest); }
+.row:hover { --hue: var(--pop); }
 .row:hover { background: linear-gradient(90deg, color-mix(in srgb, var(--hue) 10%, transparent), transparent 80%); }
-.row:hover::before { opacity: 1; }
-.sw { width: 44px; height: 44px; display: grid; place-items: center; font: 600 13px var(--f-mono); color: var(--tok-ink); background: var(--hue); clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+.sw { transition: background-color 0.25s ease; width: 44px; height: 44px; display: grid; place-items: center; font: 600 13px var(--f-mono); color: var(--tok-ink); background: var(--hue); border-radius: 10px; }
 .name { display: grid; min-width: 0; }
 .name b { font-size: 20px; font-weight: 650; letter-spacing: -0.015em; line-height: 1.2; }
 .name b a { text-decoration: none; }
 .name span { color: var(--soft); font-size: 14px; overflow-wrap: anywhere; }
 .addr { font-family: var(--f-mono); font-size: 13px !important; }
 
-/* Shared shape for the arrow and the copy button: a small cut-corner key. */
+/* Shared shape for the arrow and the copy button: a small rounded key. */
 .go, .copy {
   height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  color: var(--soft); background: rgba(238, 234, 246, 0.06);
-  box-shadow: inset 0 0 0 1px rgba(238, 234, 246, 0.1);
-  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  color: var(--soft); background: color-mix(in srgb, var(--ink) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+  border-radius: 10px;
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
