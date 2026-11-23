@@ -212,14 +212,14 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   {
     slug: "game-engines",
     context: { en: "EPITECH projects", fr: "Projets EPITECH" },
-    title: { en: "Pikselite Engine & R-Type", fr: "Pikselite Engine et R-Type" },
+    title: { en: "Pikselite Engine", fr: "Pikselite Engine" },
     summary: {
       en: "Two 2D game engines in C++: one with per-pixel physics, one with an ECS architecture and networked multiplayer.",
       fr: "Deux moteurs de jeu 2D en C++ : l'un avec une physique au pixel près, l'autre avec une architecture ECS et un multijoueur en réseau.",
     },
     details: {
-      en: "Pikselite Engine and R-Type are 2D game engines: one with per-pixel physics, the other with a C++ ECS architecture and networked multiplayer.",
-      fr: "Pikselite Engine et R-Type sont des moteurs de jeu 2D : l'un avec une physique au pixel près, l'autre avec une architecture ECS en C++ et un multijoueur en réseau.",
+      en: "Pikselite Engine is a game engines: per-pixel physics, with a C++ ECS architecture.",
+      fr: "Pikselite Engine est un moteur de jeu 2D : physique au pixel près, avec une architecture ECS en C++.",
     },
     tags: [{ label: "C++", color: 3 }, { label: "ECS", color: 1 }, { label: "networking", color: 4 }],
     categories: ["games"],

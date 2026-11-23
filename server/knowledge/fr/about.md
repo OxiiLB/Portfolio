@@ -28,7 +28,7 @@ Romain a été développeur full-stack chez BestConsultant. Il a développé des
 ## Projets
 
 - Area : plateforme d'automatisation web et mobile, avec connexion SSO à des services tiers et actions déclenchées par des événements, dans le style d'IFTTT ou Zapier.
-- Pikselite Engine et R-Type : moteurs de jeu 2D, l'un avec une physique au pixel près, l'autre avec une architecture ECS en C++ et un multijoueur en réseau.
+- Pikselite Engine est un moteur de jeu 2D : physique au pixel près, avec une architecture ECS en C++.
 
 ## Formation
 

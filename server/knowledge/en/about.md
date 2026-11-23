@@ -28,8 +28,7 @@ Romain was a full-stack developer at BestConsultant. He developed JavaScript and
 ## Projects
 
 - Area: a web and mobile automation platform with SSO connection to third-party services and event-triggered actions, in the style of IFTTT or Zapier.
-- Pikselite Engine and R-Type: 2D game engines, one with per-pixel physics, the other with a C++ ECS architecture and networked multiplayer.
-
+- Pikselite Engine is a game engines: per-pixel physics, with a C++ ECS architecture.
 ## Education
 
 - EPITECH Bordeaux (2022 to 2027): Master of Science-level degree in Information Technology, covering web, AI and software development. Romain graduates in 2027.
