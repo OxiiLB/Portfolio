@@ -87,7 +87,7 @@ async function copyEmail() {
   color: var(--soft); background: color-mix(in srgb, var(--ink) 6%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
   border-radius: 10px;
-  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 .go { width: 40px; }
@@ -100,6 +100,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round
 
 .copy { border: 0; padding: 0 14px; font-family: var(--f-mono); font-size: 12px; font-weight: 600; min-width: 96px; }
 .copy:hover { background: var(--hue); color: var(--tok-ink); box-shadow: none; }
+.copy:active { transform: scale(0.97); } /* press feedback */
 .copy.done { background: var(--ok); color: var(--tok-ink); box-shadow: none; }
 .copy.done svg { animation: tick 0.3s ease-out; }
 @keyframes tick { from { transform: scale(0.4); opacity: 0; } }

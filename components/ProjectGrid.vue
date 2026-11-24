@@ -65,6 +65,9 @@ const shown = computed<Project[]>(() =>
 .filters button { border: 0; border-radius: 999px; background: none; padding: 6px 12px; font-family: var(--f-mono); font-size: 12.5px; color: var(--soft); }
 .filters button:hover { color: var(--ink); }
 .filters button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+/* Press feedback */
+.filters button { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.filters button:active { transform: scale(0.97); }
 .projs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 /* With an odd number of cards, the first one spans the full width so no card sits alone. */
 .projs > :first-child:nth-last-child(odd) { grid-column: 1 / -1; }

@@ -201,5 +201,8 @@ onBeforeUnmount(() => ro?.disconnect());
 .switch { display: inline-flex; background: color-mix(in srgb, var(--ink) 6%, transparent); border-radius: 8px; overflow: hidden; }
 .switch button { border: 0; background: none; padding: 5px 10px; font-family: var(--f-mono); font-size: 12px; color: var(--soft); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+/* Press feedback */
+.switch button { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.switch button:active { transform: scale(0.97); }
 @media (max-width: 560px) { .w { font-size: 9.5px; top: -7px; } .tk small { font-size: 9px; } }
 </style>

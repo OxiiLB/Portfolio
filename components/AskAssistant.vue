@@ -231,6 +231,9 @@ button:disabled { opacity: 0.5; cursor: progress; }
 .sugg { display: grid; gap: 8px; }
 .sugg button { text-align: left; background: color-mix(in srgb, var(--ink) 5%, transparent); border: 0; border-radius: 10px; padding: 10px 12px; font-size: 14.5px; color: var(--ink); }
 .sugg button:hover:not(:disabled) { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+/* Press feedback */
+.ask button, .sugg button { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.ask button:active:not(:disabled), .sugg button:active:not(:disabled) { transform: scale(0.97); }
 .tgl { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--soft); }
 .tgl input { accent-color: var(--m3); width: 16px; height: 16px; }
 .stat { font-family: var(--f-mono); font-size: 12px; color: var(--soft); display: grid; gap: 6px; }
