@@ -21,5 +21,7 @@ defineProps<{ src: string; alt: string; width: number; height: number }>();
   background: linear-gradient(180deg, transparent 65%, color-mix(in srgb, var(--m1) 35%, transparent));
 }
 img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-.photo:hover img { transform: scale(1.03); }
+@media (hover: hover) and (pointer: fine) {
+  .photo:hover img { transform: scale(1.03); }
+}
 </style>

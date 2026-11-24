@@ -44,13 +44,29 @@ const attn = computed(() => {
   return props.tokens.map((_, j) => (j === source.value ? 1 : (m.get(j) ?? 0)));
 });
 
+/** Layout position of `el` inside `root`. Offsets ignore CSS transforms, so the
+ *  entrance animation and the hover lift don't shift the measured position. */
+function offsetIn(el: HTMLElement, root: HTMLElement) {
+  let x = 0;
+  let y = 0;
+  let n: HTMLElement | null = el;
+  while (n && n !== root) {
+    x += n.offsetLeft;
+    y += n.offsetTop;
+    n = n.offsetParent as HTMLElement | null;
+  }
+  return { x, y };
+}
+
 function measure() {
-  if (!wrap.value) return;
-  const box = wrap.value.getBoundingClientRect();
-  size.value = { w: box.width, h: box.height };
+  const root = wrap.value;
+  if (!root) return;
+  size.value = { w: root.offsetWidth, h: root.offsetHeight };
   centres.value = props.tokens.map((_, i) => {
-    const r = tokenEls[i]?.getBoundingClientRect();
-    return r ? { x: r.left - box.left + r.width / 2, y: r.top - box.top + r.height / 2 } : { x: 0, y: 0 };
+    const el = tokenEls[i];
+    if (!el) return { x: 0, y: 0 };
+    const { x, y } = offsetIn(el, root);
+    return { x: x + el.offsetWidth / 2, y: y + el.offsetHeight / 2 };
   });
 }
 
@@ -67,6 +83,13 @@ const threads = computed(() => {
   });
 });
 
+/** A mouse dims the other tokens while it hovers. Touch and pen have no hover and
+ *  never send a matching "leave", so a tap only moves the attention source. */
+function onTokenEnter(e: PointerEvent, i: number) {
+  source.value = i;
+  if (e.pointerType === "mouse") hovering.value = true;
+}
+
 function tokenStyle(i: number) {
   return {
     animationDelay: `${i * 0.06}s`,
@@ -77,8 +100,8 @@ function tokenStyle(i: number) {
 let ro: ResizeObserver | null = null;
 onMounted(async () => {
   await document.fonts?.ready;
-  // Wait for the entrance animation so positions are final.
-  setTimeout(measure, 700);
+  // Offsets ignore transforms, so there's no need to wait for the entrance animation.
+  measure();
   ro = new ResizeObserver(measure);
   if (wrap.value) ro.observe(wrap.value);
 });
@@ -98,7 +121,7 @@ onBeforeUnmount(() => ro?.disconnect());
           :stroke-opacity="Math.min(t.opacity, 1)"
         />
       </svg>
-      <h1 class="toks" :aria-label="plainText" @mouseleave="hovering = false">
+      <h1 class="toks" :aria-label="plainText" @pointerleave="hovering = false" @pointercancel="hovering = false">
         <span v-for="(line, l) in lines" :key="l" class="line" aria-hidden="true">
           <span
             v-for="{ t, i } in line"
@@ -107,7 +130,7 @@ onBeforeUnmount(() => ro?.disconnect());
             class="tk"
             :class="[`c${t.color}`, { src: i === source, word: t.text.startsWith(' ') }]"
             :style="tokenStyle(i)"
-            @mouseenter="source = i; hovering = true"
+            @pointerenter="onTokenEnter($event, i)"
           >{{ t.text.trim() }}<small>{{ t.id }}</small><em
               v-if="attn[i] > 0 && i !== source"
               class="w"
@@ -131,9 +154,12 @@ onBeforeUnmount(() => ro?.disconnect());
 .thread {
   fill: none; stroke: var(--m3); stroke-linecap: round;
   filter: drop-shadow(0 0 6px color-mix(in srgb, var(--m2) 60%, transparent));
-  stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 0.8s ease-out forwards;
 }
-@keyframes draw { to { stroke-dashoffset: 0; } }
+/* Threads are visible by default; only draw them in when motion is welcome. */
+@media (prefers-reduced-motion: no-preference) {
+  .thread { stroke-dasharray: 900; animation: draw 0.8s ease-out backwards; }
+}
+@keyframes draw { from { stroke-dashoffset: 900; } }
 .toks {
   position: relative; z-index: 1; margin: 0;
   display: grid; justify-items: start; row-gap: 0.18em;
@@ -161,7 +187,10 @@ onBeforeUnmount(() => ro?.disconnect());
   animation: fade 0.3s both;
 }
 @keyframes fade { from { opacity: 0; transform: translateY(4px); } }
-.tk:hover { transform: translateY(-4px); }
+/* Only on devices that really hover: a tap would leave the token stuck lifted. */
+@media (hover: hover) and (pointer: fine) {
+  .tk:hover { transform: translateY(-4px); }
+}
 @keyframes pop { from { transform: translateY(0.25em) scale(0.96); } }
 .plain .tk { background: transparent; color: var(--ink); box-shadow: none; opacity: 1 !important; }
 .plain .tk + .tk { margin-left: 0; }

@@ -200,13 +200,24 @@ section.block { padding-block: 64px; }
   transition: transform 0.15s, filter 0.15s, background-color 0.15s;
 }
 .btn.primary { background: var(--grad); color: var(--on-accent); }
-.btn.primary:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.btn.primary:hover { filter: brightness(1.08); }
+@media (hover: hover) and (pointer: fine) {
+  .btn.primary:hover { transform: translateY(-1px); }
+}
 .btn.ghost { background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink); }
 .btn.ghost:hover { background: color-mix(in srgb, var(--ink) 11%, transparent); }
 .btn .k { font-family: var(--f-mono); font-size: 11px; font-weight: 500; opacity: 0.7; }
 .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 
+/* Reduced motion: fewer, gentler animations, not none. Animations jump straight to
+   their end state (so fill modes still apply and nothing stays hidden), colour and
+   opacity transitions are kept, and hover/entrance movement is removed. */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+  .tk, .tk:hover, .btn.primary:hover, .photo:hover img, .row:hover .go svg { transform: none !important; }
 }

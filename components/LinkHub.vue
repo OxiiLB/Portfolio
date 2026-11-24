@@ -93,7 +93,10 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round
 .go { width: 40px; }
 .go svg { transition: transform 0.25s cubic-bezier(0.3, 0.8, 0.3, 1); }
 .row:hover .go, .row:focus-visible .go { background: var(--hue); color: var(--tok-ink); box-shadow: none; }
-.row:hover .go svg, .row:focus-visible .go svg { transform: translate(2px, -2px); }
+.row:focus-visible .go svg { transform: translate(2px, -2px); }
+@media (hover: hover) and (pointer: fine) {
+  .row:hover .go svg { transform: translate(2px, -2px); }
+}
 
 .copy { border: 0; padding: 0 14px; font-family: var(--f-mono); font-size: 12px; font-weight: 600; min-width: 96px; }
 .copy:hover { background: var(--hue); color: var(--tok-ink); box-shadow: none; }
