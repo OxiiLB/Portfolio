@@ -18,6 +18,9 @@ const lastTokenCount = ref(0);
 const docCount = ref<number | null>(null);
 const thread = ref<HTMLElement | null>(null);
 
+/** Counters and the colour switch appear once a first answer has fully come back. */
+const answered = ref(false);
+
 /** Leading whitespace of a token, rendered outside its highlight. */
 function lead(tok: string): string {
   return tok.match(/^\s*/)?.[0] ?? "";
@@ -111,10 +114,12 @@ async function ask(q: string) {
   } catch (e) {
     flush(true);
     answer.error = true;
+    lastTokenCount.value = 0;
     answer.tokens = splitTokens(
       `${(e as Error).message} ${t("ask.emailFallback", { email: profile.value.email })}`,
     );
   } finally {
+    if (!answer.error && answer.tokens.length) answered.value = true;
     busy.value = false;
     scrollDown();
   }
@@ -129,27 +134,51 @@ async function ask(q: string) {
         :sub="t('ask.sub')"
       />
       <CutPanel :cut="22" edge="linear-gradient(135deg, color-mix(in srgb, var(--m2) 55%, transparent), color-mix(in srgb, var(--ink) 8%, transparent) 45%, color-mix(in srgb, var(--ink) 8%, transparent) 80%, color-mix(in srgb, var(--m3) 40%, transparent))" fill="color-mix(in srgb, var(--surface) 92%, transparent)">
+      <!-- A chat window: status bar, bubbles (assistant on the left with Romain's
+           photo, visitor on the right in green), suggestion chips, input. -->
       <div class="chat" :class="{ nocolor: !colorTokens }">
-        <div class="thread">
-          <div class="chead">
-            <span class="live"><i :class="{ on: busy }"></i>romain-rag{{ docCount ? ` · ${t('ask.indexed', { n: docCount })}` : "" }}</span>
-            <span>{{ t("ask.powered") }}</span>
-          </div>
-          <div ref="thread" class="msgs" aria-live="polite">
-            <div class="m-bot">
-{{ t("ask.greeting") }}
+        <div class="chead">
+          <span class="status"><i :class="{ on: busy }"></i>{{ busy ? t("ask.writing") : t("ask.online") }}</span>
+          <span>{{ t("ask.powered") }}</span>
+        </div>
+
+        <div ref="thread" class="msgs" aria-live="polite">
+          <div class="row bot first">
+            <img class="av" :src="profile.photo.src" alt="" width="32" height="32" />
+            <div class="stack">
+              <span class="who">{{ t("ask.name") }}</span>
+              <div class="bubble">{{ t("ask.greeting") }}</div>
             </div>
-            <template v-for="(turn, n) in turns" :key="n">
-              <div v-if="turn.role === 'user'" class="m-user">{{ turn.text }}</div>
-              <!-- Tokens are coloured only while this answer streams, then settle into plain text. -->
-              <div v-else class="m-bot" :class="{ err: turn.error, streaming: busy && n === turns.length - 1 }">
-                <span v-if="!turn.tokens.length" class="typing" :aria-label="t('ask.thinking')">●●●</span>
-                <template v-for="(tok, i) in turn.tokens" :key="i">{{ lead(tok) }}<span class="t" :style="tokStyle(i)">{{ tok.trimStart() }}</span></template>
-                <div v-if="turn.sources.length && !busy" class="srcs">
+          </div>
+          <template v-for="(turn, n) in turns" :key="n">
+            <div v-if="turn.role === 'user'" class="row user">
+              <div class="bubble">{{ turn.text }}</div>
+            </div>
+            <div v-else class="row bot">
+              <img class="av" :src="profile.photo.src" alt="" width="32" height="32" />
+              <div class="stack">
+                <!-- Tokens are coloured only while this answer streams, then settle into plain text. -->
+                <div class="bubble" :class="{ err: turn.error, streaming: busy && n === turns.length - 1 }">
+                  <span v-if="!turn.tokens.length" class="typing" role="status" :aria-label="t('ask.thinking')"><i></i><i></i><i></i></span>
+                  <template v-for="(tok, i) in turn.tokens" :key="i">{{ lead(tok) }}<span class="t" :style="tokStyle(i)">{{ tok.trimStart() }}</span></template>
+                </div>
+                <div v-if="turn.sources.length && !(busy && n === turns.length - 1)" class="srcs" :aria-label="t('ask.sources')">
                   <span v-for="s in turn.sources" :key="s">{{ s }}</span>
                 </div>
               </div>
-            </template>
+            </div>
+          </template>
+        </div>
+
+        <div class="composer">
+          <div class="chips" role="group" :aria-label="t('ask.try')">
+            <button
+              v-for="q in profile.suggestedQuestions"
+              :key="q"
+              type="button"
+              :disabled="busy"
+              @click="ask(q)"
+            >{{ q }}</button>
           </div>
           <form class="ask" @submit.prevent="ask(question)">
             <label for="ask-q" class="sr-only">{{ t("ask.label") }}</label>
@@ -162,26 +191,16 @@ async function ask(q: string) {
             />
             <button type="submit" :disabled="busy">{{ t("ask.send") }}</button>
           </form>
+          <div v-if="answered" class="meta">
+            <label class="tgl" for="tokcolor">
+              <input id="tokcolor" v-model="colorTokens" type="checkbox" /> {{ t("ask.color") }}
+            </label>
+            <span class="stat">
+              <span>{{ t("ask.lastAnswer") }} <b>{{ t("ask.tokens", { n: lastTokenCount }) }}</b></span>
+              <span>{{ t("ask.sources") }} <b>{{ turns.at(-1)?.sources.length ?? 0 }}</b></span>
+            </span>
+          </div>
         </div>
-        <aside class="side">
-          <div class="sugg">
-            <span class="label">{{ t("ask.try") }}</span>
-            <button
-              v-for="q in profile.suggestedQuestions"
-              :key="q"
-              type="button"
-              :disabled="busy"
-              @click="ask(q)"
-            >{{ q }}</button>
-          </div>
-          <label class="tgl" for="tokcolor">
-            <input id="tokcolor" v-model="colorTokens" type="checkbox" /> {{ t("ask.color") }}
-          </label>
-          <div class="stat">
-            <div><span>{{ t("ask.lastAnswer") }}</span><b>{{ t("ask.tokens", { n: lastTokenCount }) }}</b></div>
-            <div><span>{{ t("ask.sources") }}</span><b>{{ turns.at(-1)?.sources.length ?? 0 }}</b></div>
-          </div>
-        </aside>
       </div>
       </CutPanel>
     </div>
@@ -189,20 +208,37 @@ async function ask(q: string) {
 </template>
 
 <style scoped>
-.chat { display: grid; grid-template-columns: minmax(0, 1fr) 280px; color: var(--ink); }
-.thread { padding: 26px clamp(18px, 3vw, 32px); display: flex; flex-direction: column; gap: 16px; height: 520px; min-width: 0; }
-.chead { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--f-mono); font-size: 12px; color: var(--soft); }
-.live { display: flex; align-items: center; gap: 7px; }
-.live i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
-.live i.on { animation: blink 0.8s infinite alternate; }
-@keyframes blink { to { opacity: 0.25; } }
-.msgs { display: flex; flex-direction: column; gap: 16px; flex: 1; overflow-y: auto; min-height: 0; padding-right: 4px; }
-.m-user { align-self: flex-end; background: color-mix(in srgb, var(--ink) 7%, transparent); border-radius: 14px 14px 4px 14px; padding: 10px 14px; max-width: 80%; overflow-wrap: anywhere; }
-.m-bot { max-width: 62ch; font-size: 17px; line-height: 1.6; overflow-wrap: anywhere; }
+.chat { display: flex; flex-direction: column; height: 620px; color: var(--ink); }
+
+/* Status bar */
+.chead {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 14px clamp(18px, 3vw, 28px); border-bottom: 1px solid var(--line);
+  font-size: 13.5px; color: var(--soft);
+}
+.status { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--ink); }
+.status i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent); }
+.status i.on { animation: blink 0.8s infinite alternate; }
+@keyframes blink { to { opacity: 0.3; } }
+
+/* Messages */
+.msgs { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 22px clamp(18px, 3vw, 28px); }
+.row { display: flex; gap: 10px; align-items: flex-start; }
+.row.user { justify-content: flex-end; }
+/* The avatar sits level with the top of the bubble (below the name on the greeting). */
+.av { width: 32px; height: 32px; margin-top: 4px; border-radius: 50%; object-fit: cover; flex: none; background: var(--surface-2); }
+.row.first .av { margin-top: 26px; }
+.stack { display: grid; gap: 6px; justify-items: start; max-width: min(62ch, 85%); min-width: 0; }
+.who { font-size: 13px; font-weight: 650; color: var(--soft); padding-left: 4px; }
+.bubble { padding: 11px 16px; font-size: 16px; line-height: 1.55; overflow-wrap: anywhere; }
+.bot .bubble { background: color-mix(in srgb, var(--m2) 9%, var(--surface)); border-radius: 18px 18px 18px 6px; }
+.user .bubble { background: var(--m2); color: var(--on-accent); border-radius: 18px 18px 6px 18px; max-width: min(52ch, 80%); }
+.bubble.err { color: var(--soft); background: color-mix(in srgb, var(--ink) 5%, var(--surface)); }
+
 /* Token highlight: a band behind most of the letters (about 3/4 of the line), not a full
    block, with a small gap between pieces so neighbours never touch. */
-.m-bot .t {
-  /* Slightly deeper than the token tint so the palest shades still show on white. */
+.bubble .t {
+  /* Slightly deeper than the token tint so the palest shades still show on the bubble. */
   --band: color-mix(in srgb, var(--tok) 72%, var(--m3));
   color: var(--tok-ink); white-space: pre-wrap;
   margin-left: 1px; border-radius: 2px;
@@ -212,41 +248,54 @@ async function ask(q: string) {
   /* When the answer finishes, the bands sink to the baseline and disappear. */
   transition: background-size 420ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.m-bot.streaming .t { background-size: 100% 74%; background-position: 0 72%; transition: none; }
-.m-bot.streaming .t:hover { --band: var(--tok-pop); }
-.nocolor .m-bot .t, .m-bot.err .t { background: transparent !important; color: var(--ink); }
-.m-bot.err { color: var(--soft); }
-.typing { color: var(--soft); letter-spacing: 3px; animation: blink 0.8s infinite alternate; }
-.srcs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-.srcs span { font-family: var(--f-mono); font-size: 11.5px; background: color-mix(in srgb, var(--ink) 6%, transparent); padding: 3px 8px; color: var(--soft); }
+.bubble.streaming .t { background-size: 100% 74%; background-position: 0 72%; transition: none; }
+.bubble.streaming .t:hover { --band: var(--tok-pop); }
+.nocolor .bubble .t, .bubble.err .t { background: transparent !important; color: inherit; }
+
+/* Typing dots */
+.typing { display: inline-flex; gap: 4px; padding: 6px 0; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--soft); animation: dot 1s infinite ease-in-out; }
+.typing i:nth-child(2) { animation-delay: 0.15s; }
+.typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes dot { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+
+/* Sources used for an answer, under its bubble */
+.srcs { display: flex; gap: 6px; flex-wrap: wrap; padding-left: 4px; }
+.srcs span { font-family: var(--f-mono); font-size: 11.5px; background: color-mix(in srgb, var(--ink) 6%, transparent); padding: 3px 8px; border-radius: 6px; color: var(--soft); }
 .srcs span::before { content: "↳ "; }
+
+/* Composer: suggestion chips, input, then counters once there is an answer */
+.composer { display: grid; gap: 10px; padding: 12px clamp(18px, 3vw, 28px) 18px; border-top: 1px solid var(--line); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chips button {
+  border: 1px solid color-mix(in srgb, var(--m2) 22%, transparent); background: var(--surface);
+  border-radius: 999px; padding: 7px 14px; font-size: 14px; color: var(--ink); white-space: nowrap;
+}
+.chips button:hover:not(:disabled) { background: color-mix(in srgb, var(--m2) 8%, var(--surface)); border-color: color-mix(in srgb, var(--m2) 40%, transparent); }
 .ask { border-radius: 14px; display: flex; gap: 8px; background: color-mix(in srgb, var(--ink) 5%, transparent); padding: 6px; box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--ink) 10%, transparent); transition: box-shadow 0.2s; }
 .ask:focus-within { box-shadow: inset 0 -2px 0 var(--m3); }
 .ask input { flex: 1; min-width: 0; background: none; border: 0; color: var(--ink); font: inherit; font-size: 16px; padding: 8px 10px; }
 .ask input::placeholder { color: var(--soft); }
 .ask input:focus { outline: none; }
-.ask button { border: 0; border-radius: 10px; background: var(--grad); color: var(--on-accent); font-weight: 600; padding: 8px 14px; }
+.ask button { border: 0; border-radius: 10px; background: var(--grad); color: var(--on-accent); font-weight: 600; padding: 8px 16px; }
 button:disabled { opacity: 0.5; cursor: progress; }
-.side { border-left: 1px solid var(--line); padding: 26px 22px; display: grid; gap: 18px; align-content: start; }
-.side .label { color: var(--soft); }
-.sugg { display: grid; gap: 8px; }
-.sugg button { text-align: left; background: color-mix(in srgb, var(--ink) 5%, transparent); border: 0; border-radius: 10px; padding: 10px 12px; font-size: 14.5px; color: var(--ink); }
-.sugg button:hover:not(:disabled) { background: color-mix(in srgb, var(--ink) 10%, transparent); }
 /* Press feedback */
-.ask button, .sugg button { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
-.ask button:active:not(:disabled), .sugg button:active:not(:disabled) { transform: scale(0.97); }
-.tgl { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--soft); }
-.tgl input { accent-color: var(--m3); width: 16px; height: 16px; }
-.stat { font-family: var(--f-mono); font-size: 12px; color: var(--soft); display: grid; gap: 6px; }
-.stat div { display: flex; justify-content: space-between; border-top: 1px dashed var(--line); padding-top: 6px; }
-.stat b { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+.ask button, .chips button { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 0.2s, border-color 0.2s; }
+.ask button:active:not(:disabled), .chips button:active:not(:disabled) { transform: scale(0.97); }
+.meta { display: flex; justify-content: space-between; align-items: center; gap: 8px 20px; flex-wrap: wrap; font-size: 13px; color: var(--soft); }
+.tgl { display: flex; align-items: center; gap: 8px; }
+.tgl input { accent-color: var(--m3); width: 15px; height: 15px; }
+.stat { display: flex; gap: 18px; }
+.stat b { font-family: var(--f-mono); font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+
 @media (prefers-reduced-motion: reduce) {
-  .m-bot .t { transition: none; }
+  .bubble .t { transition: none; }
 }
 @media (max-width: 860px) {
-  .chat { grid-template-columns: 1fr; }
-  .side { border-left: 0; border-top: 1px solid var(--line); order: -1; padding-bottom: 18px; }
-  .tgl, .stat { display: none; }
-  .thread { height: 440px; }
+  .chat { height: 580px; }
+  /* One row of chips that scrolls sideways, so the conversation keeps its room. */
+  .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * clamp(18px, 3vw, 28px)); padding-inline: clamp(18px, 3vw, 28px); }
+  .chips::-webkit-scrollbar { display: none; }
+  .stack { max-width: 88%; }
 }
 </style>
