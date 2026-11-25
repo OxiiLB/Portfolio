@@ -2,11 +2,14 @@
 const { t, locale, locales } = useI18n();
 const switchLocalePath = useSwitchLocalePath();
 
-// At the top of the page the bar blends into the dark matcha hero; once you scroll
-// it switches to the light, blurred bar.
-const atTop = ref(true);
+// Over the dark matcha hero (top of the page) and the dark footer (end of the page)
+// the bar blends into the green; in between it is the light, blurred bar.
+const onDark = ref(true);
 function onScroll() {
-  atTop.value = window.scrollY < 24;
+  const footer = document.getElementById("links");
+  // The bar is 62px tall: it is "over" the footer once the footer reaches it.
+  const overFooter = !!footer && footer.getBoundingClientRect().top <= 62;
+  onDark.value = window.scrollY < 24 || overFooter;
 }
 onMounted(() => {
   onScroll();
@@ -16,7 +19,7 @@ onBeforeUnmount(() => window.removeEventListener("scroll", onScroll));
 </script>
 
 <template>
-  <header class="nav" :class="{ 'band-dark': atTop, top: atTop }">
+  <header class="nav" :class="{ 'band-dark': onDark, dark: onDark }">
     <div class="in bar">
       <a class="mark" href="#top" :aria-label="t('nav.home')">
         <span class="c1">giraud</span><span class="c2">labs</span><span class="c3">.com</span>
@@ -57,8 +60,8 @@ onBeforeUnmount(() => window.removeEventListener("scroll", onScroll));
   backdrop-filter: blur(14px) saturate(1.3);
   transition: background-color 0.3s ease;
 }
-.nav.top { background: var(--band-dark); backdrop-filter: none; }
-.nav.top::after { opacity: 0; }
+.nav.dark { background: var(--band-dark); backdrop-filter: none; }
+.nav.dark::after { opacity: 0; }
 .nav::after { content: ""; position: absolute; inset: auto 0 0; height: 1px; background: linear-gradient(90deg, transparent, var(--line) 20%, var(--line) 80%, transparent); }
 .bar { display: flex; align-items: center; gap: 20px; height: 62px; }
 .mark { display: flex; gap: 2px; font-weight: 700; font-size: 17px; text-decoration: none; letter-spacing: -0.01em; }
@@ -95,5 +98,10 @@ nav a:hover { color: var(--ink); }
 @media (max-width: 1080px) {
   nav { display: none; }
   .lang { margin-left: auto; }
+}
+/* Phones: tighter spacing so logo, language switch and "Hire me" / "Me recruter" fit. */
+@media (max-width: 480px) {
+  .bar { gap: 10px; }
+  .hire { font-size: 13px; padding: 7px 11px; }
 }
 </style>

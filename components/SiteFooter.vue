@@ -8,6 +8,12 @@ const cvHref = computed(() =>
   locale.value === "fr" ? "/CV_Romain_GIRAUD_Prospection.pdf" : "/CV_Romain_GIRAUD_Outreach_EN.pdf",
 );
 
+const hireLinks = computed(() => profile.value.links.filter((l) => l.group === "hire"));
+const profileLinks = computed(() => profile.value.links.filter((l) => l.group === "profile"));
+
+/** Opens the visitor's mail app with a subject already filled in. */
+const mailHref = computed(() => `mailto:${profile.value.email}?subject=${encodeURIComponent(t("footer.mailSubject"))}`);
+
 // Copy the email address; if the clipboard is blocked, select it instead.
 const copied = ref<"copy" | "copied" | "selected">("copy");
 const addr = ref<HTMLElement | null>(null);
@@ -40,27 +46,23 @@ async function copyEmail() {
       <div class="main">
         <div class="pitch">
           <p class="big">
-            <span class="tk c5">{{ t("footer.got") }}</span>&#32;<span class="tk c6">{{ t("footer.a") }}</span>&#32;<span class="tk c1">{{ t("footer.project") }}</span><span class="tk c2">?</span>
+            <span class="tk c5">{{ t("footer.got") }}</span>&#32;<span class="tk c6">{{ t("footer.a") }}</span>&#32;<span class="nobr"><span class="tk c1">{{ t("footer.project") }}</span><span class="tk c2">?</span></span>
             {{ t("footer.talk") }}
           </p>
           <p class="sub">{{ t("links.sub") }}</p>
+          <!-- The main action starts the conversation; the assistant is a quieter
+               option for visitors who are not ready to write yet. -->
           <div class="ctas">
-            <a class="btn primary" href="#ask">{{ t("footer.askFirst") }}</a>
+            <a class="btn primary" :href="mailHref">{{ t("footer.emailMe") }}</a>
             <a class="btn ghost" :href="cvHref" target="_blank" rel="noopener">{{ t("footer.cv") }}</a>
           </div>
+          <a class="askfirst" href="#ask">{{ t("footer.askFirst") }}</a>
         </div>
 
         <div class="contact">
           <h2 class="contact-title">{{ t("nav.hire") }}</h2>
+          <!-- Ways to hire, email first (the only direct channel), then the platforms. -->
           <ul class="list">
-            <li v-for="l in profile.links" :key="l.key">
-              <a class="row" :href="l.url" target="_blank" rel="noopener">
-                <span class="name"><b>{{ l.label }}</b><span>{{ l.description }}</span></span>
-                <span class="go" aria-hidden="true">
-                  <svg viewBox="0 0 16 16" width="16" height="16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" /></svg>
-                </span>
-              </a>
-            </li>
             <li>
               <div class="row mail">
                 <span class="name">
@@ -75,6 +77,26 @@ async function copyEmail() {
                   <span aria-live="polite">{{ t(`links.${copied}`) }}</span>
                 </button>
               </div>
+            </li>
+            <li v-for="l in hireLinks" :key="l.key">
+              <a class="row" :href="l.url" target="_blank" rel="noopener">
+                <span class="name"><b>{{ l.label }}</b><span>{{ l.description }}</span></span>
+                <span class="go" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" width="16" height="16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" /></svg>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <!-- Places to check Romain's background, not to book him. -->
+          <h3 class="group-title">{{ t("footer.profiles") }}</h3>
+          <ul class="list">
+            <li v-for="l in profileLinks" :key="l.key">
+              <a class="row" :href="l.url" target="_blank" rel="noopener">
+                <span class="name"><b>{{ l.label }}</b><span>{{ l.description }}</span></span>
+                <span class="go" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" width="16" height="16"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" /></svg>
+                </span>
+              </a>
             </li>
           </ul>
         </div>
@@ -103,10 +125,16 @@ footer {
   gap: clamp(40px, 7vw, 112px); align-items: center;
 }
 
-.big { font-size: clamp(40px, 6.4vw, 88px); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; margin: 0; text-wrap: balance; }
-.tk { padding: 0.02em 0.08em 0.12em; border-radius: 0.14em; color: var(--tok-ink); }
+/* Line height leaves room under the token chips so "Let's talk." doesn't touch them. */
+.big { font-size: clamp(40px, 6.4vw, 88px); font-weight: 800; letter-spacing: -0.04em; line-height: 1.3; margin: 0; text-wrap: balance; }
+/* Each chip is its own box with a tight line height, so chips on two lines never touch. */
+/* The last word and its "?" stay on the same line. */
+.nobr { white-space: nowrap; }
+.tk { display: inline-block; line-height: 1.05; padding: 0.02em 0.08em 0.12em; border-radius: 0.14em; color: var(--tok-ink); }
 .sub { margin: 24px 0 0; font-size: clamp(17px, 1.6vw, 20px); color: var(--soft); max-width: 40ch; }
 .ctas { margin-top: 32px; }
+.askfirst { display: inline-block; margin-top: 18px; font-size: 15px; color: var(--soft); text-underline-offset: 3px; }
+.askfirst:hover { color: var(--ink); }
 
 /* Contact list: a quiet panel of rows, one per platform, then the email. */
 .contact {
@@ -116,6 +144,7 @@ footer {
 }
 .contact-title { margin: 0 0 8px; font-size: 22px; font-weight: 750; letter-spacing: -0.02em; }
 .list { list-style: none; margin: 0; padding: 0; }
+.group-title { margin: 22px 0 4px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 15px; font-weight: 650; color: var(--soft); }
 .list li + li { border-top: 1px solid var(--line); }
 .row {
   display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 14px;
@@ -163,7 +192,8 @@ a.row:focus-visible .go svg { transform: translate(2px, -2px); }
 }
 @media (max-width: 480px) {
   .contact { padding: 20px 16px 12px; }
-  .copy { min-width: 0; padding: 0 11px; }
-  .copy span { display: none; }
+  .copy { min-width: 0; padding: 0 12px; }
+  /* The two buttons share the row evenly (and stack evenly if a label is long). */
+  .ctas .btn { flex: 1 1 auto; justify-content: center; text-align: center; white-space: nowrap; }
 }
 </style>

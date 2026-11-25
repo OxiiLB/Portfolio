@@ -30,6 +30,8 @@ export interface ProfileLink {
   url: string;
   badge: string;
   color: TokenColor;
+  /** "hire": where to book or brief Romain. "profile": where to check his background. */
+  group: "hire" | "profile";
 }
 
 export type ProjectCategory = "rag" | "automation" | "vision" | "web" | "games";
@@ -134,15 +136,15 @@ const headlines: L<{ tokens: Token[]; focus: number }> = {
 };
 
 const links: (Omit<ProfileLink, "description"> & { description: L<string> })[] = [
-  { key: "malt", label: "Malt", url: "https://www.malt.com/profile/romaingiraud3", badge: "Ma", color: 3,
+  { key: "malt", label: "Malt", url: "https://www.malt.com/profile/romaingiraud3", badge: "Ma", color: 3, group: "hire",
     description: { en: "Book a mission and read reviews", fr: "Réserver une mission, lire les avis" } },
-  { key: "codeur", label: "Codeur.com", url: "https://www.codeur.com/-romaingiraud", badge: "Co", color: 4,
+  { key: "codeur", label: "Codeur.com", url: "https://www.codeur.com/-romaingiraud", badge: "Co", color: 4, group: "hire",
     description: { en: "Send me a project brief", fr: "M'envoyer un brief de projet" } },
-  { key: "fiverr", label: "Fiverr", url: "https://www.fiverr.com/s/9dGvX2A", badge: "Fi", color: 5,
+  { key: "fiverr", label: "Fiverr", url: "https://www.fiverr.com/s/9dGvX2A", badge: "Fi", color: 5, group: "hire",
     description: { en: "Fixed-price AI gigs", fr: "Prestations IA à prix fixe" } },
-  { key: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/in/romain-paul-giraud/", badge: "Li", color: 2,
+  { key: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/in/romain-paul-giraud/", badge: "Li", color: 2, group: "profile",
     description: { en: "Experience and recommendations", fr: "Parcours et recommandations" } },
-  { key: "github", label: "GitHub", url: "https://github.com/OxiiLB", badge: "Gh", color: 1,
+  { key: "github", label: "GitHub", url: "https://github.com/OxiiLB", badge: "Gh", color: 1, group: "profile",
     description: { en: "Code and open source", fr: "Code et open source" } },
 ];
 

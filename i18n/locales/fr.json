@@ -89,7 +89,9 @@
     "project": "en tête",
     "talk": "Parlons-en.",
     "contact": "Me contacter",
-    "askFirst": "Demander d'abord à l'assistant",
+    "emailMe": "M'écrire",
+    "mailSubject": "Demande de projet",
+    "askFirst": "Pas encore décidé ? Posez d'abord vos questions à mon assistant",
     "cv": "Télécharger le CV",
     "profiles": "Profils",
     "top": "Retour en haut"

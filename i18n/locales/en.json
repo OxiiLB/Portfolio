@@ -89,7 +89,9 @@
     "project": "project",
     "talk": "Let's talk.",
     "contact": "Contact me",
-    "askFirst": "Ask the assistant first",
+    "emailMe": "Email me",
+    "mailSubject": "Project inquiry",
+    "askFirst": "Not sure yet? Ask my assistant first",
     "cv": "Download CV",
     "profiles": "Profiles",
     "top": "Back to top"

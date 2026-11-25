@@ -137,7 +137,7 @@ useHead(() => {
 .switch button:active { transform: scale(0.97); }
 
 .avail {
-  display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 12.5px; color: var(--soft);
+  display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; color: var(--soft);
   background: color-mix(in srgb, var(--ink) 5%, transparent); padding: 6px 12px 6px 10px; border-radius: 999px;
 }
 .avail i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent), 0 0 12px var(--ok); }
@@ -158,6 +158,6 @@ useHead(() => {
   }
   .portrait { margin-top: 0; }
   .headline :deep(.wrap) { margin-top: 40px; }
-  .avail { align-self: center; white-space: nowrap; font-size: 11.5px; }
+  .avail { align-self: center; font-size: 12.5px; line-height: 1.3; }
 }
 </style>
