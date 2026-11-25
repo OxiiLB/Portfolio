@@ -44,6 +44,8 @@ export interface Project {
   context: string;
   tags: { label: string; color: TokenColor }[];
   categories: ProjectCategory[];
+  /** Preview shown on the card (screenshot, demo still). Not read by the assistant. */
+  image: string;
   result?: { value: string; label: string };
   url?: string;
 }
@@ -149,6 +151,11 @@ const links: (Omit<ProfileLink, "description"> & { description: L<string> })[] =
 // Projects = school work and AI development. Personal projects and
 // associations live in sideProjects below.
 // TODO(Romain): add links (GitHub, demo) where you have them.
+// TODO(Romain): replace the placeholder images with real screenshots or demo
+// stills (put them in public/projects/ and use "/projects/<slug>.webp").
+/** Grey placeholder photo from Lorem Picsum, stable per project. */
+const placeholder = (slug: string) => `https://picsum.photos/seed/${slug}/1200/750?grayscale`;
+
 const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "result"> & {
   title: L<string>;
   summary: L<string>;
@@ -158,6 +165,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
 })[] = [
   {
     slug: "rag-assistant",
+    image: placeholder("rag-assistant"),
     context: { en: "Open source, 2026", fr: "Open source, 2026" },
     title: { en: "Multi-document RAG assistant with citations", fr: "Assistant RAG multi-documents avec citations" },
     summary: {
@@ -174,6 +182,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   },
   {
     slug: "ai-visuals",
+    image: placeholder("ai-visuals"),
     context: { en: "Freelance, 2026", fr: "Freelance, 2026" },
     title: { en: "AI image generation pipeline", fr: "Chaîne de génération d'images par IA" },
     summary: {
@@ -190,6 +199,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   },
   {
     slug: "rag-extraction",
+    image: placeholder("rag-extraction"),
     context: { en: "Freelance, 2026", fr: "Freelance, 2026" },
     title: { en: "Document assistants & extraction agents", fr: "Assistants documentaires et agents d'extraction" },
     summary: {
@@ -206,6 +216,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   },
   {
     slug: "rhinov",
+    image: placeholder("rhinov"),
     context: { en: "Rhinov, AI R&D, 2025", fr: "Rhinov, R&D IA, 2025" },
     title: { en: "AI editing for photorealistic 3D renders", fr: "Édition par IA de rendus 3D photoréalistes" },
     summary: {
@@ -221,6 +232,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   },
   {
     slug: "area",
+    image: placeholder("area"),
     context: { en: "EPITECH project", fr: "Projet EPITECH" },
     title: { en: "Area, an automation platform", fr: "Area, une plateforme d'automatisation" },
     summary: {
@@ -237,6 +249,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   },
   {
     slug: "game-engines",
+    image: placeholder("game-engines"),
     context: { en: "EPITECH projects", fr: "Projets EPITECH" },
     title: { en: "Pikselite Engine", fr: "Pikselite Engine" },
     summary: {
@@ -253,6 +266,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   },
   {
     slug: "portfolio-rag",
+    image: placeholder("portfolio-rag"),
     context: { en: "This website", fr: "Ce site" },
     title: { en: "This portfolio's assistant", fr: "L'assistant de ce portfolio" },
     summary: {

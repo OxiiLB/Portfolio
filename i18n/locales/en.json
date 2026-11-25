@@ -62,6 +62,7 @@
     "vision": "image AI",
     "web": "web",
     "games": "game engines",
+    "preview": "Preview of {title}",
     "github": "View on GitHub ↗"
   },
   "services": {

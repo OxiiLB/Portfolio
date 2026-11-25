@@ -39,8 +39,18 @@ const shown = computed<Project[]>(() =>
           :tag="p.url ? 'a' : 'article'"
           class="pj"
           v-bind="p.url ? { href: p.url, target: '_blank', rel: 'noopener' } : {}"
-          :style="{ '--rest': `var(--t${p.tags[0]?.color ?? 1})`, '--pop': `var(--p${p.tags[0]?.color ?? 1})` }"
         >
+          <div class="card">
+          <!-- TODO(Romain): placeholder image, see `image` in data/profile.ts. -->
+          <img
+            class="shot"
+            :src="p.image"
+            :alt="t('projects.preview', { title: p.title })"
+            width="1200"
+            height="750"
+            loading="lazy"
+            decoding="async"
+          />
           <div class="body">
             <div class="tags">
               <span v-for="tag in p.tags" :key="tag.label" class="tag">{{ tag.label }}</span>
@@ -53,6 +63,7 @@ const shown = computed<Project[]>(() =>
               <span>{{ p.result.label }}</span>
             </div>
             <div v-else-if="p.url" class="res"><span class="link">{{ t("projects.github") }}</span></div>
+          </div>
           </div>
         </CutPanel>
       </div>
@@ -73,12 +84,17 @@ const shown = computed<Project[]>(() =>
 .projs > :first-child:nth-last-child(odd) { grid-column: 1 / -1; }
 .pj { text-decoration: none; display: block; }
 .pj:hover { --edge: linear-gradient(135deg, color-mix(in srgb, var(--m2) 70%, transparent), color-mix(in srgb, var(--ink) 10%, transparent) 70%); }
-.pj { --glow: var(--rest); }
-.pj:hover { --glow: var(--pop); }
-.body {
-  height: 100%; padding: 24px 24px 22px; display: grid; gap: 14px; align-content: start;
-  background: radial-gradient(28rem 14rem at 0% 0%, color-mix(in srgb, var(--glow) 13%, transparent), transparent 70%);
+/* Each card: the preview on top, the text below. */
+.card { height: 100%; display: grid; grid-template-rows: auto 1fr; }
+.shot {
+  display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover;
+  background: var(--surface-2); border-bottom: 1px solid var(--line);
 }
+.body { padding: 22px 24px 24px; display: grid; gap: 14px; align-content: start; }
+/* The full-width first card puts its preview beside the text, so its right half is never empty. */
+.projs > :first-child:nth-last-child(odd) .card { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); grid-template-rows: auto; }
+.projs > :first-child:nth-last-child(odd) .shot { order: 2; height: 100%; aspect-ratio: auto; min-height: 300px; border-bottom: 0; border-left: 1px solid var(--line); }
+.projs > :first-child:nth-last-child(odd) .body { align-content: center; padding: 32px; }
 .tags { display: flex; gap: 6px; flex-wrap: wrap; }
 .ctx { font-size: 13.5px; color: var(--soft); margin-bottom: -6px; }
 h3 { margin: 0; font-size: clamp(22px, 2.4vw, 27px); line-height: 1.12; letter-spacing: -0.025em; font-weight: 700; text-wrap: balance; }
@@ -87,5 +103,10 @@ p { margin: 0; color: var(--soft); font-size: 15.5px; max-width: 46ch; }
 .res strong { font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
 .res span { font-size: 14px; color: var(--soft); }
 .res .link { color: var(--ink); }
-@media (max-width: 720px) { .projs { grid-template-columns: 1fr; } }
+@media (max-width: 720px) {
+  .projs { grid-template-columns: 1fr; }
+  .projs > :first-child:nth-last-child(odd) .card { grid-template-columns: 1fr; }
+  .projs > :first-child:nth-last-child(odd) .shot { order: 0; height: auto; aspect-ratio: 16 / 10; min-height: 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  .projs > :first-child:nth-last-child(odd) .body { padding: 22px 24px 24px; }
+}
 </style>

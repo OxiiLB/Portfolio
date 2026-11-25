@@ -62,6 +62,7 @@
     "vision": "IA image",
     "web": "web",
     "games": "moteurs de jeu",
+    "preview": "Aperçu : {title}",
     "github": "Voir sur GitHub ↗"
   },
   "services": {
