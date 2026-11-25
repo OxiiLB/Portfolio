@@ -110,7 +110,7 @@ const headlines: L<{ tokens: Token[]; focus: number }> = {
       { text: "aud", id: 6567, color: 4, line: 0, attends: [[2, 0.5], [1, 0.3], [0, 0.2]] },
       { text: " builds", id: 22890, color: 5, line: 1, attends: [[0, 0.35], [5, 0.35], [3, 0.2], [7, 0.1]] },
       { text: " AI", id: 15592, color: 6, line: 1, attends: [[4, 0.45], [7, 0.35], [0, 0.1], [6, 0.1]] },
-      { text: " That", id: 430, color: 1, line: 2, attends: [[5, 0.5], [4, 0.3], [7, 0.2]] },
+      { text: " that", id: 430, color: 1, line: 2, attends: [[5, 0.5], [4, 0.3], [7, 0.2]] },
       { text: " works", id: 4375, color: 2, line: 2, attends: [[5, 0.45], [4, 0.35], [6, 0.2]] },
       { text: ".", id: 13, color: 3, line: 2, attends: [[7, 0.4], [4, 0.3], [5, 0.2], [0, 0.1]] },
     ],

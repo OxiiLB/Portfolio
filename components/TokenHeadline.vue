@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { Token } from "~/data/profile";
 
-const props = defineProps<{ tokens: Token[]; focus?: number }>();
-const { t } = useI18n();
-const view = ref<"tokens" | "plain">("tokens");
+/** `view` is controlled by the hero, which shows the tokens / plain switch under its buttons. */
+const props = withDefaults(defineProps<{ tokens: Token[]; focus?: number; view?: "tokens" | "plain" }>(), {
+  view: "tokens",
+});
 const plainText = computed(() =>
   lines.value.map((l) => l.map(({ t }) => t.text).join("").trim()).join(" "),
 );
@@ -138,13 +139,6 @@ onBeforeUnmount(() => ro?.disconnect());
         </span>
       </h1>
     </div>
-    <div class="meta">
-      <span>{{ t("hero.tokens", { n: tokens.length }) }}</span>
-      <span class="switch" role="group" :aria-label="t('hero.view')">
-        <button type="button" :aria-pressed="view === 'tokens'" @click="view = 'tokens'">{{ t("hero.viewTokens") }}</button>
-        <button type="button" :aria-pressed="view === 'plain'" @click="view = 'plain'">{{ t("hero.viewPlain") }}</button>
-      </span>
-    </div>
   </div>
 </template>
 
@@ -176,13 +170,15 @@ onBeforeUnmount(() => ro?.disconnect());
   animation: pop 0.5s backwards cubic-bezier(0.2, 0.9, 0.3, 1.3);
 }
 .tk.src { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--m2); }
+/* Token id, inside the chip's bottom-left corner. The small left offset keeps it
+   inside narrow chips such as "." (otherwise it spills onto the dark band). */
 .tk small {
-  position: absolute; left: 0.3em; bottom: -0.02em;
-  font: 500 10.5px/1 var(--f-mono); letter-spacing: 0;
-  color: color-mix(in srgb, var(--tok-ink) 60%, transparent); transition: opacity 0.4s;
+  position: absolute; left: 0.12em; bottom: 0;
+  font: 500 12px/1 var(--f-mono); letter-spacing: 0;
+  color: color-mix(in srgb, var(--tok-ink) 78%, transparent); transition: opacity 0.4s;
 }
 .w {
-  position: absolute; z-index: 3; top: -9px; right: -6px; font: 600 11px/1 var(--f-mono); font-style: normal; letter-spacing: 0;
+  position: absolute; z-index: 3; top: -10px; right: -6px; font: 600 12px/1 var(--f-mono); font-style: normal; letter-spacing: 0;
   color: var(--on-accent); background: var(--grad); padding: 3px 5px; border-radius: 4px;
   animation: fade 0.3s both;
 }
@@ -192,17 +188,15 @@ onBeforeUnmount(() => ro?.disconnect());
   .tk:hover { transform: translateY(-4px); }
 }
 @keyframes pop { from { transform: translateY(0.25em) scale(0.96); } }
-.plain .tk { background: transparent; color: var(--ink); box-shadow: none; opacity: 1 !important; }
+.plain .tk { background: transparent; color: var(--ink); box-shadow: none; opacity: 1 !important; padding-inline: 0; min-width: 0; }
 .plain .tk + .tk { margin-left: 0; }
 .plain .tk.word + .tk.word, .plain .tk + .tk.word { margin-left: 0.24em; }
 .plain .tk small, .plain .w { opacity: 0; }
 .plain .threads { opacity: 0; }
-.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 22px; font-family: var(--f-mono); font-size: 12.5px; color: var(--soft); }
-.switch { display: inline-flex; background: color-mix(in srgb, var(--ink) 6%, transparent); border-radius: 8px; overflow: hidden; }
-.switch button { border: 0; background: none; padding: 5px 10px; font-family: var(--f-mono); font-size: 12px; color: var(--soft); }
-.switch button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-/* Press feedback */
-.switch button { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
-.switch button:active { transform: scale(0.97); }
-@media (max-width: 560px) { .w { font-size: 9.5px; top: -7px; } .tk small { font-size: 9px; } }
+@media (max-width: 560px) {
+  .w { font-size: 10.5px; top: -8px; }
+  .tk small { font-size: 10px; }
+  /* On small screens the id is large next to a "." token: widen the chip to hold it. */
+  .tk { min-width: 0.6em; text-align: center; }
+}
 </style>

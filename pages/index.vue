@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const profile = useProfile();
 const { t, locale } = useI18n();
+/** Headline shown as tokens (default) or as plain text; the switch sits under the buttons. */
+const headlineView = ref<"tokens" | "plain">("tokens");
 
 const { siteUrl } = useRuntimeConfig().public;
 const localePath = useLocalePath();
@@ -71,11 +73,18 @@ useHead(() => {
         :height="profile.photo.height"
       />
       <span v-if="profile.availability" class="avail"><i></i>{{ profile.availability }}</span>
-      <TokenHeadline :key="locale" class="headline" :tokens="profile.headline" :focus="profile.headlineFocus" />
+      <TokenHeadline :key="locale" class="headline" :tokens="profile.headline" :focus="profile.headlineFocus" :view="headlineView" />
       <p class="lede">{{ profile.lede }}</p>
       <div class="ctas">
         <a class="btn primary" href="#links">{{ t("hero.hire") }}</a>
         <a class="btn ghost" href="#projects">{{ t("hero.work") }}</a>
+      </div>
+      <div class="tokmeta">
+        <span>{{ t("hero.tokens", { n: profile.headline.length }) }}</span>
+        <span class="switch" role="group" :aria-label="t('hero.view')">
+          <button type="button" :aria-pressed="headlineView === 'tokens'" @click="headlineView = 'tokens'">{{ t("hero.viewTokens") }}</button>
+          <button type="button" :aria-pressed="headlineView === 'plain'" @click="headlineView = 'plain'">{{ t("hero.viewPlain") }}</button>
+        </span>
       </div>
     </div>
     </section>
@@ -105,8 +114,9 @@ useHead(() => {
     "avail portrait"
     "headline portrait"
     "lede portrait"
-    "ctas portrait";
-  grid-template-rows: auto auto auto 1fr;
+    "ctas portrait"
+    "tokmeta portrait";
+  grid-template-rows: auto auto auto auto 1fr;
   column-gap: clamp(24px, 4vw, 56px);
 }
 .portrait { grid-area: portrait; align-self: center; width: 100%; max-width: 460px; justify-self: end; }
@@ -114,6 +124,17 @@ useHead(() => {
 .headline { grid-area: headline; }
 .lede { grid-area: lede; }
 .ctas { grid-area: ctas; align-self: start; }
+.tokmeta { grid-area: tokmeta; align-self: start; }
+
+/* Token count and the tokens / plain switch: a quiet extra under the buttons. */
+.tokmeta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 28px; font-size: 13px; color: var(--soft); }
+.tokmeta > span:first-child { font-family: var(--f-mono); }
+.switch { display: inline-flex; background: color-mix(in srgb, var(--ink) 6%, transparent); border-radius: 8px; overflow: hidden; }
+.switch button { border: 0; background: none; padding: 5px 10px; font-size: 13px; color: var(--soft); }
+.switch button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+/* Press feedback */
+.switch button { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.switch button:active { transform: scale(0.97); }
 
 .avail {
   display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 12.5px; color: var(--soft);
@@ -129,7 +150,8 @@ useHead(() => {
       "portrait avail"
       "headline headline"
       "lede lede"
-      "ctas ctas";
+      "ctas ctas"
+      "tokmeta tokmeta";
     grid-template-rows: auto;
     column-gap: 16px;
     padding-top: 40px;
