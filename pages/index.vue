@@ -2,12 +2,60 @@
 const profile = useProfile();
 const { t, locale } = useI18n();
 
+const { siteUrl } = useRuntimeConfig().public;
+const localePath = useLocalePath();
+/** Absolute when NUXT_PUBLIC_SITE_URL is set; crawlers ignore relative og:image and og:url. */
+const abs = (path: string) => `${siteUrl}${path}`;
+const pageUrl = computed(() => abs(localePath("/")));
+
 useSeoMeta({
   title: () => t("meta.title"),
   description: () => t("meta.description"),
+  ogType: "website",
+  ogSiteName: () => profile.value.name,
+  ogUrl: () => pageUrl.value,
   ogTitle: () => t("meta.title"),
-  ogDescription: () => profile.value.lede,
-  ogImage: () => profile.value.photo.src,
+  ogDescription: () => t("meta.description"),
+  ogImage: () => abs(profile.value.photo.src),
+  ogImageWidth: () => profile.value.photo.width,
+  ogImageHeight: () => profile.value.photo.height,
+  ogImageAlt: () => profile.value.photo.alt,
+  twitterCard: "summary",
+});
+
+// Structured data (schema.org) built from the same profile data as the page,
+// so search engines can tie this site to Romain's other profiles (sameAs).
+useHead(() => {
+  const p = profile.value;
+  const person = {
+    "@type": "Person",
+    "@id": abs("/#person"),
+    name: p.name,
+    jobTitle: p.role,
+    description: p.lede,
+    image: abs(p.photo.src),
+    url: pageUrl.value,
+    address: { "@type": "PostalAddress", addressCountry: "FR" },
+    knowsAbout: p.services.map((s) => s.title),
+    sameAs: p.links.map((l) => l.url),
+  };
+  const site = {
+    "@type": "WebSite",
+    "@id": abs("/#website"),
+    name: p.name,
+    url: abs("/"),
+    inLanguage: locale.value === "fr" ? "fr-FR" : "en-US",
+    about: { "@id": person["@id"] },
+  };
+  return {
+    script: [
+      {
+        key: "ld-json",
+        type: "application/ld+json",
+        innerHTML: JSON.stringify({ "@context": "https://schema.org", "@graph": [person, site] }),
+      },
+    ],
+  };
 });
 </script>
 

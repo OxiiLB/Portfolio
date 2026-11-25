@@ -1,3 +1,8 @@
+// Public address of the site, e.g. https://romaingiraud.dev (no trailing slash).
+// Needed at build time: it makes hreflang, canonical, og:image and the sitemap
+// absolute, which search engines and social previews require.
+const siteUrl = (process.env.NUXT_PUBLIC_SITE_URL ?? "").replace(/\/+$/, "");
+
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
@@ -12,6 +17,7 @@ export default defineNuxtConfig({
       { code: "fr", language: "fr-FR", name: "Français", file: "fr.json" },
     ],
     defaultLocale: "en",
+    baseUrl: siteUrl,
     strategy: "prefix_except_default",
     detectBrowserLanguage: { useCookie: true, cookieKey: "i18n_lang", redirectOn: "root" },
   },
@@ -22,6 +28,7 @@ export default defineNuxtConfig({
     // $2.50 stays under €3 at any usual exchange rate.
     assistantMonthlyBudgetUsd: 2.5,
     assistantDailyQuestions: 200,
+    public: { siteUrl },
   },
 
   nitro: {

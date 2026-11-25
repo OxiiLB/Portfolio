@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Romain Giraud · Développeur freelance, IA et automatisation",
-    "description": "Romain Giraud, développeur freelance. Assistants IA sur vos documents, automatisation, intégration IA et développement web pour les petites entreprises et les agences. Posez vos questions à mon assistant."
+    "description": "Développeur freelance : assistants IA sur vos documents, automatisation et intégration IA pour les PME et les agences. Posez vos questions à mon assistant."
   },
   "nav": {
     "home": "Romain Giraud, accueil",
@@ -62,16 +62,16 @@
     "vision": "IA image",
     "web": "web",
     "games": "moteurs de jeu",
-    "github": "voir sur GitHub ↗"
+    "github": "Voir sur GitHub ↗"
   },
   "services": {
     "title": "Ce que je peux créer pour vous",
-    "sub": "Un périmètre défini, une démo fonctionnelle rapidement, et un code qui vous appartient à la fin.",
+    "sub": "Des forfaits fixes à tarif étudiant, le temps de constituer mon portfolio : une démo fonctionnelle rapidement, et un code qui vous appartient à la fin. Prix en dollars US.",
     "recommended": "Recommandé",
     "delivery": "Livraison en {n} jours",
     "revisions": "{n} révision | {n} révisions",
     "notIncluded": "Non inclus",
-    "rates": "Des forfaits fixes à tarif étudiant, le temps de constituer mon portfolio. Prix en dollars US.",
+    
     "offers": "Choisir un service",
     "extras": "Options",
     "extraExpress": "Livraison express +{p} %",
@@ -110,7 +110,7 @@
     "kinds": {
       "project": "projet perso",
       "association": "association",
-      "media": "podcast · radio",
+      "media": "podcast et radio",
       "student": "vie étudiante"
     }
   }

@@ -75,7 +75,7 @@ nav a:hover { color: var(--ink); }
 }
 .lang a {
   position: relative; z-index: 1; min-width: 34px; padding: 5px 8px; text-align: center; text-decoration: none;
-  font-family: var(--f-mono); font-size: 12px; font-weight: 600; color: var(--soft); transition: color 0.2s;
+  font-size: 13px; font-weight: 600; color: var(--soft); transition: color 0.2s;
 }
 .lang a:hover { color: var(--ink); }
 .lang a.on { color: var(--on-accent); }
@@ -86,7 +86,7 @@ nav a:hover { color: var(--ink); }
 .knob.right { transform: translateX(100%); }
 
 .hire {
-  font-family: var(--f-mono); font-size: 12.5px; font-weight: 600; text-decoration: none; color: var(--ink);
+  font-size: 14px; font-weight: 600; text-decoration: none; color: var(--ink);
   background: color-mix(in srgb, var(--ink) 8%, transparent); padding: 7px 12px; white-space: nowrap;
   border-radius: 999px;
 }

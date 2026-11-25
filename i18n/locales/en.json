@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Romain Giraud · Freelance developer, AI & automation",
-    "description": "Romain Giraud, freelance developer. AI assistants on your documents, automation, AI integration and web development for small businesses and agencies. Ask my assistant anything about my work."
+    "description": "Freelance developer: AI assistants that answer from your documents, automation and AI integration for small businesses and agencies. Ask my assistant."
   },
   "nav": {
     "home": "Romain Giraud, home",
@@ -62,16 +62,16 @@
     "vision": "image AI",
     "web": "web",
     "games": "game engines",
-    "github": "view on GitHub ↗"
+    "github": "View on GitHub ↗"
   },
   "services": {
     "title": "What I can build for you",
-    "sub": "Fixed scope, a working demo early, and code you own at the end.",
+    "sub": "Fixed packages at student rates while I build my portfolio: a working demo early, and code you own at the end. Prices in US dollars.",
     "recommended": "Recommended",
     "delivery": "{n}-day delivery",
     "revisions": "{n} revision | {n} revisions",
     "notIncluded": "Not included",
-    "rates": "Fixed packages at student rates while I build my portfolio. Prices in US dollars.",
+    
     "offers": "Choose a service",
     "extras": "Extras",
     "extraExpress": "Express delivery +{p}%",
@@ -110,7 +110,7 @@
     "kinds": {
       "project": "side project",
       "association": "association",
-      "media": "podcast · radio",
+      "media": "podcast and radio",
       "student": "student life"
     }
   }

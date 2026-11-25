@@ -21,7 +21,7 @@ const shown = computed<Project[]>(() =>
 <template>
   <section id="projects" class="block">
     <div class="in">
-      <SectionHead name="projects" :title="t('projects.title')">
+      <SectionHead :title="t('projects.title')">
         <div class="filters" role="group" :aria-label="t('projects.filter')">
           <button
             v-for="f in usable"
@@ -43,7 +43,7 @@ const shown = computed<Project[]>(() =>
         >
           <div class="body">
             <div class="tags">
-              <span v-for="tag in p.tags" :key="tag.label" :class="`c${tag.color}`">{{ tag.label }}</span>
+              <span v-for="tag in p.tags" :key="tag.label" class="tag">{{ tag.label }}</span>
             </div>
             <div class="ctx">{{ p.context }}</div>
             <h3>{{ p.title }}</h3>
@@ -62,7 +62,7 @@ const shown = computed<Project[]>(() =>
 
 <style scoped>
 .filters { display: flex; gap: 2px; flex-wrap: wrap; background: color-mix(in srgb, var(--ink) 5%, transparent); padding: 3px; border-radius: 999px; }
-.filters button { border: 0; border-radius: 999px; background: none; padding: 6px 12px; font-family: var(--f-mono); font-size: 12.5px; color: var(--soft); }
+.filters button { border: 0; border-radius: 999px; background: none; padding: 6px 12px; font-size: 14px; font-weight: 500; color: var(--soft); }
 .filters button:hover { color: var(--ink); }
 .filters button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 /* Press feedback */
@@ -80,13 +80,12 @@ const shown = computed<Project[]>(() =>
   background: radial-gradient(28rem 14rem at 0% 0%, color-mix(in srgb, var(--glow) 13%, transparent), transparent 70%);
 }
 .tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tags span { font-family: var(--f-mono); font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 6px; color: var(--tok-ink); }
-.ctx { font-family: var(--f-mono); font-size: 12px; color: var(--faint); margin-bottom: -6px; }
+.ctx { font-size: 13.5px; color: var(--soft); margin-bottom: -6px; }
 h3 { margin: 0; font-size: clamp(22px, 2.4vw, 27px); line-height: 1.12; letter-spacing: -0.025em; font-weight: 700; text-wrap: balance; }
 p { margin: 0; color: var(--soft); font-size: 15.5px; max-width: 46ch; }
 .res { display: flex; align-items: baseline; gap: 12px; margin-top: 6px; }
 .res strong { font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
-.res span { font-family: var(--f-mono); font-size: 12px; color: var(--soft); }
+.res span { font-size: 14px; color: var(--soft); }
 .res .link { color: var(--ink); }
 @media (max-width: 720px) { .projs { grid-template-columns: 1fr; } }
 </style>

@@ -7,7 +7,7 @@ const { t } = useI18n();
 <template>
   <section id="side-projects" class="block">
     <div class="in">
-      <SectionHead name="off_the_clock" :title="t('side.title')" :sub="t('side.sub')" />
+      <SectionHead :title="t('side.title')" :sub="t('side.sub')" />
       <div class="grid">
         <CutPanel
           v-for="p in profile.sideProjects"
@@ -18,7 +18,7 @@ const { t } = useI18n();
         >
           <article class="body">
             <div class="top">
-              <span class="kind" :class="`c${p.color}`">{{ t(`side.kinds.${p.kind}`) }}</span>
+              <span class="kind tag">{{ t(`side.kinds.${p.kind}`) }}</span>
               <span class="ctx">{{ p.context }}</span>
             </div>
             <h3>{{ p.title }}</h3>
@@ -45,11 +45,11 @@ const { t } = useI18n();
   background: linear-gradient(160deg, color-mix(in srgb, var(--hue) 14%, transparent), transparent 55%);
 }
 .top { display: grid; justify-items: start; gap: 8px; }
-.kind { font-family: var(--f-mono); font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 7px; color: var(--tok-ink); }
-.ctx { font-family: var(--f-mono); font-size: 12px; color: var(--faint); }
+.kind { justify-self: start; }
+.ctx { font-size: 13.5px; color: var(--soft); }
 h3 { margin: 6px 0 0; font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 700; text-wrap: balance; }
 p { margin: 0; color: var(--soft); font-size: 15px; line-height: 1.6; }
-.link { justify-self: start; margin-top: 4px; font-family: var(--f-mono); font-size: 12.5px; font-weight: 600; color: var(--ink); text-decoration: none; padding: 6px 10px; border-radius: 8px; background: color-mix(in srgb, var(--hue) 35%, transparent); }
+.link { justify-self: start; margin-top: 4px; font-size: 14px; font-weight: 600; color: var(--ink); text-decoration: none; padding: 6px 10px; border-radius: 8px; background: color-mix(in srgb, var(--hue) 35%, transparent); }
 .link:hover { background: var(--hue); color: var(--tok-ink); }
 @media (max-width: 900px) {
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

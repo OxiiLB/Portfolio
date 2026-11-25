@@ -8,7 +8,7 @@ const colors = [1, 2, 4, 3, 5, 6];
 <template>
   <section id="process" class="block">
     <div class="in">
-      <SectionHead name="process" :title="t('process.title')" :sub="t('process.sub')" />
+      <SectionHead :title="t('process.title')" :sub="t('process.sub')" />
       <ol class="steps">
         <li v-for="(s, i) in profile.process" :key="s.title" class="step">
           <span class="n" :class="`c${colors[i % colors.length]}`">{{ String(i + 1).padStart(2, "0") }}</span>

@@ -38,11 +38,9 @@ function onTabKey(e: KeyboardEvent) {
   <section id="services" class="block">
     <div class="in">
       <SectionHead
-        name="services"
         :title="t('services.title')"
         :sub="t('services.sub')"
       />
-      <p class="rates">{{ t("services.rates") }}</p>
 
       <!-- Pricing: one tab per service, each with three fixed packages
            (good / better / best). The Standard package is recommended and
@@ -146,7 +144,7 @@ function onTabKey(e: KeyboardEvent) {
 .tier:not(.rec):hover { --edge: var(--m3); }
 .card { height: 100%; display: flex; flex-direction: column; gap: 14px; padding: 28px 26px 26px; }
 .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 26px; }
-.tier-name { font-family: var(--f-mono); font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em; color: var(--soft); }
+.tier-name { font-size: 14px; font-weight: 600; color: var(--soft); }
 .badge {
   font-size: 12.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
   background: var(--m2); color: var(--on-accent);

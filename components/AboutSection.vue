@@ -6,7 +6,7 @@ const { t } = useI18n();
 <template>
   <section id="about" class="block">
     <div class="in">
-      <SectionHead name="about_me" :title="t('about.title')" :sub="t('about.sub')" />
+      <SectionHead :title="t('about.title')" :sub="t('about.sub')" />
       <div class="grid">
         <div class="story">
           <p v-for="(p, i) in profile.about.paragraphs" :key="i" :class="{ first: i === 0 }">{{ p }}</p>
@@ -22,7 +22,7 @@ const { t } = useI18n();
             </dl>
             <span class="label">{{ t("about.skills") }}</span>
             <ul class="skills">
-              <li v-for="s in profile.skills" :key="s.label" :class="`c${s.color}`">{{ s.label }}</li>
+              <li v-for="s in profile.skills" :key="s.label" class="tag">{{ s.label }}</li>
             </ul>
           </div>
         </CutPanel>
@@ -39,14 +39,13 @@ const { t } = useI18n();
 /* Follow the reader only when the whole card fits on screen. */
 @media (min-height: 940px) { .card { position: sticky; top: 90px; } }
 .facts { padding: 24px; display: grid; gap: 14px; }
-.label { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
+.label { font-size: 14px; font-weight: 650; color: var(--ink); }
 dl { margin: 0 0 8px; display: grid; }
 dl div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
 dl div:first-child { border-top: 0; padding-top: 0; }
-dt { font-family: var(--f-mono); font-size: 12.5px; color: var(--soft); }
+dt { font-size: 14px; color: var(--soft); }
 dd { margin: 0; font-weight: 550; }
 .skills { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.skills li { font-family: var(--f-mono); font-size: 12px; font-weight: 500; padding: 4px 9px; border-radius: 7px; color: var(--tok-ink); }
 @media (max-width: 860px) {
   .grid { grid-template-columns: 1fr; }
   .card { position: static; }

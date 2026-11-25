@@ -1,23 +1,22 @@
 <script setup lang="ts">
-defineProps<{ name: string; title: string; sub?: string }>();
+defineProps<{ title: string; sub?: string }>();
 </script>
 
 <template>
   <div class="sh">
-    <div class="lbl"><i></i>{{ name }}</div>
-    <div class="row">
+    <div class="txt">
       <h2>{{ title }}</h2>
       <p v-if="sub">{{ sub }}</p>
-      <slot />
     </div>
+    <slot />
   </div>
 </template>
 
 <style scoped>
-.sh { display: grid; gap: 12px; margin-bottom: 28px; }
-.lbl { display: flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--soft); }
-.lbl i { width: 28px; height: 3px; background: var(--grad); }
-.row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; }
+/* Title with its subtitle underneath, read as one block. Anything in the slot
+   (the project filters) sits at the right, aligned to the last line. */
+.sh { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; margin-bottom: 32px; }
+.txt { display: grid; gap: 14px; max-width: 60ch; }
 h2 { margin: 0; font-size: clamp(32px, 4.4vw, 52px); font-weight: 750; letter-spacing: -0.035em; line-height: 1; text-wrap: balance; }
-p { margin: 0; color: var(--soft); max-width: 44ch; }
+p { margin: 0; color: var(--soft); font-size: clamp(16px, 1.4vw, 18px); line-height: 1.5; text-wrap: pretty; }
 </style>

@@ -111,6 +111,17 @@ img { max-width: 100%; }
 .mono { font-family: var(--f-mono); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
+/* Quiet label for tags, skills and categories: one tint, no hover. The
+   multi-colour token chips (.c1–.c6) are kept for the hero, the footer
+   headline and the assistant's streaming answer. */
+.tag {
+  display: inline-block;
+  font-size: 12.5px; font-weight: 500; line-height: 1.2;
+  padding: 4px 9px; border-radius: 6px;
+  color: var(--soft);
+  background: color-mix(in srgb, var(--m2) 8%, transparent);
+}
+
 .c1 { background: var(--t1); } .c2 { background: var(--t2); } .c3 { background: var(--t3); }
 .c4 { background: var(--t4); } .c5 { background: var(--t5); } .c6 { background: var(--t6); }
 /* Section bands. Add one of these classes to a section (or the hero / footer)

@@ -18,8 +18,6 @@ const lastTokenCount = ref(0);
 const docCount = ref<number | null>(null);
 const thread = ref<HTMLElement | null>(null);
 
-const greetingTokens = computed(() => splitTokens(t("ask.greeting")));
-
 /** Leading whitespace of a token, rendered outside its highlight. */
 function lead(tok: string): string {
   return tok.match(/^\s*/)?.[0] ?? "";
@@ -127,7 +125,6 @@ async function ask(q: string) {
   <section id="ask" class="block">
     <div class="in">
       <SectionHead
-        name="retrieve + generate"
         :title="t('ask.title')"
         :sub="t('ask.sub')"
       />
@@ -140,11 +137,12 @@ async function ask(q: string) {
           </div>
           <div ref="thread" class="msgs" aria-live="polite">
             <div class="m-bot">
-              <template v-for="(tok, i) in greetingTokens" :key="i">{{ lead(tok) }}<span class="t" :style="tokStyle(i)">{{ tok.trimStart() }}</span></template>
+{{ t("ask.greeting") }}
             </div>
             <template v-for="(turn, n) in turns" :key="n">
               <div v-if="turn.role === 'user'" class="m-user">{{ turn.text }}</div>
-              <div v-else class="m-bot" :class="{ err: turn.error }">
+              <!-- Tokens are coloured only while this answer streams, then settle into plain text. -->
+              <div v-else class="m-bot" :class="{ err: turn.error, streaming: busy && n === turns.length - 1 }">
                 <span v-if="!turn.tokens.length" class="typing" :aria-label="t('ask.thinking')">●●●</span>
                 <template v-for="(tok, i) in turn.tokens" :key="i">{{ lead(tok) }}<span class="t" :style="tokStyle(i)">{{ tok.trimStart() }}</span></template>
                 <div v-if="turn.sources.length && !busy" class="srcs">
@@ -209,10 +207,13 @@ async function ask(q: string) {
   color: var(--tok-ink); white-space: pre-wrap;
   margin-left: 1px; border-radius: 2px;
   background-image: linear-gradient(var(--band), var(--band));
-  background-repeat: no-repeat; background-size: 100% 74%; background-position: 0 72%;
+  background-repeat: no-repeat; background-size: 100% 0%; background-position: 0 92%;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  /* When the answer finishes, the bands sink to the baseline and disappear. */
+  transition: background-size 420ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.m-bot .t:hover { --band: var(--tok-pop); }
+.m-bot.streaming .t { background-size: 100% 74%; background-position: 0 72%; transition: none; }
+.m-bot.streaming .t:hover { --band: var(--tok-pop); }
 .nocolor .m-bot .t, .m-bot.err .t { background: transparent !important; color: var(--ink); }
 .m-bot.err { color: var(--soft); }
 .typing { color: var(--soft); letter-spacing: 3px; animation: blink 0.8s infinite alternate; }
@@ -239,6 +240,9 @@ button:disabled { opacity: 0.5; cursor: progress; }
 .stat { font-family: var(--f-mono); font-size: 12px; color: var(--soft); display: grid; gap: 6px; }
 .stat div { display: flex; justify-content: space-between; border-top: 1px dashed var(--line); padding-top: 6px; }
 .stat b { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  .m-bot .t { transition: none; }
+}
 @media (max-width: 860px) {
   .chat { grid-template-columns: 1fr; }
   .side { border-left: 0; border-top: 1px solid var(--line); order: -1; padding-bottom: 18px; }

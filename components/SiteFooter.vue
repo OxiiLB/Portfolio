@@ -39,7 +39,6 @@ async function copyEmail() {
     <div class="in shell">
       <div class="main">
         <div class="pitch">
-          <div class="lbl"><i></i>output</div>
           <p class="big">
             <span class="tk c5">{{ t("footer.got") }}</span>&#32;<span class="tk c6">{{ t("footer.a") }}</span>&#32;<span class="tk c1">{{ t("footer.project") }}</span><span class="tk c2">?</span>
             {{ t("footer.talk") }}
@@ -82,7 +81,7 @@ async function copyEmail() {
       </div>
 
       <div class="bottom">
-        <span>© {{ year }} {{ profile.name }} · {{ profile.role }} · {{ profile.location }}</span>
+        <span>© {{ year }} {{ profile.name }}</span>
         <a href="#top">↑ {{ t("footer.top") }}</a>
       </div>
     </div>
@@ -104,8 +103,6 @@ footer {
   gap: clamp(40px, 7vw, 112px); align-items: center;
 }
 
-.lbl { display: flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 12px; color: var(--soft); margin-bottom: 20px; }
-.lbl i { width: 28px; height: 3px; background: var(--grad); }
 .big { font-size: clamp(40px, 6.4vw, 88px); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; margin: 0; text-wrap: balance; }
 .tk { padding: 0.02em 0.08em 0.12em; border-radius: 0.14em; color: var(--tok-ink); }
 .sub { margin: 24px 0 0; font-size: clamp(17px, 1.6vw, 20px); color: var(--soft); max-width: 40ch; }
@@ -146,7 +143,7 @@ a.row:focus-visible .go svg { transform: translate(2px, -2px); }
 @media (hover: hover) and (pointer: fine) {
   a.row:hover .go svg { transform: translate(2px, -2px); }
 }
-.copy { border: 0; padding: 0 14px; font-family: var(--f-mono); font-size: 12px; font-weight: 600; min-width: 92px; }
+.copy { border: 0; padding: 0 14px; font-size: 13px; font-weight: 600; min-width: 92px; }
 .copy:hover { background: var(--m2); color: var(--on-accent); }
 .copy:active { transform: scale(0.97); } /* press feedback */
 .copy.done { background: var(--ok); color: var(--tok-ink); }
@@ -156,7 +153,7 @@ a.row:focus-visible .go svg { transform: translate(2px, -2px); }
 .bottom {
   display: flex; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap;
   padding-top: 20px; border-top: 1px solid var(--line);
-  font-family: var(--f-mono); font-size: 12.5px; color: var(--soft);
+  font-size: 14px; color: var(--soft);
 }
 .bottom a { text-decoration: none; }
 .bottom a:hover { color: var(--ink); }

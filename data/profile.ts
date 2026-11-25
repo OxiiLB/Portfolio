@@ -40,7 +40,7 @@ export interface Project {
   summary: string;
   /** Longer write-up used by the assistant (not shown on the card). */
   details: string;
-  /** Where or when it was built, e.g. "Freelance · 2026". */
+  /** Where or when it was built, e.g. "Freelance, 2026". */
   context: string;
   tags: { label: string; color: TokenColor }[];
   categories: ProjectCategory[];
@@ -133,7 +133,7 @@ const headlines: L<{ tokens: Token[]; focus: number }> = {
 
 const links: (Omit<ProfileLink, "description"> & { description: L<string> })[] = [
   { key: "malt", label: "Malt", url: "https://www.malt.com/profile/romaingiraud3", badge: "Ma", color: 3,
-    description: { en: "Book a mission · reviews", fr: "Réserver une mission · avis" } },
+    description: { en: "Book a mission and read reviews", fr: "Réserver une mission, lire les avis" } },
   { key: "codeur", label: "Codeur.com", url: "https://www.codeur.com/-romaingiraud", badge: "Co", color: 4,
     description: { en: "Send me a project brief", fr: "M'envoyer un brief de projet" } },
   { key: "fiverr", label: "Fiverr", url: "https://www.fiverr.com/s/9dGvX2A", badge: "Fi", color: 5,
@@ -158,7 +158,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
 })[] = [
   {
     slug: "rag-assistant",
-    context: { en: "Open source · 2026", fr: "Open source · 2026" },
+    context: { en: "Open source, 2026", fr: "Open source, 2026" },
     title: { en: "Multi-document RAG assistant with citations", fr: "Assistant RAG multi-documents avec citations" },
     summary: {
       en: "Ask questions about your PDFs: the answer streams in and cites the exact document and page, with clickable sources.",
@@ -174,7 +174,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   },
   {
     slug: "ai-visuals",
-    context: { en: "Freelance · 2026", fr: "Freelance · 2026" },
+    context: { en: "Freelance, 2026", fr: "Freelance, 2026" },
     title: { en: "AI image generation pipeline", fr: "Chaîne de génération d'images par IA" },
     summary: {
       en: "Produces a finished visual in about 40 seconds, where manual retouching took several hours.",
@@ -190,7 +190,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   },
   {
     slug: "rag-extraction",
-    context: { en: "Freelance · 2026", fr: "Freelance · 2026" },
+    context: { en: "Freelance, 2026", fr: "Freelance, 2026" },
     title: { en: "Document assistants & extraction agents", fr: "Assistants documentaires et agents d'extraction" },
     summary: {
       en: "RAG assistants that answer from a company's own documents, and agents that pull structured data out of them.",
@@ -206,7 +206,7 @@ const projects: (Omit<Project, "title" | "summary" | "details" | "context" | "re
   },
   {
     slug: "rhinov",
-    context: { en: "Rhinov · AI R&D · 2025", fr: "Rhinov · R&D IA · 2025" },
+    context: { en: "Rhinov, AI R&D, 2025", fr: "Rhinov, R&D IA, 2025" },
     title: { en: "AI editing for photorealistic 3D renders", fr: "Édition par IA de rendus 3D photoréalistes" },
     summary: {
       en: "Research tools to improve photorealistic rendering in Unreal Engine, and an interface to edit 3D renders with AI.",
@@ -633,11 +633,11 @@ const about: L<{ paragraphs: string[]; facts: { label: string; value: string }[]
       "Outside of code, I love video games and how they are designed, cooking and trying new cuisines, and animals.",
     ],
     facts: [
-      { label: "Based in", value: "France · fully remote" },
+      { label: "Based in", value: "France, fully remote" },
       { label: "Time zones", value: "Europe, Americas, Asia" },
       { label: "Languages", value: "French (native), English (professional), Korean (basic), Spanish (A2)" },
-      { label: "Education", value: "EPITECH Bordeaux, Master's level (2027) · Keimyung University, South Korea" },
-      { label: "Experience", value: "Rhinov (AI R&D) · BestConsultant (full-stack)" },
+      { label: "Education", value: "EPITECH Bordeaux (Master's level, 2027) and Keimyung University (South Korea)" },
+      { label: "Experience", value: "Rhinov (AI R&D) and BestConsultant (full-stack)" },
       { label: "Status", value: "Student-entrepreneur (PÉPITE PSL)" },
     ],
   },
@@ -650,11 +650,11 @@ const about: L<{ paragraphs: string[]; facts: { label: string; value: string }[]
       "En dehors du code, j'adore les jeux vidéo et leur game design, la cuisine et la découverte de nouvelles cuisines, et les animaux.",
     ],
     facts: [
-      { label: "Basé en", value: "France · 100 % à distance" },
+      { label: "Basé en", value: "France, 100 % à distance" },
       { label: "Fuseaux", value: "Europe, Amériques, Asie" },
       { label: "Langues", value: "français (natif), anglais (professionnel), coréen (notions), espagnol (A2)" },
-      { label: "Formation", value: "EPITECH Bordeaux, niveau Master (2027) · Université Keimyung, Corée du Sud" },
-      { label: "Expérience", value: "Rhinov (R&D IA) · BestConsultant (full-stack)" },
+      { label: "Formation", value: "EPITECH Bordeaux (niveau Master, 2027) et Université Keimyung (Corée du Sud)" },
+      { label: "Expérience", value: "Rhinov (R&D IA) et BestConsultant (full-stack)" },
       { label: "Statut", value: "Étudiant-entrepreneur (PÉPITE PSL)" },
     ],
   },
@@ -729,7 +729,7 @@ export interface Step {
   text: string;
 }
 
-const process: { title: L<string>; text: L<string> }[] = [
+const processSteps: { title: L<string>; text: L<string> }[] = [
   {
     title: { en: "Intro call", fr: "Premier appel" },
     text: {
@@ -770,7 +770,7 @@ const text: L<{
   suggestedQuestions: string[];
 }> = {
   en: {
-    role: "Freelance developer · AI integration & automation",
+    role: "Freelance developer, AI integration and automation",
     location: "France",
     languages: ["French (native)", "English (professional)", "Korean (basic)", "Spanish (A2)"],
     // TODO(Romain): update or set to null to hide the badge.
@@ -785,7 +785,7 @@ const text: L<{
     ],
   },
   fr: {
-    role: "Développeur freelance · intégration IA et automatisation",
+    role: "Développeur freelance, intégration IA et automatisation",
     location: "France",
     languages: ["français (natif)", "anglais (professionnel)", "coréen (notions)", "espagnol (A2)"],
     availability: "Disponible pour des missions",
@@ -837,7 +837,7 @@ export function getProfile(locale: Locale) {
     values: values.map(
       (v): Value => ({ keyword: v.keyword[locale], title: v.title[locale], text: v.text[locale], color: v.color }),
     ),
-    process: process.map((s): Step => ({ title: s.title[locale], text: s.text[locale] })),
+    process: processSteps.map((s): Step => ({ title: s.title[locale], text: s.text[locale] })),
     services: services.map(
       (s): Service => ({
         ...s,
