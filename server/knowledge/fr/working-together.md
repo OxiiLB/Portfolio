@@ -4,11 +4,11 @@
 
 ## Comment le recruter
 
-Vous pouvez réserver Romain sur Malt, Codeur.com ou Fiverr, ou le contacter directement par e-mail. Les liens sont dans la section « Me trouver » du site.
+Vous pouvez réserver Romain sur Malt, Codeur.com ou Fiverr, ou le contacter directement par e-mail. Les liens sont en bas du site, dans le bloc de contact vert (le bouton « Me recruter » y mène).
 
 ## Tarifs
 
-Les tarifs dépendent du périmètre du projet. Le mieux est d'envoyer une courte description du projet ; Romain répond avec un devis.
+Chaque service est proposé en trois forfaits fixes (Basic, Standard, Premium) à tarif étudiant, en dollars US : assistants documentaires 150 / 350 / 700, automatisation 80 / 200 / 450, intégration IA 120 / 300 / 600, développement web 150 / 400 / 800. Les forfaits sont sur le site, dans la section « Ce que je peux créer pour vous ». Pour un projet qui ne rentre dans aucun forfait, le mieux est d'envoyer une courte description ; Romain répond avec un devis.
 
 ## Déroulement d'une mission
 

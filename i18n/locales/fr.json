@@ -19,6 +19,7 @@
   "hero": {
     "ask": "Interroger mon assistant",
     "hire": "Me recruter",
+    "work": "Voir mes réalisations",
     "tokens": "{n} tokens",
     "attention": "attention depuis « {token} »",
     "hover": "survolez un token",
@@ -65,7 +66,18 @@
   },
   "services": {
     "title": "Ce que je peux créer pour vous",
-    "sub": "Un périmètre défini, une démo fonctionnelle rapidement, et un code qui vous appartient à la fin."
+    "sub": "Un périmètre défini, une démo fonctionnelle rapidement, et un code qui vous appartient à la fin.",
+    "recommended": "Recommandé",
+    "delivery": "Livraison en {n} jours",
+    "revisions": "{n} révision | {n} révisions",
+    "notIncluded": "Non inclus",
+    "rates": "Des forfaits fixes à tarif étudiant, le temps de constituer mon portfolio. Prix en dollars US.",
+    "offers": "Choisir un service",
+    "extras": "Options",
+    "extraExpress": "Livraison express +{p} %",
+    "extraRevision": "Révision supplémentaire {price}",
+    "extraMaintenance": "Maintenance {price} par mois",
+    "extraDocs": "+{n} documents {price}"
   },
   "footer": {
     "got": "Un",
@@ -75,7 +87,8 @@
     "contact": "Me contacter",
     "askFirst": "Demander d'abord à l'assistant",
     "cv": "Télécharger le CV",
-    "profiles": "Profils"
+    "profiles": "Profils",
+    "top": "Retour en haut"
   },
   "about": {
     "title": "À propos de moi",

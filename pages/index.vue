@@ -26,18 +26,21 @@ useSeoMeta({
       <TokenHeadline :key="locale" class="headline" :tokens="profile.headline" :focus="profile.headlineFocus" />
       <p class="lede">{{ profile.lede }}</p>
       <div class="ctas">
-        <a class="btn primary" href="#ask">{{ t("hero.ask") }}</a>
-        <a class="btn ghost" href="#links">{{ t("hero.hire") }}</a>
+        <a class="btn primary" href="#links">{{ t("hero.hire") }}</a>
+        <a class="btn ghost" href="#projects">{{ t("hero.work") }}</a>
       </div>
     </div>
     </section>
-    <!-- Backgrounds: dark matcha hero, then classic and matcha-latte sections in
-         turn, joined by waves. Values has no bottom wave: the footer's top wave
-         covers that edge. -->
-    <LinkHub />
-    <AboutSection class="band-latte wave-top wave-bottom" />
-    <AskAssistant />
+    <!-- Order: who I am, proof (projects, live assistant, side projects), what I
+         offer, then how to hire me at the very end.
+         Backgrounds: dark matcha hero, then classic and matcha-latte sections in
+         turn, joined by waves. About needs no top wave: the hero's bottom wave
+         already covers that edge. Values needs no bottom wave: the footer's top
+         wave covers it. The footer (SiteFooter) is the full-screen green ending
+         with all the contact links (#links). -->
+    <AboutSection class="band-latte wave-bottom" />
     <ProjectGrid />
+    <AskAssistant />
     <SideProjects class="band-latte wave-top wave-bottom" />
     <ServiceList />
     <ProcessSection />

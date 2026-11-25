@@ -19,6 +19,7 @@
   "hero": {
     "ask": "Ask my assistant about my profile",
     "hire": "Hire me",
+    "work": "See my work",
     "tokens": "{n} tokens",
     "attention": "attention from “{token}”",
     "hover": "hover a token",
@@ -65,7 +66,18 @@
   },
   "services": {
     "title": "What I can build for you",
-    "sub": "Fixed scope, a working demo early, and code you own at the end."
+    "sub": "Fixed scope, a working demo early, and code you own at the end.",
+    "recommended": "Recommended",
+    "delivery": "{n}-day delivery",
+    "revisions": "{n} revision | {n} revisions",
+    "notIncluded": "Not included",
+    "rates": "Fixed packages at student rates while I build my portfolio. Prices in US dollars.",
+    "offers": "Choose a service",
+    "extras": "Extras",
+    "extraExpress": "Express delivery +{p}%",
+    "extraRevision": "Extra revision {price}",
+    "extraMaintenance": "Maintenance {price} per month",
+    "extraDocs": "+{n} documents {price}"
   },
   "footer": {
     "got": "Got",
@@ -75,7 +87,8 @@
     "contact": "Contact me",
     "askFirst": "Ask the assistant first",
     "cv": "Download CV",
-    "profiles": "Profiles"
+    "profiles": "Profiles",
+    "top": "Back to top"
   },
   "about": {
     "title": "About me",

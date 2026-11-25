@@ -103,6 +103,26 @@ function passagesFromProfile(locale: Locale): Passage[] {
         : `Service offered: ${s.title}. ${s.summary} Includes: ${s.deliverables.join("; ")}.`,
     });
   }
+  // Fixed packages for every service (one passage per package), then the extras.
+  for (const o of p.offers) {
+    for (const pk of o.tiers) {
+      const has = pk.features.filter((f) => f.included).map((f) => f.label);
+      const lacks = pk.features.filter((f) => !f.included).map((f) => f.label);
+      out.push({
+        source: `${fr ? "tarif" : "pricing"} · ${o.title} · ${pk.tier}`,
+        text: fr
+          ? `Forfait ${pk.tier} pour « ${o.title} » : ${pk.name}, ${pk.price} dollars US (tarif étudiant). ${pk.summary} Livraison en ${pk.deliveryDays} jours, ${pk.revisions} révision(s). Inclus : ${has.join(" ; ")}.${lacks.length ? ` Non inclus : ${lacks.join(" ; ")}.` : ""}`
+          : `${pk.tier} package for "${o.title}": ${pk.name}, US$${pk.price} (student rate). ${pk.summary} Delivered in ${pk.deliveryDays} days, ${pk.revisions} revision(s). Includes: ${has.join("; ")}.${lacks.length ? ` Not included: ${lacks.join("; ")}.` : ""}`,
+      });
+    }
+  }
+  const x = p.extras;
+  out.push({
+    source: fr ? "tarif · Options" : "pricing · Extras",
+    text: fr
+      ? `Options payantes sur tous les forfaits : livraison express +${x.expressPercent} %, révision supplémentaire ${x.revision} dollars US, maintenance ${x.maintenancePerMonth} dollars US par mois. Pour les assistants documentaires : +${x.docs.count} documents pour ${x.docs.price} dollars US.`
+      : `Paid extras on every package: express delivery +${x.expressPercent}%, extra revision US$${x.revision}, maintenance US$${x.maintenancePerMonth} per month. For document assistants: +${x.docs.count} documents for US$${x.docs.price}.`,
+  });
   return out;
 }
 

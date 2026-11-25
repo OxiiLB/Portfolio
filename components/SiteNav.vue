@@ -22,12 +22,13 @@ onBeforeUnmount(() => window.removeEventListener("scroll", onScroll));
         <span class="c1">giraud</span><span class="c2">labs</span><span class="c3">.com</span>
       </a>
       <nav :aria-label="t('nav.sections')">
+        <!-- Same order as the sections on the page. -->
         <a href="#about">{{ t("nav.about") }}</a>
         <a href="#projects">{{ t("nav.projects") }}</a>
+        <a href="#ask">{{ t("nav.ask") }}</a>
         <a href="#side-projects">{{ t("nav.side") }}</a>
         <a href="#services">{{ t("nav.services") }}</a>
         <a href="#values">{{ t("nav.values") }}</a>
-        <a href="#ask">{{ t("nav.ask") }}</a>
       </nav>
       <div class="lang" role="group" :aria-label="t('nav.language')">
         <NuxtLink

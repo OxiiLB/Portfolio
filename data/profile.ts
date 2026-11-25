@@ -68,6 +68,32 @@ export interface Service {
   color: TokenColor;
 }
 
+/** One package of the document-assistant offer (same packages as the Fiverr gig). */
+export interface PricingTier {
+  /** "Basic", "Standard" or "Premium". */
+  tier: string;
+  name: string;
+  /** Price in US dollars. */
+  price: number;
+  summary: string;
+  deliveryDays: number;
+  revisions: number;
+  /** Every feature of the offer, with whether this package includes it. */
+  features: { label: string; included: boolean }[];
+  /** The package highlighted on the page. */
+  recommended: boolean;
+}
+
+/** One service with its three fixed packages. */
+export interface PricingOffer {
+  key: string;
+  title: string;
+  summary: string;
+  tiers: PricingTier[];
+  /** Whether the "more documents" extra applies (document assistants only). */
+  docsExtra: boolean;
+}
+
 // ---------------------------------------------------------------------------
 
 const name = "Romain Giraud";
@@ -364,6 +390,234 @@ const services: (Omit<Service, "title" | "summary" | "deliverables"> & {
   },
 ];
 
+// Fixed packages for every service: Basic / Standard / Premium, Standard is the
+// recommended one. Student rates set in Nov. 2026 (see the pricing audit).
+// The document assistant packages are the same as Romain's Fiverr RAG gig;
+// keep the two in sync. `service` is the index of the matching entry in
+// `services` above, which gives each offer its title and summary.
+type TierData = {
+  tier: "Basic" | "Standard" | "Premium";
+  name: L<string>;
+  /** US dollars. */
+  price: number;
+  summary: L<string>;
+  deliveryDays: number;
+  revisions: number;
+  /** Indexes into the offer's `features` that this package includes. */
+  includes: number[];
+};
+
+const offers: { key: string; service: number; features: L<string>[]; tiers: TierData[]; docsExtra?: boolean }[] = [
+  {
+    key: "rag",
+    service: 0,
+    docsExtra: true,
+    features: [
+      { en: "AI model integration", fr: "Intégration d'un modèle d'IA" },
+      { en: "Answers from your documents (RAG)", fr: "Réponses à partir de vos documents (RAG)" },
+      { en: "Guided conversation flow", fr: "Parcours de conversation prédéfini" },
+      { en: "CRM or database integration", fr: "Intégration CRM ou base de données" },
+      { en: "User login", fr: "Connexion des utilisateurs" },
+      { en: "Multi-language support", fr: "Support multilingue" },
+      { en: "Source code included", fr: "Code source fourni" },
+    ],
+    tiers: [
+      {
+        tier: "Basic",
+        name: { en: "Document Q&A bot", fr: "Bot questions-réponses" },
+        price: 150,
+        summary: {
+          en: "A chatbot that answers from up to 10 of your documents, with cited sources and a simple web chat.",
+          fr: "Un chatbot qui répond à partir de 10 de vos documents maximum, avec les sources citées et un chat web simple.",
+        },
+        deliveryDays: 5,
+        revisions: 1,
+        includes: [0, 1],
+      },
+      {
+        tier: "Standard",
+        name: { en: "Website chatbot", fr: "Chatbot pour votre site" },
+        price: 350,
+        summary: {
+          en: "A chatbot trained on up to 50 documents or web pages, embedded on your site, in your tone, in several languages.",
+          fr: "Un chatbot entraîné sur 50 documents ou pages web maximum, intégré à votre site, avec votre ton, en plusieurs langues.",
+        },
+        deliveryDays: 7,
+        revisions: 2,
+        includes: [0, 1, 2, 5],
+      },
+      {
+        tier: "Premium",
+        name: { en: "Business assistant", fr: "Assistant métier" },
+        price: 700,
+        summary: {
+          en: "A full assistant on up to 200 documents, connected to your CRM or app, with user login, source code and 30 days of support.",
+          fr: "Un assistant complet sur 200 documents maximum, connecté à votre CRM ou application, avec connexion des utilisateurs, code source et 30 jours de support.",
+        },
+        deliveryDays: 14,
+        revisions: 3,
+        includes: [0, 1, 2, 3, 4, 5, 6],
+      },
+    ],
+  },
+  {
+    key: "automation",
+    service: 1,
+    features: [
+      { en: "Workflow connecting your tools", fr: "Workflow reliant vos outils" },
+      { en: "AI data extraction", fr: "Extraction de données par IA" },
+      { en: "Error alerts", fr: "Alertes en cas d'erreur" },
+      { en: "Custom API code", fr: "Code sur mesure pour les API" },
+      { en: "Activity log", fr: "Journal d'activité" },
+      { en: "Documentation", fr: "Documentation" },
+      { en: "30-day support", fr: "Support de 30 jours" },
+    ],
+    tiers: [
+      {
+        tier: "Basic",
+        name: { en: "Single automation", fr: "Automatisation simple" },
+        price: 80,
+        summary: {
+          en: "One workflow connecting 2 of your tools, up to 5 steps.",
+          fr: "Un workflow reliant 2 de vos outils, jusqu'à 5 étapes.",
+        },
+        deliveryDays: 3,
+        revisions: 1,
+        includes: [0],
+      },
+      {
+        tier: "Standard",
+        name: { en: "Business workflow", fr: "Workflow métier" },
+        price: 200,
+        summary: {
+          en: "Up to 3 workflows across your tools, with AI that pulls data out of emails and files, and alerts if something fails.",
+          fr: "Jusqu'à 3 workflows entre vos outils, avec une IA qui extrait les données des e-mails et fichiers, et des alertes en cas d'échec.",
+        },
+        deliveryDays: 5,
+        revisions: 2,
+        includes: [0, 1, 2],
+      },
+      {
+        tier: "Premium",
+        name: { en: "Automation system", fr: "Système d'automatisation" },
+        price: 450,
+        summary: {
+          en: "Up to 6 workflows, custom code for any API, an activity log, documentation and 30 days of support.",
+          fr: "Jusqu'à 6 workflows, du code sur mesure pour n'importe quelle API, un journal d'activité, une documentation et 30 jours de support.",
+        },
+        deliveryDays: 10,
+        revisions: 3,
+        includes: [0, 1, 2, 3, 4, 5, 6],
+      },
+    ],
+  },
+  {
+    key: "integration",
+    service: 2,
+    features: [
+      { en: "AI feature in your site or app", fr: "Fonctionnalité IA dans votre site ou app" },
+      { en: "Prompt design", fr: "Conception des prompts" },
+      { en: "Interface component", fr: "Composant d'interface" },
+      { en: "Spending limits", fr: "Plafonds de dépenses" },
+      { en: "AI agent or multi-step workflow", fr: "Agent IA ou workflow en plusieurs étapes" },
+      { en: "User roles and cost monitoring", fr: "Rôles utilisateurs et suivi des coûts" },
+      { en: "30-day support", fr: "Support de 30 jours" },
+    ],
+    tiers: [
+      {
+        tier: "Basic",
+        name: { en: "One AI feature", fr: "Une fonctionnalité IA" },
+        price: 120,
+        summary: {
+          en: "One AI feature (summary, text generation or classification) added to your site or app through an API.",
+          fr: "Une fonctionnalité IA (résumé, génération de texte ou classification) ajoutée à votre site ou application via une API.",
+        },
+        deliveryDays: 5,
+        revisions: 1,
+        includes: [0],
+      },
+      {
+        tier: "Standard",
+        name: { en: "AI feature set", fr: "Ensemble de fonctionnalités IA" },
+        price: 300,
+        summary: {
+          en: "Two or three AI features with tuned prompts, a ready-made interface component and spending limits.",
+          fr: "Deux ou trois fonctionnalités IA avec des prompts ajustés, un composant d'interface prêt à l'emploi et des plafonds de dépenses.",
+        },
+        deliveryDays: 7,
+        revisions: 2,
+        includes: [0, 1, 2, 3],
+      },
+      {
+        tier: "Premium",
+        name: { en: "AI module", fr: "Module IA" },
+        price: 600,
+        summary: {
+          en: "A complete AI module, such as an agent or a multi-step workflow, with user roles, cost monitoring and 30 days of support.",
+          fr: "Un module IA complet, comme un agent ou un workflow en plusieurs étapes, avec rôles utilisateurs, suivi des coûts et 30 jours de support.",
+        },
+        deliveryDays: 14,
+        revisions: 3,
+        includes: [0, 1, 2, 3, 4, 5, 6],
+      },
+    ],
+  },
+  {
+    key: "web",
+    service: 3,
+    features: [
+      { en: "Responsive design", fr: "Design adapté au mobile" },
+      { en: "Contact form", fr: "Formulaire de contact" },
+      { en: "SEO basics", fr: "Bases du référencement (SEO)" },
+      { en: "Bilingual site", fr: "Site bilingue" },
+      { en: "Performance optimization", fr: "Optimisation des performances" },
+      { en: "Login and database", fr: "Connexion et base de données" },
+      { en: "30-day support", fr: "Support de 30 jours" },
+    ],
+    tiers: [
+      {
+        tier: "Basic",
+        name: { en: "Landing page", fr: "Page d'accueil" },
+        price: 150,
+        summary: {
+          en: "One responsive page with a contact form and SEO basics.",
+          fr: "Une page responsive avec formulaire de contact et bases du référencement.",
+        },
+        deliveryDays: 5,
+        revisions: 1,
+        includes: [0, 1, 2],
+      },
+      {
+        tier: "Standard",
+        name: { en: "Business website", fr: "Site vitrine" },
+        price: 400,
+        summary: {
+          en: "A website of up to 5 pages, in two languages, fast and easy to find on search engines.",
+          fr: "Un site jusqu'à 5 pages, en deux langues, rapide et bien référencé.",
+        },
+        deliveryDays: 10,
+        revisions: 2,
+        includes: [0, 1, 2, 3, 4],
+      },
+      {
+        tier: "Premium",
+        name: { en: "Simple web app", fr: "Application web simple" },
+        price: 800,
+        summary: {
+          en: "A web app of up to 3 screens with login and a database, or a migration of existing code to Vue.js or Nuxt, with 30 days of support.",
+          fr: "Une application web jusqu'à 3 écrans avec connexion et base de données, ou une migration de code existant vers Vue.js ou Nuxt, avec 30 jours de support.",
+        },
+        deliveryDays: 21,
+        revisions: 3,
+        includes: [0, 1, 2, 3, 4, 5, 6],
+      },
+    ],
+  },
+];
+
+/** Paid extras in US dollars, the same for every offer (documents: RAG only). */
+const extras = { expressPercent: 30, revision: 25, maintenancePerMonth: 49, docs: { count: 50, price: 50 } };
+
 // ---------------------------------------------------------------------------
 // About, values and process: the "who I am and how I work" part of the page.
 // About and skills are written from Romain's CV (Outreach EN, Nov. 2026).
@@ -592,6 +846,27 @@ export function getProfile(locale: Locale) {
         deliverables: s.deliverables[locale],
       }),
     ),
+    offers: offers.map(
+      (o): PricingOffer => ({
+        key: o.key,
+        title: services[o.service]!.title[locale],
+        summary: services[o.service]!.summary[locale],
+        docsExtra: !!o.docsExtra,
+        tiers: o.tiers.map(
+          (p): PricingTier => ({
+            tier: p.tier,
+            name: p.name[locale],
+            price: p.price,
+            summary: p.summary[locale],
+            deliveryDays: p.deliveryDays,
+            revisions: p.revisions,
+            features: o.features.map((f, i) => ({ label: f[locale], included: p.includes.includes(i) })),
+            recommended: p.tier === "Standard",
+          }),
+        ),
+      }),
+    ),
+    extras,
   };
 }
 
